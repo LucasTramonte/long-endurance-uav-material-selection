@@ -8,5 +8,7 @@ sympy>=1.14.0              # symbolic derivation of the merit indices
 python-docx>=1.1
 pytest>=7.4
 docx2pdf>=0.1.8          # PDF export of the Portuguese .docx (needs Microsoft Word or LibreOffice)
-markdown>=3.11.3            # English report PDF
-pymdown-extensions>=13.1
+markdown>=3.5; python_version < "3.11"      # English report PDF (3.11.3 needs Python 3.11+)
+markdown>=3.11.3; python_version >= "3.11"
+pymdown-extensions>=10.0; python_full_version < "3.11.5"      # 13.1 needs Python 3.11.5+
+pymdown-extensions>=13.1; python_full_version >= "3.11.5"
