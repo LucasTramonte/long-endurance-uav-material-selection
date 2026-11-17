@@ -1,0 +1,87 @@
+{
+  "description": "Hard constraint bounds applied as pass/fail limits in the Ansys Granta limit-stage and mirrored in src/analysis/decision_matrix.py.",
+  "uv_resistance_scale": [
+    "Poor",
+    "Acceptable",
+    "Good",
+    "Excellent"
+  ],
+  "constraints": [
+    {
+      "property": "uv_resistance",
+      "type": "min_category",
+      "value": "Acceptable",
+      "rationale": "Outdoor mapping missions with sustained solar exposure; 'Acceptable' admits coated/stabilised grades."
+    },
+    {
+      "property": "water_absorption_24h_pct",
+      "type": "max",
+      "value": 0.2,
+      "unit": "%",
+      "rationale": "Limits dimensional drift and stiffness loss in humid field conditions."
+    },
+    {
+      "property": "fracture_toughness_MPa_m05",
+      "type": "min",
+      "value": 2.0,
+      "unit": "MPa*m^0.5",
+      "rationale": "Damage tolerance for hard landings and handling impacts (avoid brittle shell)."
+    },
+    {
+      "property": "max_service_temp_C",
+      "type": "min",
+      "value": 80,
+      "unit": "deg C",
+      "rationale": "Closed-shell heating under sun plus ~40 C motor/ESC dissipation."
+    },
+    {
+      "property": "density_kg_m3",
+      "type": "max",
+      "value": 3000,
+      "unit": "kg/m^3",
+      "rationale": "Mass-critical airframe; excludes steels/Ti by inspection."
+    }
+  ],
+  "weights": {
+    "mechanical_performance": 0.35,
+    "cost": 0.25,
+    "manufacturability": 0.2,
+    "environmental_durability": 0.2
+  },
+  "reference_panel": {
+    "description": "Reference panel used to translate merit indices into mass: flexural rigidity of a 1.0 mm Al 7075-T6 flat panel (assumed size of the central body/duct skin of the ~112 mm CAD model).",
+    "length_m": 0.1,
+    "width_m": 0.05,
+    "reference_material": "AL_7075_T6",
+    "reference_thickness_m": 0.001
+  },
+  "load_cases": {
+    "description": "Load-case premises used to derive hard constraints. Nothing here is measured: every value is an assumption of the team (see README Sections 1.4, 3.3 and 5.4) to be replaced by CAD, test or Granta data.",
+    "safety_factor": 1.5,
+    "safety_factor_source": "14 CFR 25.303 (limit to ultimate load), read through secondary copies; a transport-aircraft rule used as an aeronautical reference value",
+    "arm": {
+      "tip_load_N": 0.3,
+      "length_m": 0.03,
+      "width_m": 0.005,
+      "thickness_m": 0.0015,
+      "allowable_tip_deflection_m": 0.0005
+    },
+    "rotor": {
+      "rpm": 40000,
+      "blade_length_m": 0.024,
+      "rotating_mass_kg": 0.01,
+      "balance_grade_G_mm_s": 6.3,
+      "balance_grade_note": "ISO 21940-11 grade; sources found disagree between G2.5 and G6.3 for small electric motors, the standard text was not read",
+      "dynamic_amplification": 1.0
+    },
+    "fatigue": {
+      "fatigue_to_tensile_ratio": 0.1,
+      "note": "Premise: no reliable per-material fatigue strength was found in official sources. Replace with the Granta 'fatigue strength at 10^7 cycles' of each material."
+    },
+    "reference_steel": {
+      "price_usd_kg": 0.7,
+      "density_kg_m3": 7850,
+      "note": "Premise for relative cost per unit volume (course notes: steel reference). The 0.7 USD/kg price is not from an official source."
+    }
+  }
+}
