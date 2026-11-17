@@ -1,6 +1,6 @@
 numpy>=1.24
 pandas>=2.0
-scipy>=1.10
+scipy>=1.18.1
 matplotlib>=3.7
 adjustText>=1.4.0          # non-overlapping labels in the physics figures
 sympy>=1.12              # symbolic derivation of the merit indices
