@@ -1,0 +1,58 @@
+# Private or third-party material - NOT for public distribution (kept locally only; see assets/README.md)
+# professor's lecture slides
+assets/courses/
+# professor's project brief
+assets/brief/
+# team draft: contains student registration numbers (RA)
+assets/drafts/
+# excerpts of a published book (Ashby)
+assets/ashby_charts/
+# published thesis used as benchmark (Niero, 2024)
+assets/benchmark/
+# loose course notes and exercise solutions kept at the top of assets/
+assets/*.pdf
+
+# Python bytecode / caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# CAD temporary / backup files
+*.bak
+*.sldprt.bak
+~$*
+*.swp
+*.dwl
+*.dwl2
+*.SLDPRT.*.tmp
+*.sldlfp.tmp
+*.ac$
+*.err
+
+# Generated scratch output
+outputs/
+
+# IDE / editor settings
+.vscode/
+.idea/
+*.code-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
