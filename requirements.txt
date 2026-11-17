@@ -1,6 +1,7 @@
 numpy>=1.24
 pandas>=2.0
-scipy>=1.18.1
+scipy>=1.10; python_version < "3.12"      # scipy 1.18+ needs Python 3.12 or newer
+scipy>=1.18.1; python_version >= "3.12"
 matplotlib>=3.7
 adjustText>=1.4.0          # non-overlapping labels in the physics figures
 sympy>=1.14.0              # symbolic derivation of the merit indices

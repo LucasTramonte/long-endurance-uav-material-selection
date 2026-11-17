@@ -20,10 +20,14 @@ from __future__ import annotations
 
 import argparse
 import re
+import tempfile
 from pathlib import Path
 
+import matplotlib
+
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
 from docx import Document
-from docx.enum.section import WD_SECTION
 from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_BREAK
 from docx.oxml import OxmlElement
@@ -31,6 +35,7 @@ from docx.oxml.ns import qn
 from docx.shared import Cm, Pt
 
 HERE = Path(__file__).resolve().parent
+plt.rcParams["mathtext.fontset"] = "stix"
 FONT = "Times New Roman"
 INLINE = re.compile(r"(\*\*.+?\*\*|\*.+?\*|`.+?`)")
 
@@ -170,12 +175,38 @@ def add_image(doc: Document, alt: str, src: str, base: Path) -> None:
     p = doc.add_paragraph()
     fmt(p, WD_ALIGN_PARAGRAPH.CENTER, 1.0, False, before=6)
     if path.exists():
-        p.add_run().add_picture(str(path), width=Cm(13))
+        p.add_run().add_picture(str(path), width=Cm(16 if "ashby" in src else 13))   # text width is 16 cm
     else:
         set_font(p.add_run(f"[Figura não encontrada: {src}]"), 10, italic=True)
     cap = doc.add_paragraph()
     fmt(cap, WD_ALIGN_PARAGRAPH.CENTER, 1.0, False, after=10)
     add_runs(cap, alt, size=10)
+
+
+def render_equation(latex: str, path: Path) -> None:
+    """Render one display equation (matplotlib mathtext subset) to a transparent PNG."""
+    fig = plt.figure(figsize=(0.1, 0.1))
+    fig.text(0, 0, f"${latex}$", fontsize=13)
+    fig.savefig(path, dpi=300, bbox_inches="tight", pad_inches=0.03, transparent=True)
+    plt.close(fig)
+
+
+def add_equation(doc: Document, latex: str, number: int, tmp: Path) -> None:
+    """Equation centred, number in parentheses at the right margin (ABNT NBR 14724)."""
+    png = tmp / f"eq{number}.png"
+    render_equation(latex, png)
+    table = doc.add_table(rows=1, cols=3)
+    table.alignment = WD_TABLE_ALIGNMENT.CENTER
+    widths = (Cm(1.0), Cm(13.0), Cm(2.0))
+    for cell, w in zip(table.rows[0].cells, widths, strict=True):
+        cell.width = w
+    mid = table.cell(0, 1).paragraphs[0]
+    fmt(mid, WD_ALIGN_PARAGRAPH.CENTER, 1.0, False, before=4, after=4)
+    width_cm = min(13.0, matplotlib.image.imread(str(png)).shape[1] / 300 * 2.54)
+    mid.add_run().add_picture(str(png), width=Cm(width_cm))
+    num = table.cell(0, 2).paragraphs[0]
+    fmt(num, WD_ALIGN_PARAGRAPH.RIGHT, 1.0, False, before=10)
+    set_font(num.add_run(f"({number})"), 12)
 
 
 def build(md_text: str, out_path: Path, base: Path) -> None:
@@ -189,12 +220,23 @@ def build(md_text: str, out_path: Path, base: Path) -> None:
     header.alignment = WD_ALIGN_PARAGRAPH.RIGHT
     add_page_number_field(header)
 
+    tmp = Path(tempfile.mkdtemp(prefix="eq_"))
+    eq_count = 0
     i = 0
     while i < len(lines):
         line = lines[i].rstrip()
         s = line.strip()
         if not s:
             i += 1
+        elif s == "$$":                                  # display equation block
+            i += 1
+            block = []
+            while lines[i].strip() != "$$":
+                block.append(lines[i].strip())
+                i += 1
+            i += 1
+            eq_count += 1
+            add_equation(doc, " ".join(block), eq_count, tmp)
         elif s == r"\pagebreak":
             doc.add_paragraph().add_run().add_break(WD_BREAK.PAGE)
             i += 1
@@ -241,7 +283,8 @@ def build(md_text: str, out_path: Path, base: Path) -> None:
         else:
             para = [s]
             i += 1
-            while i < len(lines) and lines[i].strip() and not re.match(r"^(#{1,3}\s|\||!\[|>|[-*]\s|\d+\.\s|\\pagebreak|<!--)", lines[i].strip()):
+            block_start = r"^(#{1,3}\s|\||!\[|>|[-*]\s|\d+\.\s|\\pagebreak|<!--|\$\$)"
+            while i < len(lines) and lines[i].strip() and not re.match(block_start, lines[i].strip()):
                 para.append(lines[i].strip())
                 i += 1
             p = doc.add_paragraph()
