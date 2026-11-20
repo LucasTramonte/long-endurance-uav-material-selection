@@ -28,5 +28,5 @@ Dividing by a reference material removes the currency and most of the inflation.
 
 - Guide lines on the cost charts have slope 1 for $E/C_{v,R}$ and for $\sigma_f/C_{v,R}$.
 - The strength chart against cost uses the same five-step reading as the mass charts (`ashby-chart-selection`); ceramics stay excluded in tension.
-- The relative-cost reference used in the code is a premise (`load_cases.reference_steel`: 0.7 USD/kg, 7850 kg/m^3; the price is not from an official source). Overlaying the DB points on the printed cost chart landed CFRP and PEEK-CF30 in their printed bubbles, which supports the order of magnitude but is not a validation.
+- Granta prices are in BRL/kg in this installation: state the currency. The relative-cost reference is the Granta *Low carbon steel* record (`reference_steel` in `data/granta_filters.json`, C_v about 59,500 BRL/m^3); the ranking uses the absolute C_v, and the relative cost is reported beside it.
 - Material prices in `data/materials_db.json` are indicative placeholders until the Granta/MatWeb export replaces them.

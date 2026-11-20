@@ -1,18 +1,15 @@
-"""Ashby chart procedure: constraint, screening, guide lines, safety factor, and the drawn charts."""
+"""Ashby chart procedure: constraint, screening, guide lines and safety factor."""
 
 import matplotlib
 import numpy as np
 import pytest
 
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
 
-from src.analysis import ashby_charts as ac  # noqa: E402
 from src.analysis.export_tables import load_cases, load_materials  # noqa: E402
-from src.analysis.figure_utils import text_overlaps  # noqa: E402
 from src.math_modeling import ashby_selection as sel  # noqa: E402
 from src.math_modeling.load_case_screening import derived_limits  # noqa: E402
-from src.math_modeling.merit_indices import bending_panel_index, compute_all_indices  # noqa: E402
+from src.math_modeling.merit_indices import bending_panel_index  # noqa: E402
 
 ARM = dict(F=0.30, L=0.030, b=0.005, h=0.0015)
 
@@ -32,9 +29,14 @@ def test_stiffness_constraint_is_consistent_with_deflection_formula():
 
 def test_screening_discards_what_the_constraint_cuts():
     e_c, _ = sel.arm_requirements(**ARM, w_max=0.5e-3)
-    kept, dropped = sel.screen_by_constraint(load_materials(), e_c)
-    assert {m["id"] for m, _ in dropped} == {"PC", "ABS"}
-    assert all(m["youngs_modulus_GPa"] >= e_c.minimum for m in kept)
+    soft = {"id": "soft", "youngs_modulus_GPa": 2.0, "youngs_modulus_GPa_min": 1.5}
+    cut_bubble = {"id": "bubble", "youngs_modulus_GPa": 6.0, "youngs_modulus_GPa_min": 2.0}   # range straddles 3.84 GPa
+    stiff = {"id": "stiff", "youngs_modulus_GPa": 70.0, "youngs_modulus_GPa_min": 69.0}
+    kept, dropped = sel.screen_by_constraint([soft, cut_bubble, stiff], e_c)
+    assert [m["id"] for m in kept] == ["stiff"] and {m["id"] for m, _ in dropped} == {"soft", "bubble"}
+    kept_db, dropped_db = sel.screen_by_constraint(load_materials(), e_c)
+    # their Granta E ranges (3.76-3.95, 2.32-2.44 GPa) dip below 3.84 GPa
+    assert {m["id"] for m, _ in dropped_db} == {"PEEK", "PC", "ABS"}
 
 
 def test_ceramics_are_excluded_in_tension_only():
@@ -54,40 +56,10 @@ def test_guide_line_slope_and_offset():
     assert bending_panel_index(8e1 / 8, 1000) == pytest.approx(bending_panel_index(80, 2000))
 
 
-@pytest.mark.parametrize("spec", ac.CHARTS, ids=lambda s: s.key)
-def test_selected_material_has_the_best_merit_index(spec):
-    """The guide-line anchor of each chart is the survivor with the largest index of that guide."""
-    fig, ax = plt.subplots()
-    ax.set_xlim(*spec.open_xlim)
-    ax.set_ylim(*spec.open_ylim)
-    anchors, dropped, _ = ac.draw_overlay(ax, spec, load_cases(), spec.open_xlim, spec.open_ylim)
-    plt.close(fig)
-    rows = {r["id"]: r for r in compute_all_indices(load_materials()) if r["id"] not in dropped}
-    key = {"E_rho": ("IM1",), "sigma_rho": ("IM2",), "E_cost": ("IM3",), "sigma_cost": ("IM2",)}
-    for guide, name in zip(spec.guides, key[spec.key], strict=True):
-        if spec.key == "sigma_cost":          # sigma/C_v,R is a different index from IM2 (sigma/rho): recompute
-            best = max(rows.values(), key=lambda r: r["yield_strength_MPa"] / r["Cv_usd_m3"])["id"]
-        else:
-            best = max(rows.values(), key=lambda r: r[name])["id"]
-        assert anchors[guide.index]["id"] == best
-
-
-def test_load_case_constraints_on_the_charts():
+def test_load_case_constraints():
     lim = derived_limits(load_cases())
     assert lim["E_min_GPa"] == pytest.approx(3.84)
     assert lim["sigma_mean_MPa"] == pytest.approx(4.8)
-
-
-@pytest.mark.parametrize("spec", ac.CHARTS, ids=lambda s: s.key)
-def test_open_charts_have_no_overlapping_labels(spec):
-    fig = ac.build_open(spec)
-    try:
-        # the numbered step circles (single digits) sit on their arrows; the label placement of adjustText varies
-        # slightly with the matplotlib version, so the check is on the readable labels and the legend lines
-        bad = [pair for pair in text_overlaps(fig) if not any(t.isdigit() for t in pair)]
-        assert bad == []
-    finally:
-        plt.close(fig)
 
 
 def test_safety_factors_carry_their_verification_status():

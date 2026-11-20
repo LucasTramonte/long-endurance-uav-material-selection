@@ -1,148 +1,461 @@
 {
   "metadata": {
     "description": "Candidate material property dataset for the long-endurance UAV fuselage selection study.",
-    "sources": ["Ansys Granta EduPack / Selector (typical values)", "MatWeb (datasheet values)"],
-    "verification_status": "REPRESENTATIVE VALUES - replace with the exact Granta / MatWeb export used in the report before submission (see docs/ansys_granta_notes.md).",
+    "source": "Ansys Granta EduPack 2024 R1 (version 24.1.1), records read by the team in November 2026. Granta is the only source of material data in this repository.",
+    "records": "CFRP, epoxy matrix (isotropic); Aluminum alloys; Magnesium alloys; Polyetheretherketone (PEEK); Polycarbonate (PC); Acrylonitrile butadiene styrene (ABS); GFRP, epoxy matrix (isotropic). Low carbon steel is in granta_filters.json as the reference of the relative cost, not as a candidate.",
+    "format": "'granta' holds the [minimum, maximum] range of each property as shown by Granta (the extent of its bubble). The loader derives the representative value (geometric mean = centre of the bubble in log space) as the plain key, and '<key>_min' / '<key>_max' for conservative screening.",
+    "estimated": "Granta marks estimated values with an asterisk; they are listed in 'estimated' of each record.",
     "units": {
       "density_kg_m3": "kg/m^3",
-      "youngs_modulus_GPa": "GPa (in-plane, quasi-isotropic for composites)",
-      "yield_strength_MPa": "MPa (yield for metals/polymers, tensile strength for composites)",
+      "price_brl_kg": "BRL/kg (Granta currency in this installation)",
+      "youngs_modulus_GPa": "GPa",
+      "yield_strength_MPa": "MPa (elastic limit)",
+      "tensile_strength_MPa": "MPa",
+      "fatigue_strength_1e7_MPa": "MPa at 10^7 cycles",
       "fracture_toughness_MPa_m05": "MPa*m^0.5",
-      "water_absorption_24h_pct": "% mass gain, 24 h immersion (ASTM D570 / ISO 62)",
-      "uv_resistance": "Granta categorical: Poor < Acceptable < Good < Excellent (unprotected, outdoor)",
       "max_service_temp_C": "deg C",
-      "thermal_conductivity_W_mK": "W/(m*K)",
-      "cte_microstrain_K": "10^-6 / K",
-      "price_usd_kg": "USD/kg (raw material, indicative)",
-      "scores": "Qualitative 1 (worst) to 5 (best), team judgement at 50,000 units/year"
-    }
+      "thermal_conductivity_W_mK": "W/(m*C)",
+      "cte_microstrain_K": "10^-6 / C",
+      "scores": "Qualitative 1 (worst) to 5 (best), team judgement at 50,000 units/year (not Granta data)"
+    },
+    "not_in_granta_export": "UV resistance and 24 h water absorption were not read; the filters on them are not evaluated until those properties are added (null)."
   },
   "materials": [
     {
       "id": "CFRP_QI",
-      "name": "CFRP, epoxy matrix, quasi-isotropic [0/+45/-45/90]s (Vf ~ 0.55)",
+      "name": "CFRP, epoxy matrix (isotropic)",
       "family": "Composite",
       "shortlist": true,
-      "density_kg_m3": 1550,
-      "youngs_modulus_GPa": 48,
-      "yield_strength_MPa": 600,
-      "fracture_toughness_MPa_m05": 30,
-      "water_absorption_24h_pct": 0.15,
-      "uv_resistance": "Acceptable",
-      "max_service_temp_C": 120,
-      "thermal_conductivity_W_mK": 5,
-      "cte_microstrain_K": 2.5,
-      "price_usd_kg": 60,
-      "scores": {"manufacturability": 2, "environmental_durability": 4},
-      "notes": "Epoxy matrix needs UV-stable clearcoat/paint. Autoclave or press cure; slow cycle times at 50k units/year."
+      "complete": true,
+      "granta": {
+        "density_kg_m3": [
+          1500,
+          1600
+        ],
+        "price_brl_kg": [
+          197,
+          219
+        ],
+        "youngs_modulus_GPa": [
+          69,
+          150
+        ],
+        "yield_strength_MPa": [
+          550,
+          1050
+        ],
+        "tensile_strength_MPa": [
+          550,
+          1050
+        ],
+        "fatigue_strength_1e7_MPa": [
+          150,
+          300
+        ],
+        "fracture_toughness_MPa_m05": [
+          6.12,
+          20
+        ],
+        "max_service_temp_C": [
+          140,
+          220
+        ],
+        "thermal_conductivity_W_mK": [
+          1.28,
+          2.6
+        ],
+        "cte_microstrain_K": [
+          1,
+          4
+        ]
+      },
+      "estimated": [
+        "price_brl_kg",
+        "fracture_toughness_MPa_m05",
+        "thermal_conductivity_W_mK"
+      ],
+      "uv_resistance": null,
+      "water_absorption_24h_pct": null,
+      "scores": {
+        "manufacturability": 2,
+        "environmental_durability": 4
+      },
+      "notes": "Epoxy + continuous HS carbon reinforcement (0, +-45, 90), quasi-isotropic layup (Granta composition summary)."
     },
     {
-      "id": "PEEK_CF30",
-      "name": "PEEK, 30% short carbon fibre reinforced",
-      "family": "Polymer composite",
+      "id": "AL_ALLOYS",
+      "name": "Aluminum alloys (Granta family record; 7075-T6 is the reference grade)",
+      "family": "Metal",
       "shortlist": true,
-      "density_kg_m3": 1410,
-      "youngs_modulus_GPa": 13,
-      "yield_strength_MPa": 200,
-      "fracture_toughness_MPa_m05": 6,
-      "water_absorption_24h_pct": 0.06,
-      "uv_resistance": "Good",
-      "max_service_temp_C": 250,
-      "thermal_conductivity_W_mK": 0.9,
-      "cte_microstrain_K": 15,
-      "price_usd_kg": 90,
-      "scores": {"manufacturability": 4, "environmental_durability": 5},
-      "notes": "Injection mouldable (380-400 C melt); excellent chemical/UV resistance. High raw material cost, lower stiffness."
+      "complete": true,
+      "granta": {
+        "density_kg_m3": [
+          2640,
+          2810
+        ],
+        "price_brl_kg": [
+          14.8,
+          21
+        ],
+        "youngs_modulus_GPa": [
+          69,
+          75
+        ],
+        "yield_strength_MPa": [
+          109,
+          439
+        ],
+        "tensile_strength_MPa": [
+          186,
+          510
+        ],
+        "fatigue_strength_1e7_MPa": [
+          68.2,
+          169
+        ],
+        "fracture_toughness_MPa_m05": [
+          23,
+          38
+        ],
+        "max_service_temp_C": [
+          99.9,
+          170
+        ],
+        "thermal_conductivity_W_mK": [
+          121,
+          187
+        ],
+        "cte_microstrain_K": [
+          21.6,
+          24.6
+        ]
+      },
+      "estimated": [
+        "price_brl_kg",
+        "fatigue_strength_1e7_MPa",
+        "fracture_toughness_MPa_m05"
+      ],
+      "uv_resistance": null,
+      "water_absorption_24h_pct": null,
+      "scores": {
+        "manufacturability": 4,
+        "environmental_durability": 3
+      },
+      "notes": "Family-level record: the range covers all aluminium alloys, not only 7075-T6. Scores were assigned by the team for 7075-T6."
+    },
+    {
+      "id": "MG_ALLOYS",
+      "name": "Magnesium alloys (Granta family record)",
+      "family": "Metal",
+      "shortlist": true,
+      "complete": true,
+      "granta": {
+        "density_kg_m3": [
+          1780,
+          1840
+        ],
+        "price_brl_kg": [
+          31.7,
+          38.8
+        ],
+        "youngs_modulus_GPa": [
+          42,
+          46
+        ],
+        "yield_strength_MPa": [
+          109,
+          216
+        ],
+        "tensile_strength_MPa": [
+          180,
+          305
+        ],
+        "fatigue_strength_1e7_MPa": [
+          75,
+          140
+        ],
+        "fracture_toughness_MPa_m05": [
+          14,
+          18
+        ],
+        "max_service_temp_C": [
+          150,
+          234
+        ],
+        "thermal_conductivity_W_mK": [
+          52,
+          123
+        ],
+        "cte_microstrain_K": [
+          25,
+          27.2
+        ]
+      },
+      "estimated": [
+        "price_brl_kg",
+        "fatigue_strength_1e7_MPa",
+        "fracture_toughness_MPa_m05"
+      ],
+      "uv_resistance": null,
+      "water_absorption_24h_pct": null,
+      "scores": {
+        "manufacturability": 3,
+        "environmental_durability": 2
+      },
+      "notes": "Family-level record. Scores were assigned by the team for AZ31B."
+    },
+    {
+      "id": "PEEK",
+      "name": "Polyetheretherketone (PEEK), unfilled",
+      "family": "Polymer",
+      "shortlist": true,
+      "complete": true,
+      "granta": {
+        "density_kg_m3": [
+          1300,
+          1320
+        ],
+        "price_brl_kg": [
+          368,
+          410
+        ],
+        "youngs_modulus_GPa": [
+          3.76,
+          3.95
+        ],
+        "yield_strength_MPa": [
+          90,
+          110
+        ],
+        "tensile_strength_MPa": [
+          97,
+          117
+        ],
+        "fatigue_strength_1e7_MPa": [
+          39,
+          47
+        ],
+        "fracture_toughness_MPa_m05": [
+          2.73,
+          4.3
+        ],
+        "max_service_temp_C": [
+          239,
+          260
+        ],
+        "thermal_conductivity_W_mK": [
+          0.24,
+          0.26
+        ],
+        "cte_microstrain_K": [
+          40,
+          55
+        ]
+      },
+      "estimated": [
+        "price_brl_kg",
+        "youngs_modulus_GPa",
+        "fatigue_strength_1e7_MPa",
+        "fracture_toughness_MPa_m05",
+        "thermal_conductivity_W_mK"
+      ],
+      "uv_resistance": null,
+      "water_absorption_24h_pct": null,
+      "scores": {
+        "manufacturability": 4,
+        "environmental_durability": 5
+      },
+      "notes": "Unfilled PEEK (Polymers > Thermoplastics). The course candidate was PEEK with 30 % carbon fibre, which was not found in the tree. Granta shows the tensile strength struck through. Scores were assigned by the team for PEEK with 30 % carbon fibre."
     },
     {
       "id": "PC",
-      "name": "Polycarbonate (UV-stabilised grade)",
+      "name": "Polycarbonate (PC)",
       "family": "Polymer",
       "shortlist": true,
-      "density_kg_m3": 1200,
-      "youngs_modulus_GPa": 2.3,
-      "yield_strength_MPa": 62,
-      "fracture_toughness_MPa_m05": 2.1,
-      "water_absorption_24h_pct": 0.15,
-      "uv_resistance": "Acceptable",
-      "max_service_temp_C": 120,
-      "thermal_conductivity_W_mK": 0.21,
-      "cte_microstrain_K": 68,
-      "price_usd_kg": 3.5,
-      "scores": {"manufacturability": 5, "environmental_durability": 3},
-      "notes": "Cheapest and easiest to mould, but low stiffness; unstabilised grades yellow and embrittle under UV."
-    },
-    {
-      "id": "AL_7075_T6",
-      "name": "Aluminium alloy 7075-T6",
-      "family": "Metal",
-      "shortlist": true,
-      "density_kg_m3": 2810,
-      "youngs_modulus_GPa": 71.7,
-      "yield_strength_MPa": 503,
-      "fracture_toughness_MPa_m05": 29,
-      "water_absorption_24h_pct": 0.0,
-      "uv_resistance": "Excellent",
-      "max_service_temp_C": 120,
-      "thermal_conductivity_W_mK": 130,
-      "cte_microstrain_K": 23.4,
-      "price_usd_kg": 4.5,
-      "scores": {"manufacturability": 4, "environmental_durability": 3},
-      "notes": "High-speed CNC machinable; susceptible to stress-corrosion cracking (T6) - anodise/alodine required."
-    },
-    {
-      "id": "GFRP_EPOXY",
-      "name": "GFRP, E-glass/epoxy, quasi-isotropic",
-      "family": "Composite",
-      "shortlist": false,
-      "density_kg_m3": 1900,
-      "youngs_modulus_GPa": 20,
-      "yield_strength_MPa": 300,
-      "fracture_toughness_MPa_m05": 20,
-      "water_absorption_24h_pct": 0.15,
-      "uv_resistance": "Acceptable",
-      "max_service_temp_C": 120,
-      "thermal_conductivity_W_mK": 0.5,
-      "cte_microstrain_K": 12,
-      "price_usd_kg": 12,
-      "scores": {"manufacturability": 3, "environmental_durability": 3},
-      "notes": "Screening-pool reference; radio-transparent (useful for antennas)."
-    },
-    {
-      "id": "MG_AZ31B",
-      "name": "Magnesium alloy AZ31B-H24",
-      "family": "Metal",
-      "shortlist": false,
-      "density_kg_m3": 1770,
-      "youngs_modulus_GPa": 45,
-      "yield_strength_MPa": 200,
-      "fracture_toughness_MPa_m05": 15,
-      "water_absorption_24h_pct": 0.0,
-      "uv_resistance": "Excellent",
-      "max_service_temp_C": 100,
-      "thermal_conductivity_W_mK": 96,
-      "cte_microstrain_K": 26,
-      "price_usd_kg": 5,
-      "scores": {"manufacturability": 3, "environmental_durability": 2},
-      "notes": "Screening-pool reference; galvanic/atmospheric corrosion needs conversion coating."
+      "complete": true,
+      "granta": {
+        "density_kg_m3": [
+          1190,
+          1210
+        ],
+        "price_brl_kg": [
+          17.6,
+          19.1
+        ],
+        "youngs_modulus_GPa": [
+          2.32,
+          2.44
+        ],
+        "yield_strength_MPa": [
+          59.1,
+          65.2
+        ],
+        "tensile_strength_MPa": [
+          62.7,
+          72.4
+        ],
+        "fatigue_strength_1e7_MPa": [
+          23.7,
+          30.8
+        ],
+        "fracture_toughness_MPa_m05": [
+          2.1,
+          2.3
+        ],
+        "max_service_temp_C": [
+          101,
+          116
+        ],
+        "thermal_conductivity_W_mK": [
+          0.193,
+          0.218
+        ],
+        "cte_microstrain_K": [
+          120,
+          125
+        ]
+      },
+      "estimated": [
+        "price_brl_kg",
+        "fatigue_strength_1e7_MPa",
+        "max_service_temp_C"
+      ],
+      "uv_resistance": null,
+      "water_absorption_24h_pct": null,
+      "scores": {
+        "manufacturability": 5,
+        "environmental_durability": 3
+      },
+      "notes": "Polymers > Thermoplastics. Scores were assigned by the team."
     },
     {
       "id": "ABS",
-      "name": "ABS (general purpose injection grade)",
+      "name": "Acrylonitrile butadiene styrene (ABS)",
       "family": "Polymer",
-      "shortlist": false,
-      "density_kg_m3": 1050,
-      "youngs_modulus_GPa": 2.2,
-      "yield_strength_MPa": 42,
-      "fracture_toughness_MPa_m05": 2.0,
-      "water_absorption_24h_pct": 0.3,
-      "uv_resistance": "Poor",
-      "max_service_temp_C": 80,
-      "thermal_conductivity_W_mK": 0.18,
-      "cte_microstrain_K": 90,
-      "price_usd_kg": 2.2,
-      "scores": {"manufacturability": 5, "environmental_durability": 1},
-      "notes": "Screening-pool reference; expected to be eliminated by environmental filters."
+      "shortlist": true,
+      "complete": true,
+      "granta": {
+        "density_kg_m3": [
+          1030,
+          1060
+        ],
+        "price_brl_kg": [
+          11.7,
+          14.7
+        ],
+        "youngs_modulus_GPa": [
+          2.07,
+          2.76
+        ],
+        "yield_strength_MPa": [
+          34.5,
+          49.6
+        ],
+        "tensile_strength_MPa": [
+          37.9,
+          51.7
+        ],
+        "fatigue_strength_1e7_MPa": [
+          15.2,
+          20.7
+        ],
+        "fracture_toughness_MPa_m05": [
+          1.46,
+          4.29
+        ],
+        "max_service_temp_C": [
+          62.9,
+          76.9
+        ],
+        "thermal_conductivity_W_mK": [
+          0.253,
+          0.263
+        ],
+        "cte_microstrain_K": [
+          74,
+          123
+        ]
+      },
+      "estimated": [
+        "price_brl_kg",
+        "fatigue_strength_1e7_MPa",
+        "fracture_toughness_MPa_m05",
+        "thermal_conductivity_W_mK"
+      ],
+      "uv_resistance": null,
+      "water_absorption_24h_pct": null,
+      "scores": {
+        "manufacturability": 5,
+        "environmental_durability": 1
+      },
+      "notes": "Polymers > Thermoplastics. Scores were assigned by the team."
+    },
+    {
+      "id": "GFRP_EPOXY",
+      "name": "GFRP, epoxy matrix (isotropic)",
+      "family": "Composite",
+      "shortlist": true,
+      "complete": true,
+      "granta": {
+        "density_kg_m3": [
+          1750,
+          1970
+        ],
+        "price_brl_kg": [
+          177,
+          195
+        ],
+        "youngs_modulus_GPa": [
+          21,
+          21.8
+        ],
+        "yield_strength_MPa": [
+          207,
+          304
+        ],
+        "tensile_strength_MPa": [
+          207,
+          304
+        ],
+        "fatigue_strength_1e7_MPa": [
+          41.3,
+          91.1
+        ],
+        "fracture_toughness_MPa_m05": [
+          19.3,
+          31
+        ],
+        "max_service_temp_C": [
+          140,
+          220
+        ],
+        "thermal_conductivity_W_mK": [
+          0.42,
+          0.51
+        ],
+        "cte_microstrain_K": [
+          8.64,
+          33
+        ]
+      },
+      "estimated": [
+        "price_brl_kg",
+        "youngs_modulus_GPa",
+        "yield_strength_MPa",
+        "tensile_strength_MPa",
+        "fatigue_strength_1e7_MPa",
+        "fracture_toughness_MPa_m05",
+        "max_service_temp_C",
+        "thermal_conductivity_W_mK",
+        "cte_microstrain_K"
+      ],
+      "uv_resistance": null,
+      "water_absorption_24h_pct": null,
+      "scores": {
+        "manufacturability": 3,
+        "environmental_durability": 3
+      },
+      "notes": "Epoxy + continuous E-glass fibre (0, +-45, 90), quasi-isotropic layup. Granta marks almost every value of this record as estimated. Scores were assigned by the team."
     }
   ]
 }

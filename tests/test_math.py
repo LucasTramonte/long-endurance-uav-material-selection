@@ -12,7 +12,7 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from src.analysis.decision_matrix import CRITERIA, normalise_weights, score_materials, screen  # noqa: E402
+from src.analysis.decision_matrix import CRITERIA, normalise_weights, not_evaluated, score_materials, screen  # noqa: E402
 from src.analysis.export_tables import load_filters, load_materials, properties_dataframe, to_markdown  # noqa: E402
 from src.math_modeling import composite_anisotropy as ca  # noqa: E402
 from src.math_modeling import merit_indices as mi  # noqa: E402
@@ -151,24 +151,45 @@ def test_pareto_on_database_contains_lightest_and_cheapest():
     rows = po.pareto_front(po.evaluate_candidates(load_materials()))
     flagged = {r["id"] for r in rows if r["pareto"]}
     lightest = min(rows, key=lambda r: r["mass_g"])["id"]
-    cheapest = min(rows, key=lambda r: r["cost_usd"])["id"]
+    cheapest = min(rows, key=lambda r: r["cost_brl"])["id"]
     assert lightest in flagged and cheapest in flagged
 
 
 # ---------------------------------------------------------------- decision matrix / data
 def test_database_integrity():
     mats = load_materials()
-    assert len(mats) >= 4
-    assert {m["id"] for m in mats if m["shortlist"]} == {"CFRP_QI", "PEEK_CF30", "PC", "AL_7075_T6"}
+    ids = {"CFRP_QI", "AL_ALLOYS", "MG_ALLOYS", "PEEK", "PC", "ABS", "GFRP_EPOXY"}
+    assert {m["id"] for m in mats} == ids
+    assert {m["id"] for m in mats if m["shortlist"]} == ids
     for m in mats:
         assert m["density_kg_m3"] > 0 and m["youngs_modulus_GPa"] > 0
+        for key in m["granta"]:                                      # representative value = centre of the range
+            lo, hi = m["granta"][key]
+            assert lo <= m[key] <= hi and m[key] == pytest.approx((lo * hi) ** 0.5)
 
 
-def test_screening_rejects_abs_and_keeps_shortlist():
+def test_screening_uses_the_whole_granta_range():
     survivors, rejected = screen(load_materials(), load_filters())
-    assert "ABS" in rejected
-    assert {m["id"] for m in survivors} >= {"CFRP_QI", "PEEK_CF30", "AL_7075_T6"}
-    assert "PC" in rejected                               # arm stiffness E >= 3.84 GPa and fatigue premise
+    assert {m["id"] for m in survivors} == {"CFRP_QI", "AL_ALLOYS", "MG_ALLOYS", "GFRP_EPOXY"}
+    # the arm stiffness cuts the E ranges of PEEK (3.76-3.95), PC (2.32-2.44) and ABS (2.07-2.76 GPa)
+    assert set(rejected) == {"PEEK", "PC", "ABS"}
+    assert all("arm stiffness" in why for key in ("PEEK", "PC") for why in rejected[key])
+    filters_only = {k: v for k, v in load_filters().items() if k != "load_cases"}
+    only = screen(load_materials(), filters_only)[1]
+    # ABS: the K_Ic range starts at 1.46 and the maximum service temperature stops at 76.9 C
+    assert set(only) == {"ABS"}
+    assert len(only["ABS"]) == 2
+    cut = {"id": "X", "family": "Metal", "density_kg_m3": 2000.0, "uv_resistance": None,
+           "water_absorption_24h_pct": None,
+           "fracture_toughness_MPa_m05": 5.0, "fracture_toughness_MPa_m05_min": 1.0,   # the range dips below 2.0
+           "max_service_temp_C": 150.0, "youngs_modulus_GPa": 70.0, "yield_strength_MPa": 300.0}
+    _, rej = screen([cut], load_filters())
+    assert "X" in rej and any("fracture_toughness" in why for why in rej["X"])
+
+
+def test_filters_without_data_are_reported_not_applied():
+    missing = not_evaluated(load_materials(), load_filters())
+    assert all({"uv_resistance", "water_absorption_24h_pct"} <= set(v) for v in missing.values())
 
 
 def test_weights_normalised_and_ranking_responds():
@@ -180,7 +201,7 @@ def test_weights_normalised_and_ranking_responds():
     mech_only = dict.fromkeys(CRITERIA, 0.0) | {"mechanical_performance": 1.0}
     cost_only = dict.fromkeys(CRITERIA, 0.0) | {"cost": 1.0}
     assert score_materials(surv, mech_only)[0]["id"] == "CFRP_QI"
-    assert score_materials(surv, cost_only)[0]["id"] == "AL_7075_T6"
+    assert score_materials(surv, cost_only)[0]["id"] == "AL_ALLOYS"
 
 
 def test_scores_bounded():
@@ -191,7 +212,7 @@ def test_scores_bounded():
 
 def test_markdown_table_shape():
     md = to_markdown(properties_dataframe(load_materials(shortlist_only=True))).splitlines()
-    assert len(md) == 2 + 4
+    assert len(md) == 2 + 7
 
 
 def test_dominance_relations_of_the_pareto_analysis():

@@ -7,7 +7,7 @@ Source material that is **inputs** to the project (not generated). Generated fig
 | Folder | Content | Why it is not published | Where to get it |
 |---|---|---|---|
 | `brief/` | `projeto_selemat_2026-2.pdf` - professor's project brief (reference [14]) | course material | from the course (UNICAMP FCA, ER700/EU910) |
-| `ashby_charts/` | `mapas_ashby.pdf`, `diagrama_custo.pdf` - the original Ashby property and cost charts | the source PDFs are excerpts of a published book (reference [1]); the team decided to publish only the *annotated* charts (`docs/figures/ashby_*_annotated.png`, source credited in the image) | Ashby, *Materials Selection in Mechanical Design*, or Ansys Granta EduPack charts |
+| `ashby_charts/` | `mapas_ashby.pdf`, `diagrama_custo.pdf` - the original Ashby property and cost charts | excerpts of a published book (reference [1]); no longer used for the figures, which are the Granta prints | Ashby, *Materials Selection in Mechanical Design* |
 | `drafts/` | `relatorio_equipe_rascunho.docx` - team working draft (Portuguese) | lists student registration numbers (RA) | team members |
 | `benchmark/` | `niero_jp_tcc_sjbv.PDF` - UNESP thesis (Niero, 2024), reference [20] | third-party thesis; redistribution terms of the institutional repository not verified | UNESP institutional repository (search the title in the reference) |
 | `*.pdf` (top level) | course exercise solution and lecture notes used as models for figure and report style | course / third-party material | from the course |

@@ -2,7 +2,8 @@
 
 Every number comes from the premises block ``load_cases`` of ``data/granta_filters.json``; nothing is measured.
 
-Checks applied to each candidate material (a failed check removes the material):
+Checks applied to each candidate material (a failed check removes the material). Granta gives a range per property;
+the lowest strength and stiffness and the highest density are used, because a constraint that cuts a bubble discards it:
 
 1. tension   - ceramics and glasses are not used where the load path is tensile;
 2. stiffness - arm tip deflection:  E >= 4 F L^3 / (b h^3 w_max);
@@ -36,12 +37,16 @@ def check_material(m: dict, case: dict) -> list[str]:
     fails = []
     if excluded_in_tension(m):
         fails.append("ceramic/glass: not used in tension")
-    if m["youngs_modulus_GPa"] < lim["E_min_GPa"]:
-        fails.append(f"arm stiffness: E={m['youngs_modulus_GPa']} GPa < {lim['E_min_GPa']:.2f} GPa")
-    if m["yield_strength_MPa"] < s * lim["sigma_mean_MPa"]:
+    # a bubble cut by the constraint is discarded, so the lowest stiffness and strength are checked
+    e_lo = m.get("youngs_modulus_GPa_min", m["youngs_modulus_GPa"])
+    y_lo = m.get("yield_strength_MPa_min", m["yield_strength_MPa"])
+    rho_hi = m.get("density_kg_m3_max", m["density_kg_m3"])
+    if e_lo < lim["E_min_GPa"]:
+        fails.append(f"arm stiffness: E down to {e_lo:g} GPa < {lim['E_min_GPa']:.2f} GPa")
+    if y_lo < s * lim["sigma_mean_MPa"]:
         fails.append("arm strength: sigma_y below s*sigma_arm")
-    sigma_blade = blade_root_stress(m["density_kg_m3"], lim["omega_rad_s"], case["rotor"]["blade_length_m"]) / 1e6
-    if m["yield_strength_MPa"] < s * sigma_blade:
+    sigma_blade = blade_root_stress(rho_hi, lim["omega_rad_s"], case["rotor"]["blade_length_m"]) / 1e6
+    if y_lo < s * sigma_blade:
         fails.append(f"blade root: sigma_y below s*{sigma_blade:.1f} MPa")
     return fails
 
