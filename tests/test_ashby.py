@@ -63,7 +63,7 @@ def test_selected_material_has_the_best_merit_index(spec):
     anchors, dropped, _ = ac.draw_overlay(ax, spec, load_cases(), spec.open_xlim, spec.open_ylim)
     plt.close(fig)
     rows = {r["id"]: r for r in compute_all_indices(load_materials()) if r["id"] not in dropped}
-    key = {"E_rho": ("IM1", "IM_beam"), "sigma_rho": ("IM2",), "E_cost": ("IM3", "IM3_beam"), "sigma_cost": ("IM2",)}
+    key = {"E_rho": ("IM1",), "sigma_rho": ("IM2",), "E_cost": ("IM3",), "sigma_cost": ("IM2",)}
     for guide, name in zip(spec.guides, key[spec.key], strict=True):
         if spec.key == "sigma_cost":          # sigma/C_v,R is a different index from IM2 (sigma/rho): recompute
             best = max(rows.values(), key=lambda r: r["yield_strength_MPa"] / r["Cv_usd_m3"])["id"]
@@ -76,7 +76,6 @@ def test_load_case_constraints_on_the_charts():
     lim = derived_limits(load_cases())
     assert lim["E_min_GPa"] == pytest.approx(3.84)
     assert lim["sigma_mean_MPa"] == pytest.approx(4.8)
-    assert lim["unbalance_force_N"] == pytest.approx(0.01 * 0.0063 * 4188.79, rel=1e-3)
 
 
 @pytest.mark.parametrize("spec", ac.CHARTS, ids=lambda s: s.key)

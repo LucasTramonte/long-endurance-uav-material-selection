@@ -38,9 +38,9 @@
 
 | Finding | Result |
 |---|---|
-| Lightest panel at equal bending rigidity | **CFRP** (8.9 g vs 14.1 g for Al 7075-T6 on the 100 x 50 mm reference panel, -37 %) |
-| Best cost-adjusted stiffness (IM3) | **Al 7075-T6** (IM3 = 0.33) and PC (0.31); CFRP is ~8x worse (0.04) |
-| Weighted decision matrix (default weights), after the load-case screen of Section 6.1 | **1. Al 7075-T6 (0.736)**, 2. CFRP (0.619), 3. PEEK-CF30 (0.565); PC is screened out by the arm stiffness |
+| Lightest tube at equal flexural rigidity (IM1 = E/rho) | **CFRP** (7.9 g vs 9.5 g for Al 7075-T6 on the reference tube, -18 %) |
+| Best cost-adjusted stiffness (IM3 = E/Cv,R) | **Al 7075-T6** (IM3 = 5.7); CFRP is ~11x worse (0.52) |
+| Weighted decision matrix (default weights), after the load-case screen of Section 6.1 | **1. Al 7075-T6 (0.755)**, 2. CFRP (0.613), 3. PEEK-CF30 (0.481); PC is screened out by the arm stiffness |
 | Sensitivity | CFRP overtakes Al 7075 once mechanical performance weighs >= 0.5 |
 | Motor vibration (40,000 RPM = 666.7 Hz) | Elastomeric dampers with f_n <= 182 Hz, zeta = 0.1 give transmissibility 0.1 [10] |
 
@@ -100,7 +100,7 @@ The model is a quad-duct airframe: four annular ducts with three-spoke motor mou
 
 **Figure 2** - Technical drawing (first-angle projection layout, [3]) with dimensions; ISO 2768-m governs unspecified tolerances [4], [5]. Enlarged front/top/side views, the full dimension table, tolerance tables and the checklist of missing items are in [`cad/README.md`](cad/README.md).
 
-**Mass budget.** The airframe target is <= 22 g (assumption). A 100 x 50 mm panel in 1.0 mm Al 7075-T6 weighs 14.1 g (Section 3.2), so a metal airframe must use local thinning and pockets (Section 5.1); the CFRP equivalent (8.9 g) leaves more margin.
+**Mass budget.** The airframe target is <= 22 g (assumption). A thin-walled Al 7075-T6 tube of the reference geometry (mean radius 18 mm, length 30 mm, 1.0 mm wall; Section 3.2) weighs 9.5 g, so a metal airframe must use local thinning and pockets (Section 5.1); the CFRP equivalent (7.9 g) leaves more margin.
 
 **Currently used materials (brief requirement).** Compact ducted drones commonly use injection-moulded thermoplastics (ABS, PC, polyamide-glass fibre) for ducts and bodies, with CFRP plates or metal parts in premium models. *[Source needed: team to add manufacturer datasheets/teardowns - not verified here.]*
 
@@ -158,7 +158,7 @@ with $`m_p`$ the blade mass and $`r_G`$ the distance of its centre of mass to th
 
 The aerodynamic force on the blade decomposes into thrust and drag: $`\vec R_{aero}=\vec T+\vec D`$, $`T=R\cos\varphi`$, $`D=R\sin\varphi`$, and the rotor torque is $`Q\simeq D\,r_G`$ per blade.
 
-*Centrifugal stress and spin limit.* For a uniform blade of density $`\rho`$ and length $`R_b`$ the root tension is $`\sigma_c=N(0)/A=\rho\,\omega^{2}R_b^{2}/2`$, the same model as $`F_c=m_p\omega^{2}r_G`$ with $`r_G=R_b/2`$. With the *assumed* $`R_b=2r_G=24`$ mm at 40 000 rpm, $`\sigma_c`$ is 7.8 MPa (CFRP), 7.1 MPa (PEEK-CF30), 6.1 MPa (PC) and 14.2 MPa (Al 7075-T6). With $`s=1.5`$ this uses only 2 %, 5 %, 15 % and 4 % of $`\sigma_y`$, so static centrifugal tension does not decide the material; fatigue (Section 5.4) and the unbalance do. The requirement $`\sigma_y\ge s\,\rho\,\omega^{2}R_b^{2}/2`$ is a line of slope 1 on the $`\sigma`$-$`\rho`$ chart, the same slope as the guide line of $`\sigma_y/\rho`$ (Section 2.7).
+*Centrifugal stress of the blade.* For a uniform blade of density $`\rho`$ and length $`R_b`$ the root tension is $`\sigma_c=N(0)/A=\rho\,\omega^{2}R_b^{2}/2`$, the same model as $`F_c=m_p\omega^{2}r_G`$ with $`r_G=R_b/2`$. With the *assumed* $`R_b=2r_G=24`$ mm at 40 000 rpm, $`\sigma_c`$ is 7.8 MPa (CFRP), 7.1 MPa (PEEK-CF30), 6.1 MPa (PC) and 14.2 MPa (Al 7075-T6). With $`s=1.5`$ this uses only 2 %, 5 %, 15 % and 4 % of $`\sigma_y`$, so static centrifugal tension does not decide the material; fatigue (Section 5.4) does. The requirement $`\sigma_y\ge s\,\rho\,\omega^{2}R_b^{2}/2`$ is a line of slope 1 on the $`\sigma`$-$`\rho`$ chart (Section 3.3). Because the centrifugal load is tensile, ceramics are not used for the blades.
 
 #### 1.4.4 Motor arm as a cantilever (RDM)
 
@@ -188,7 +188,7 @@ The arm is modelled as an Euler-Bernoulli beam of length $`L`$, rectangular sect
 E\,I_{Gy}\,w''(x)=-M_{fy}(x)\quad\Rightarrow\quad w(L)=\frac{(T-m_mg)\,L^{3}}{3\,E\,I_{Gy}}
 ```
 
-The stiffness requirement (maximum allowable $`w(L)`$, payload pointing error) and the strength requirement ($`|\sigma|_{max}\le\sigma_y/s`$, safety factor $`s`$) lead to the merit indices $`E^{1/3}/\rho`$ and $`\sigma_y/\rho`$ of Section 2.
+The stiffness requirement (maximum allowable $`w(L)`$, payload pointing error) and the strength requirement ($`|\sigma|_{max}\le\sigma_y/s`$, safety factor $`s`$) lead to the merit indices $`E/\rho`$ and $`\sigma_y/\rho`$ of Section 2.
 
 #### 1.4.5 Vibration excitation
 
@@ -214,14 +214,14 @@ A force diagram shows *what* acts on the airframe; it does not show that the equ
 
 ## Section 2: Mathematical Derivation of Merit Indices
 
-**Design translation (Lecture 4 [13], Ashby [1] ch. 5):** *Function* - panel carrying bending load / tie carrying tension. *Constraints* - fixed length $`L`$ and width $`w`$; prescribed stiffness $`S^\star`$ (or strength $`F`$). *Objectives* - minimise mass $`m`$; minimise cost $`C`$. *Free variable* - thickness $`t`$ (and hence area).
+**Design translation (Lecture 4 [13], Ashby [1] ch. 5):** *Function* - thin-walled tube (fuselage and duct shell) carrying bending load / tie carrying tension. *Constraints* - fixed length $`L`$ and mean radius $`R`$; prescribed stiffness $`S^\star`$ (or strength $`F`$). *Objectives* - minimise mass $`m`$; minimise cost $`C`$. *Free variable* - wall thickness $`t`$ (and hence area).
 
 ### Assumptions
 
 1. **Hookean elastic regime**: stress is proportional to strain; no yielding at service load.
 2. **Small-deflection (Euler-Bernoulli / Kirchhoff) theory**: deflection << thickness scale of the span, plane sections remain plane.
 3. Isotropic, homogeneous material (composites enter via their quasi-isotropic effective $`E`$ - Section 2.5).
-4. Fixed $`L`$, $`w`$; thickness is the only free geometric variable; constant section.
+4. Fixed $`L`$ and mean radius $`R`$; the wall thickness is the only free geometric variable; constant thin-walled section.
 
 ### 2.0 General formulation (mathematical programming)
 
@@ -236,30 +236,30 @@ Every index below is the answer to a constrained minimisation problem. With $`\m
 
 Eliminating $`\mathbf x`$ with the active constraint gives the *performance equation* $`f^\star=\underbrace{\Phi}_{\text{requirement}}\cdot\underbrace{\Gamma}_{\text{geometry}}\cdot P(\mathbf p)`$. The material group $`P`$ is the **performance index to minimise**; the classical merit index is its reciprocal, $`IM=1/P`$, so *minimising $`P`$ and maximising $`IM`$ select the same material*. The derivations of 2.1-2.3 are generated and checked symbolically with SymPy [22].
 
-### 2.1 IM1 - light, stiff panel in bending
+### 2.1 IM1 - light, stiff thin-walled tube in bending
 
-Minimise the mass of a panel whose bending stiffness must reach $`S^\star`$ ($`C_1`$ depends only on support and loading conditions):
+The fuselage and duct shells are thin-walled tubes whose mean radius $`R`$ is fixed by the packaging (the rotor and the battery fix it), so the wall thickness $`t`$ is the free variable. With a fixed radius and a free thickness the index is $`E/\rho`$, the formulation confirmed by the course monitor's review of the team's derivation. For a tube of length $`L`$ with $`I\simeq\pi R^{3}t`$ and a flexural stiffness $`S=48EI/L^{3}`$ (simply supported, central load) that must reach $`S^\star`$:
 
 ```math
 \begin{aligned}
-\min_{t>0}\quad & m(t)=\rho\,L\,w\,t\\
-\text{s.t.}\quad & S(t)=\frac{C_1\,E\,I}{L^{3}}=\frac{C_1}{12}\,\frac{E\,w\,t^{3}}{L^{3}}\;\ge\;S^\star,\qquad I=\frac{w\,t^{3}}{12}
+\min_{t>0}\quad & m(t)=2\pi R\,t\,L\,\rho\\
+\text{s.t.}\quad & S(t)=\frac{48\,E\,\pi R^{3}\,t}{L^{3}}\;\ge\;S^\star
 \end{aligned}
 ```
 
 $`m`$ increases with $`t`$ and $`S`$ increases with $`t`$, so the constraint is active at the optimum, $`S(t^\star)=S^\star`$:
 
 ```math
-t^\star=\left(\frac{12\,S^\star L^{3}}{C_1\,E\,w}\right)^{1/3}\quad\Longrightarrow\quad m^\star=\underbrace{\left(\frac{12\,S^\star}{C_1\,w}\right)^{1/3}L^{2}\,w}_{\text{fixed by the design}}\;\cdot\;\underbrace{\frac{\rho}{E^{1/3}}}_{P_1}
+t^\star=\frac{S^\star L^{3}}{48\pi\,E\,R^{3}}\quad\Longrightarrow\quad m^\star=\underbrace{\frac{S^\star L^{4}}{24\,R^{2}}}_{\text{fixed by the design}}\;\cdot\;\underbrace{\frac{\rho}{E}}_{P_1}
 ```
 
 The best material solves the outer problem $`\min_{k}\,P_{1,k}`$, that is
 
 ```math
-\boxed{\;P_1=\min_k\frac{\rho_k}{E_k^{1/3}}\quad\Longleftrightarrow\quad IM_1=\max_k\frac{E_k^{1/3}}{\rho_k}\;}
+\boxed{\;P_1=\min_k\frac{\rho_k}{E_k}\quad\Longleftrightarrow\quad IM_1=\max_k\frac{E_k}{\rho_k}\;}
 ```
 
-Ashby chart guideline: slope 3 on $`\log E`$ vs $`\log\rho`$.
+Ashby chart guideline: slope 1 on $`\log E`$ vs $`\log\rho`$. The thickness enters $`I`$ linearly when the radius is fixed, which is why the exponent is 1; for a flat panel of fixed width and free thickness ($`I\propto t^{3}`$) it would be $`E^{1/3}/\rho`$, the plate index of the benchmark thesis (Section 6.5). An earlier version of the team's draft used that exponent for the tube, and the review corrected it. The derivation is generated and checked symbolically (SymPy [22]).
 
 ### 2.2 IM2 - tensile strength per unit mass
 
@@ -279,36 +279,36 @@ A skin/tie loaded by a tensile force $`F`$ with free cross-section $`A`$:
 
 Chart guideline: slope 1 on $`\log\sigma_y`$ vs $`\log\rho`$.
 
-### 2.3 IM3 - volumetric cost for the stiffness-limited panel
+### 2.3 IM3 - volumetric cost for the stiffness-limited tube
 
 With $`C_m`$ the material price per kg and $`C_{v,R}=C_m\,\rho`$ the volumetric cost (USD/m^3), the objective becomes the cost $`C=C_m\,m`$ under the same stiffness constraint as 2.1:
 
 ```math
 \begin{aligned}
-\min_{t>0}\quad & C(t)=C_m\,\rho\,L\,w\,t=C_{v,R}\,L\,w\,t\\
-\text{s.t.}\quad & \frac{C_1}{12}\,\frac{E\,w\,t^{3}}{L^{3}}\ge S^\star
+\min_{t>0}\quad & C(t)=C_m\,2\pi R\,t\,L\,\rho=C_{v,R}\,2\pi R\,t\,L\\
+\text{s.t.}\quad & \frac{48\,E\,\pi R^{3}\,t}{L^{3}}\ge S^\star
 \end{aligned}
-\qquad\Longrightarrow\qquad C^\star=\left(\frac{12\,S^\star}{C_1\,w}\right)^{1/3}L^{2}\,w\cdot\underbrace{\frac{C_{v,R}}{E^{1/3}}}_{P_3}
+\qquad\Longrightarrow\qquad C^\star=\frac{S^\star L^{4}}{24\,R^{2}}\cdot\underbrace{\frac{C_{v,R}}{E}}_{P_3}
 ```
 
 ```math
-\boxed{\;P_3=\min_k\frac{C_{v,R,k}}{E_k^{1/3}}\quad\Longleftrightarrow\quad IM_3=\max_k\frac{E_k^{1/3}}{C_{v,R,k}}\;}
+\boxed{\;P_3=\min_k\frac{C_{v,R,k}}{E_k}\quad\Longleftrightarrow\quad IM_3=\max_k\frac{E_k}{C_{v,R,k}}\;}
 ```
 
 ### 2.4 Units and implementation
 
-Implementation units: $`E`$ in GPa, $`\sigma_y`$ in MPa, $`\rho`$ in kg/m^3 (converted to Mg/m^3), $`C_{v,R}`$ in USD/m^3 (IM3 reported per kUSD/m^3). The code also returns the minimisation form $`P_k=1/IM_k`$. As a cross-check, the panel mass ratio of two materials at equal rigidity $`D=E\,t^3/12`$ equals the inverse ratio of IM1.
+Implementation units: $`E`$ in GPa, $`\sigma_y`$ in MPa, $`\rho`$ in kg/m^3 (converted to Mg/m^3), $`C_{v,R}`$ in USD/m^3 (IM3 reported per kUSD/m^3). The code also returns the minimisation form $`P_k=1/IM_k`$. As a cross-check, the tube mass ratio of two materials at equal flexural rigidity $`EI`$ equals the inverse ratio of IM1.
 
-**Cost and currency.** A price list changes with the country's currency and with inflation, so absolute USD values age quickly. The mass cost is $`C_m`$ (currency/kg), the volumetric cost $`C_{v}=C_m\rho`$ (currency/m^3) and the cost of a part $`C=C_m\,m`$. For a stiffness-limited *beam* with a free square section, $`m=(12S/C_1)^{1/2}L^{5/2}\rho/E^{1/2}`$, so the cost index is $`IM=\max E^{1/2}/(C_m\rho)`$ (`beam_cost_index`), the beam counterpart of IM3. To compare across currencies and dates the charts use the *relative* volumetric cost $`C_{v,R}=C_m\rho/(C_{m}\rho)_{ref}`$ (`relative_volumetric_cost`); the course notes use steel as the reference, which is to be confirmed against Ashby [1] before the USD/m^3 values of this report are replaced by it.
+**Cost and currency.** A price list changes with the country's currency and with inflation, so absolute USD values age quickly. The mass cost is $`C_m`$ (currency/kg), the volumetric cost $`C_{v}=C_m\rho`$ (currency/m^3) and the cost of a part $`C=C_m\,m`$. To compare across currencies and dates the charts use the *relative* volumetric cost $`C_{v,R}=C_m\rho/(C_{m}\rho)_{ref}`$ (`relative_volumetric_cost`); the course notes use steel as the reference, which is to be confirmed against Ashby [1] before the USD/m^3 values of this report are replaced by it.
 
 ### 2.5 Composites and model limitations
 
 - **Anisotropy**: IM1 uses a scalar $`E`$. For laminates use the effective in-plane modulus from classical laminate theory [9] (`composite_anisotropy.py`): for 55 % fibre volume fraction, $`[0]_8`$ gives $`E_x`$ = 128 GPa but $`E_y`$ = 7.6 GPa; $`[0/{+45}/{-45}/90]_s`$ gives a uniform **47 GPa** (database value for CFRP-QI: 48 GPa).
-- IM1 is exact only for bending where *thickness* is free; with a minimum-gauge limit (e.g. 0.5 mm for handling) $`t\ge t_{min}`$ is an extra constraint and lighter materials cannot use their full advantage.
-- Small-deflection theory underestimates deflection for thin panels with large displacements; buckling, local dents and joint design are not captured.
+- IM1 holds for a thin wall ($`t\ll R`$), a fixed radius and a free thickness; with a minimum-gauge limit (e.g. 0.5 mm for handling) $`t\ge t_{min}`$ is an extra constraint and lighter materials cannot use their full advantage. The thin-wall assumption is weak for the soft materials: at equal rigidity the wall of the reference tube is 5.5 mm for PEEK-CF30 and exceeds the radius for PC (Section 3.2).
+- Small-deflection theory underestimates deflection for thin shells with large displacements; local buckling, ovalisation, dents and joint design are not captured.
 - Single-objective indices ignore interaction effects: use the multi-objective/Pareto treatment and the decision matrix (Section 2.6 and Section 6).
 - Material data are typical values; scatter (composites +-10-15 %) is not propagated.
-- IM2 with $`\sigma_y`$ for composites uses the quasi-isotropic tensile strength; fatigue and notch sensitivity are not included.
+- IM2 with $`\sigma_y`$ for composites uses the quasi-isotropic tensile strength; fatigue and notch sensitivity are not included in the index (Section 5.4).
 
 ### 2.6 Material selection as an optimisation problem
 
@@ -337,28 +337,6 @@ with $`s_{k,\mathrm{mech}}=\tfrac12\big(\tfrac{IM_{1,k}}{\max IM_1}+\tfrac{IM_{2
 
 
 
-### 2.7 Spin-limited parts: the flywheel model and the rotor
-
-A spinning part is the classical case of a *strength-limited* design (course notes, flywheel study): the centrifugal force must not exceed the yield limit. For a solid disc of radius $`R`$, thickness $`t`$, density $`\rho`$, Poisson ratio $`\nu\simeq1/3`$ (assumed constant), in the elastic regime:
-
-```math
-U=\tfrac12 I_z\omega^{2}=\tfrac14\,m R^{2}\omega^{2}=\tfrac14\,\rho\pi R^{4}t\,\omega^{2},\qquad
-\sigma_{max}=\frac{3+\nu}{8}\,\rho\,\omega^{2}R^{2}
-```
-
-Maximising the stored energy at the strength limit is the constrained problem (free variable: the material):
-
-```math
-\begin{aligned}
-\max_{\text{material}}\quad & \frac{U}{m}=\frac{R^{2}\omega^{2}}{4}\\
-\text{s.t.}\quad & \frac{3+\nu}{8}\,\rho\,\omega^{2}R^{2}\le\frac{\sigma_y}{s}
-\end{aligned}
-\qquad\Longrightarrow\qquad
-\frac{U}{m}=\frac{2}{3+\nu}\,\frac{\sigma_y/s}{\rho}
-```
-
-so the best light flywheel maximises $`\sigma_y/\rho`$ (guide line of slope 1), the same index as IM2; for energy per unit *volume* at a fixed speed, $`U/V=\rho R^{2}\omega^{2}/4`$ favours the densest material (tungsten, lead, nickel and copper alloys, steels), which is the opposite of a lightweight design. Maximising $`U`$ at fixed $`R`$ and $`t`$ gives $`IM=\max\sigma_y`$. Because the centrifugal load is tensile, **ceramics are excluded** even when their printed strength is high. The derivation is checked symbolically in `tests/test_rotating_fatigue.py`. For the rotor of this drone the same index applies to the blades, the hub and the motor bell; the numbers of Section 1.4.3 show that static centrifugal stress is far below the strength of all shortlisted materials.
-
 ---
 
 ## Section 3: Ansys Granta Screening and Ashby Mapping
@@ -369,23 +347,23 @@ Candidate families (Lecture 1): **CFRP** (epoxy matrix, quasi-isotropic), **PEEK
 
 | Material | rho (kg/m3) | E (GPa) | sigma_y (MPa) | K_Ic (MPa.m^0.5) | Cost (USD/kg) | Cv,R (USD/m3) | IM1 | IM2 | IM3 |
 |---|---|---|---|---|---|---|---|---|---|
-| CFRP (QI) | 1550 | 48 | 600 | 30 | 60 | 93,000 | **2.34** | **387** | 0.04 |
-| PEEK 30 % CF | 1410 | 13 | 200 | 6 | 90 | 126,900 | 1.67 | 142 | 0.02 |
-| Polycarbonate | 1200 | 2.3 | 62 | 2.1 | 3.5 | 4,200 | 1.10 | 52 | 0.31 |
-| Al 7075-T6 | 2810 | 71.7 | 503 | 29 | 4.5 | 12,645 | 1.48 | 179 | **0.33** |
+| CFRP (QI) | 1550 | 48 | 600 | 30 | 60 | 93,000 | **31.0** | **387** | 0.52 |
+| PEEK 30 % CF | 1410 | 13 | 200 | 6 | 90 | 126,900 | 9.2 | 142 | 0.10 |
+| Polycarbonate | 1200 | 2.3 | 62 | 2.1 | 3.5 | 4,200 | 1.9 | 52 | 0.55 |
+| Al 7075-T6 | 2810 | 71.7 | 503 | 29 | 4.5 | 12,645 | 25.5 | 179 | **5.67** |
 
-Units: IM1 in GPa^(1/3)/(Mg/m^3); IM2 in MPa/(Mg/m^3); IM3 in GPa^(1/3)/(kUSD/m^3). Regenerate: `python -m src.analysis.export_tables --shortlist`.
+Units: IM1 in GPa/(Mg/m^3); IM2 in MPa/(Mg/m^3); IM3 in GPa/(kUSD/m^3). Regenerate: `python -m src.analysis.export_tables --shortlist`.
 
-### 3.2 Panel mass at equal bending rigidity
+### 3.2 Tube mass at equal flexural rigidity
 
-Reference: flexural rigidity of a **1.0 mm Al 7075-T6 panel, 100 x 50 mm** (assumed size of a body/duct skin panel; `reference_panel` in `data/granta_filters.json`). Mass ratios are size-independent; absolute values scale with panel area.
+Reference: flexural rigidity $`EI`$ of a **thin-walled Al 7075-T6 tube with a 1.0 mm wall, mean radius 18 mm and length 30 mm** (assumed duct-like shell read from the Ø36 duct feature and the 30 mm side height of the CAD drawing, which the CAD README flags as ambiguous; `reference_tube` in `data/granta_filters.json`). Mass ratios are size-independent; absolute values scale with $`R^{-2}L^{4}`$.
 
-| Material | Thickness (mm) | Panel mass (g) | Material cost (USD) |
+| Material | Wall thickness (mm) | Tube mass (g) | Material cost (USD) |
 |---|---|---|---|
-| CFRP (QI) | 1.14 | **8.9** | 0.53 |
-| PEEK 30 % CF | 1.77 | 12.5 | 1.12 |
-| Al 7075-T6 | 1.00 | 14.1 | **0.06** |
-| Polycarbonate | 3.15 | 18.9 | 0.07 |
+| CFRP (QI) | 1.49 | **7.9** | 0.47 |
+| Al 7075-T6 | 1.00 | 9.5 | **0.04** |
+| PEEK 30 % CF | 5.52 (thin-wall assumption weak) | 26.4 | 2.37 |
+| Polycarbonate | 31.2 (exceeds the radius: not feasible) | 126.9 (formal value) | 0.44 |
 
 ### 3.3 Reading the Ashby charts: constraint line and guide line
 
@@ -393,17 +371,17 @@ The selection is made on the charts with five explicit steps. They are also writ
 
 1. **Mark the constraint.** The requirement is drawn as a straight line on the chart: a horizontal line for a minimum $`E`$ or $`\sigma`$. Here it comes from the arm model of Section 1.4.4: $`E\ge 4FL^{3}/(b\,h^{3}\,w_{max})`$ for the tip deflection and $`\sigma_y\ge s\,\sigma_{max}=s\,6FL/(b\,h^{2})`$ for strength. The blade root adds a second strength constraint, $`\sigma_y\ge s\rho\omega^{2}R_b^{2}/2`$, which is a *sloped* line of slope 1 on the $`\sigma`$-$`\rho`$ chart (Section 1.4.3).
 2. **Discard the materials the constraint cuts.** If the line crosses a material bubble, part of that material cannot meet the requirement, so the material is discarded.
-3. **Select the guide line of the merit index.** $`E^{1/3}/\rho`$ has slope 3 on the $`E`$-$`\rho`$ chart and $`\sigma_y/\rho`$ has slope 1 on the $`\sigma`$-$`\rho`$ chart (Section 2).
+3. **Select the guide line of the merit index.** $`E/\rho`$ has slope 1 on the $`E`$-$`\rho`$ chart, $`\sigma_y/\rho`$ has slope 1 on the $`\sigma`$-$`\rho`$ chart and $`E/C_{v,R}`$ has slope 1 on the $`E`$-$`C_{v,R}`$ chart (Section 2).
 4. **Slide the ruler along the slope** of the guide line across the chart, keeping the slope fixed.
 5. **Keep a material only where the guide line passes through the centre of its bubble.** Materials above or to the left of the line have a higher index; the ones far from it are ranked, not selected.
 
-**Premises (nothing is measured).** All numbers come from `data/granta_filters.json`, block `load_cases`, and are assumptions of the team: arm $`F=0.30`$ N, $`L=30`$ mm, $`b\times h=5\times1.5`$ mm, allowable tip deflection 0.5 mm; rotor 40 000 rpm, blade length $`R_b=24`$ mm, rotating mass 10 g; safety factor $`s=1.5`$. The rotating unbalance is taken from the balance grade of ISO 21940-11, $`G=e_{per}\,\omega`$, so $`F_u=m\,G\,\omega`$: with grade G 6.3 this is $`F_u=0.26`$ N and a stress amplitude $`\sigma_a=4.2`$ MPa at the arm root (the web sources found disagree between G 2.5 and G 6.3 for small electric motors and the standard text was not read, so G 6.3 is a premise). The fatigue check uses a Goodman line with a *premised* fatigue-to-tensile ratio of 0.1, because no reliable per-material fatigue strength was found in official sources; it must be replaced by the Granta fatigue strength of each material. The relative cost uses a steel reference of 0.7 USD/kg and 7850 kg/m^3, a premise whose price is not from an official source.
+**Premises (nothing is measured).** All numbers come from `data/granta_filters.json`, block `load_cases`, and are assumptions of the team: arm $`F=0.30`$ N, $`L=30`$ mm, $`b\times h=5\times1.5`$ mm, allowable tip deflection 0.5 mm; rotor 40 000 rpm and blade length $`R_b=24`$ mm; safety factor $`s=1.5`$. The relative cost uses a steel reference of 0.7 USD/kg and 7850 kg/m^3, a premise whose price is not from an official source.
 
 **Two rules that are always applied.** (i) *Ceramics are not used in tension*: their tensile strength is low and scattered, and the strength printed for ceramics on the chart is the modulus of rupture, not a tensile strength; they are removed from every tension-loaded selection. (ii) *The strength constraint includes a safety factor $`s`$ taken from the literature*, not chosen by the team: the default is $`s=1.5`$, the factor between limit and ultimate load in 14 CFR 25.303 [27]. That rule is written for transport aircraft, not for a 150 g UAV, and it was read through secondary copies; handbook values of 2.5 to 4 for uncertain dynamic loads exist (course slides and a trade article, not the textbook table). The factor is therefore an *assumption to be confirmed* against Shigley or the standard the course adopts; the charts can be redrawn for any $`s`$.
 
 ![Ashby chart E-rho with constraint, guide lines and arrows](docs/figures/ashby_E_rho_annotated.png)
 
-**Figure 6** - $`E`$-$`\rho`$ chart. Original chart: Ashby, *Materials Selection in Mechanical Design*, 4th ed., 2011 (Granta MFA) [1], annotated by the team. Arrow 1: the constraint $`E\ge 3.84`$ GPa (shaded: discarded region). Arrow 2: PC and ABS fall below it and are discarded. Arrow 3: the guide lines of the panel index $`E^{1/3}/\rho`$ (slope 3, blue) and of the arm index $`E^{1/2}/\rho`$ (slope 2, green). Arrow 4: the ruler slides along the slope. Arrow 5: both lines pass through CFRP, the selected material; Al 7075-T6, Mg AZ31B, GFRP and PEEK-CF30 lie below them. The green arrow points to the higher index. The team's materials are the representative values of `data/materials_db.json`, drawn as points over the printed bubbles.
+**Figure 6** - $`E`$-$`\rho`$ chart. Original chart: Ashby, *Materials Selection in Mechanical Design*, 4th ed., 2011 (Granta MFA) [1], annotated by the team. Arrow 1: the constraint $`E\ge 3.84`$ GPa (shaded: discarded region). Arrow 2: PC and ABS fall below it and are discarded. Arrow 3: the guide line of the index $`E/\rho`$ (slope 1). Arrow 4: the ruler slides along the slope. Arrow 5: the line passes through CFRP, the selected material; Al 7075-T6, Mg AZ31B, GFRP and PEEK-CF30 lie below it. The green arrow points to the higher index. The team's materials are the representative values of `data/materials_db.json`, drawn as points over the printed bubbles.
 
 ![Ashby chart sigma-rho with constraints, guide line and arrows](docs/figures/ashby_sigma_rho_annotated.png)
 
@@ -411,7 +389,7 @@ The selection is made on the charts with five explicit steps. They are also writ
 
 ![Ashby chart E against relative cost with constraint, guide lines and arrows](docs/figures/ashby_E_cost_annotated.png)
 
-**Figure 8** - $`E`$-$`C_{v,R}`$ chart (same source). The panel and arm guide lines ($`E^{1/3}/C_{v,R}`$, $`E^{1/2}/C_{v,R}`$) pass through Mg AZ31B, a screening-pool material that is not on the shortlist; CFRP lies far from them, on the expensive side. The points use the steel reference premised above.
+**Figure 8** - $`E`$-$`C_{v,R}`$ chart (same source). The guide line of $`E/C_{v,R}`$ passes through Al 7075-T6; CFRP lies far below it, on the expensive side. The points use the steel reference premised above.
 
 ![Ashby chart strength against relative cost with constraint, guide line and arrows](docs/figures/ashby_sigma_cost_annotated.png)
 
@@ -423,7 +401,7 @@ The selection is made on the charts with five explicit steps. They are also writ
 
 ![Pareto front](docs/figures/pareto.png)
 
-Pareto-optimal among the four shortlisted materials: **CFRP** (lightest, toughest) and **Al 7075-T6** (cheap, tough). PEEK-CF30 is dominated by CFRP in all three objectives (mass, cost, K_Ic); PC is dominated by Al 7075 (lighter, cheaper and tougher).
+Pareto-optimal among the shortlisted materials: **CFRP** (lightest, toughest) and **Al 7075-T6** (cheap, tough). PEEK-CF30 is dominated by CFRP in mass and toughness and by Al 7075-T6 in all three objectives; PC is dominated by Al 7075-T6 (lighter, cheaper and tougher). Mass is that of the reference tube of Section 3.2.
 
 ---
 
@@ -509,9 +487,11 @@ R=\frac{\sigma_{min}}{\sigma_{max}}
 
 Worked example (course notes): 20 MPa in tension and 10 MPa in compression give $`\Delta\sigma=30`$ MPa, $`\sigma_a=15`$ MPa, $`\sigma_m=5`$ MPa and $`R=-0.5`$ (`stress_cycle`, tested). Fully reversed loading has $`R=-1`$ and $`\sigma_m=0`$.
 
+**Why the motor frequency is the frequency of the stress cycles.** The unbalance force of Section 1.4.5 is a vector of constant magnitude rotating with the rotor, $`\vec F_u(t)=m_ue\omega^{2}(\cos\omega t\,\vec x+\sin\omega t\,\vec y)`$. Each component on the arm and on the fuselage therefore goes through one full load cycle per revolution, and a motor at $`n=40\,000`$ rpm imposes a cycle frequency $`f=n/60=666.7`$ Hz on every part that carries that force. The same holds for the once-per-revolution centrifugal and thrust variations of the blades; the blade-pass frequency and the harmonics add higher frequencies with lower amplitude. The stress amplitude itself depends on the unbalance and on the dynamic response of the mount, and is not known here: the number of cycles is justified, the amplitude is an open item.
+
 The S-N curve plots the stress amplitude $`\sigma_a`$ (log scale) against the number of cycles $`N`$ (log scale). Ferrous alloys show a fatigue (endurance) limit below which failure does not occur; other materials, in general aluminium alloys, polymers and composites, show a curve that keeps falling, so a life $`N`$ at a stated amplitude is used instead (this statement is general knowledge and was not checked against a source here). The test that builds the curve removes load at each failure and machines and normalises a new specimen, which is why $`\sigma_a`$ falls with $`N`$. Basquin's law $`\sigma_a=\sigma_f'(2N)^{b}`$ and Miner's sum $`D=\sum n_i/N_i`$ (`basquin_cycles`, `miner_damage`) are the models used in this repository.
 
-**Life at the excitation frequency.** At $`f=666.7`$ Hz, $`10^{7}`$ cycles are reached in $`10^{7}/(666.7\times3600)=4.2`$ h and $`10^{9}`$ cycles in about 417 h (`hours_for_cycles`). A long-endurance airframe therefore lives in the high-cycle regime within a few flights, and the arms and motor mounts must be designed for life, not only for static strength. Nothing is measured, so the stress cycle of the arm root is built from the premises of Section 3.3: the static thrust gives $`\sigma_m=4.8`$ MPa and the unbalance of an ISO 21940-11 grade G 6.3 rotor ($`F_u=m\,G\,\omega=0.26`$ N, taken quasi-statically, no dynamic amplification) gives $`\sigma_a=4.2`$ MPa, so $`\sigma_{max}=9.0`$ MPa, $`\sigma_{min}=0.6`$ MPa and $`R=0.06`$. A Goodman line $`\sigma_a/\sigma_e+\sigma_m/\sigma_u\le1/s`$ with $`\sigma_e=\varphi\sigma_u`$ gives the fatigue ratio each material needs, $`\varphi_{req}=\sigma_a/(\sigma_u/s-\sigma_m)`$: 0.011 (CFRP), 0.013 (Al 7075-T6), 0.022 (GFRP), 0.033 (PEEK-CF30, Mg AZ31B) and 0.116 (PC). With the premised ratio 0.1 only PC fails; this check is a screen, to be redone with the Granta fatigue strength of each material at $`10^{7}`$ to $`10^{9}`$ cycles.
+**Life at the excitation frequency.** At $`f=666.7`$ Hz, $`10^{7}`$ cycles are reached in $`10^{7}/(666.7\times3600)=4.2`$ h and $`10^{9}`$ cycles in about 417 h (`hours_for_cycles`). A long-endurance airframe therefore lives in the high-cycle regime within a few flights, and the arms and motor mounts must be designed for life, not only for static strength.
 
 **Fractography and surface engineering.** In a failed part, *beach marks* (striations of the slow crack growth, one advance per cycle at the microscopic scale) indicate fatigue; a fast, catastrophic fracture zone marks the final failure. If no beach marks are seen, a catastrophic failure may still have occurred, depending on the material. Fatigue life is improved by surface engineering: coatings, shot peening, and smoothing sharp angles (fillets) where cracks start.
 
@@ -521,7 +501,7 @@ The S-N curve plots the stress amplitude $`\sigma_a`$ (log scale) against the nu
 
 ### 6.1 Method
 
-Weighted-property method as taught in [13] and [1] (multiple constraints and conflicting objectives). Candidates first pass the hard filters of Section 4 and the **load-case screen** (arm stiffness, arm and blade-root strength, arm fatigue, no ceramics in tension; premises in Sections 3.3 and 5.4). Criterion scores in [0, 1], one index per kind of part: *Mechanical performance* = mean of IM1 (panels: body and duct skin), the beam index $`E^{1/2}/\rho`$ (arms) and IM2 (ties and blades), each normalised to its best value; *Cost* = mean of IM3 (panel) and the beam cost index $`E^{1/2}/C_{v,R}`$, each normalised; *Manufacturability* and *Environmental durability* = team scores (1-5)/5 given in the database. Default weights (editable): **0.35 / 0.25 / 0.20 / 0.20**.
+Weighted-property method as taught in [13] and [1] (multiple constraints and conflicting objectives). Candidates first pass the hard filters of Section 4 and the **load-case screen** (arm stiffness, arm and blade-root strength, no ceramics in tension; premises in Section 3.3). Criterion scores in [0, 1]: *Mechanical performance* = mean of IM1 ($`E/\rho`$, tube) and IM2 ($`\sigma_y/\rho`$), each normalised to its best value; *Cost* = IM3 ($`E/C_{v,R}`$) / best IM3; *Manufacturability* and *Environmental durability* = team scores (1-5)/5 given in the database. Default weights (editable): **0.35 / 0.25 / 0.20 / 0.20**.
 
 **Selection criteria and pre-selection.** The criteria are the application (use), the geometry, the properties and the manufacturing process; machining comes after the material is chosen. With about two hundred thousand engineering materials (course notes; the number is to be confirmed), a **decision matrix** is needed to choose: each option is scored from 1 to 5 on each criterion (mechanical, thermal, cost, and here also manufacturability and durability) and the scores are weighted. The shortlist itself is made by pre-selection, with three methods: (i) documentation, that is, property lists; (ii) selection diagrams, such as Ashby bubble charts and bar charts (Section 3.3); (iii) software, such as Granta (Section 3). A material is first identified by its composition: metals (alloys of metallic elements), ceramics (a metal bonded to oxygen, nitrogen, sulphur or carbon, for example Al2O3, SiC, Si3N4, ZrO2, vitreous SiO2), polymers (carbon and hydrogen chains: PE, PP, PVC, PTFE, PA 6.6) and composites (two phases, for example CFRP, GFRP, wood, reinforced concrete, SiC-reinforced aluminium).
 
@@ -529,11 +509,11 @@ Weighted-property method as taught in [13] and [1] (multiple constraints and con
 
 | Rank | Material | Mechanical (0.35) | Cost (0.25) | Manufacturability (0.20) | Durability (0.20) | **Total** |
 |---|---|---|---|---|---|---|
-| 1 | **Al 7075-T6** | 0.589 | 1.000 | 0.800 | 0.600 | **0.736** |
-| 2 | CFRP (QI) | 1.000 | 0.115 | 0.400 | 0.800 | 0.619 |
-| 3 | PEEK-CF30 | 0.550 | 0.049 | 0.800 | 1.000 | 0.565 |
+| 1 | **Al 7075-T6** | 0.643 | 1.000 | 0.800 | 0.600 | **0.755** |
+| 2 | CFRP (QI) | 1.000 | 0.091 | 0.400 | 0.800 | 0.613 |
+| 3 | PEEK-CF30 | 0.332 | 0.018 | 0.800 | 1.000 | 0.481 |
 
-Polycarbonate (score 0.665 in the previous version of the matrix) no longer reaches the ranking: with the arm geometry assumed in Section 3.3 it fails the arm stiffness ($`E=2.3<3.84`$ GPa) and, with the premised fatigue ratio of 0.1, the arm fatigue check ($`\varphi_{req}=0.116`$). This is a screen at a *fixed* arm geometry: a thicker arm would let PC pass at the price of mass, which is what the indices rank.
+Polycarbonate does not reach the ranking: with the arm geometry assumed in Section 3.3 it fails the arm stiffness ($`E=2.3<3.84`$ GPa). This is a screen at a *fixed* arm geometry: a thicker arm would let PC pass at the price of mass, which is what the indices rank (at equal flexural rigidity its tube wall would exceed the radius, Section 3.2).
 
 ### 6.3 Sensitivity to weights
 
@@ -553,8 +533,8 @@ Al 7075-T6 ranks first or second in all six scenarios and is never last.
 ### 6.4 Recommendation
 
 1. **Selected: CNC-machined Al 7075-T6 unibody** - robust winner for the stated volume and cost sensitivity, a process aligned with consumer-drone unibody practice, excellent UV/moisture behaviour and no autoclave bottleneck. Surface treat (anodise) and manage stress-corrosion cracking.
-2. **Lightweight option: quasi-isotropic CFRP** (-37 % panel mass in the reference panel, higher modal frequency, K_Ic 30), pursued only through a press/compression-moulded route; weigh against about 8x worse IM3 and the process burden.
-3. **Not recommended**: PC (screened out by the arm stiffness; its panel would be 4.7 mm thick and 255 g at equal rigidity) and PEEK-CF30 (dominated by CFRP in mass, cost and toughness).
+2. **Lightweight option: quasi-isotropic CFRP** (-18 % tube mass on the reference tube, higher modal frequency, K_Ic 30), pursued only through a press/compression-moulded route; weigh against about 11x worse IM3 and the process burden.
+3. **Not recommended**: PC (screened out by the arm stiffness; its tube wall would exceed the radius at equal rigidity) and PEEK-CF30 (dominated by CFRP in mass and toughness, and by Al 7075-T6 in all three objectives).
 
 **Caveats.** Manufacturability and durability scores are subjective; property data are representative; the matrix uses a simple normalised weighted sum (no tie-break or uncertainty analysis). Re-run after replacing the data with the Granta export.
 
@@ -562,7 +542,7 @@ Al 7075-T6 ranks first or second in all six scenarios and is never last.
 
 The closest published case is the UNESP thesis of Niero [20] (Ashby + Pahl & Beitz weighted matrix for UAV spars and ribs, 19 materials). Full comparison in [`docs/benchmark.md`](docs/benchmark.md). Summary:
 
-- **Numerical validation:** the thesis' plate index $`E^{1/3}/\rho`$ and beam index $`E^{1/2}/\rho`$ for all 19 materials are reproduced by our code within 0.5 % (`tests/test_benchmark.py`, data in `data/benchmark_niero2024.json`); e.g. Al 7075-T6: 1.478 (thesis) vs 1.48 (this project).
+- **Numerical validation:** the thesis' plate index $`E^{1/3}/\rho`$ and beam index $`E^{1/2}/\rho`$ for all 19 materials are reproduced by our code within 0.5 % (`bending_panel_index` and `bending_beam_index`, kept as benchmark functions; `tests/test_benchmark.py`, data in `data/benchmark_niero2024.json`); e.g. Al 7075-T6: 1.478 (thesis) vs 1.48 (this project). The ranking of this report uses the tube index $`E/\rho`$ instead, because the radius of our shells is fixed.
 - **Same conclusions in direction:** composites rank first when the index dominates, limited by cost; aluminium alloys are a good alternative in every scenario; steels are excluded by density and titanium by cost/manufacturing.
 - **Differences:** the thesis uses a unidirectional carbon/epoxy value ($`E`$ = 142 GPa) while we use a quasi-isotropic laminate (48 GPa); we add hard environmental constraints (UV, moisture, $`K_{Ic}`$), Pareto optimisation, process/vibration engineering and CAD/tolerancing, which the thesis does not cover.
 
@@ -609,7 +589,7 @@ The draft report and this repository differ in a few places; decide which is aut
 | Candidate materials | Al 7075-T6, Al-Li 2099-T83, CFRP epoxy (autoclave), CFRP-PEEK (thermoplastic) | CFRP epoxy, PEEK-30%CF, PC, Al 7075-T6 (as specified for this repo); Al-Li 2099 is not in the database |
 | Criteria / weights | 5 criteria: stiffness/mass 0.25, strength/mass 0.20, manufacturing 0.20, damping 0.20, cost 0.15 | 4 criteria: 0.35 / 0.25 / 0.20 / 0.20 (editable) |
 | Winner | CFRP epoxy (4.30) | Al 7075-T6 by default; CFRP when performance weight >= 0.5 |
-| Tube stiffness index | Thin tube, free t: draft says the exponent reduces to 1/3 | Flat panel (IM1 = E^(1/3)/rho). For a thin tube of fixed radius and free wall thickness, S ~ E R^3 t gives E/rho instead - to be re-derived |
+| Tube stiffness index | Thin tube, free t: the draft used the exponent 1/3 | Resolved: with fixed radius and free wall thickness IM1 = E/rho (course monitor's review; Section 2.1). The flat-panel index E^(1/3)/rho is kept only for the benchmark thesis |
 | Year / dates | 2026 | 2026 (updated) |
 
 ---
@@ -623,7 +603,7 @@ The draft report and this repository differ in a few places; decide which is aut
 ├── pyproject.toml                    # pytest + ruff configuration
 ├── CITATION.cff  CONTRIBUTING.md  SECURITY.md  CLAUDE.md  LICENSE
 ├── .github/                          # CI (Python 3.10-3.13), Dependabot, PR template
-├── .claude/skills/                   # agent skills: Ashby charts, safety factor, rotating parts, fatigue, selection method, cost
+├── .claude/skills/                   # agent skills: Ashby charts, safety factor, fatigue, selection method, cost
 ├── .gitignore
 ├── assets/                           # inputs - see assets/README.md
 │   ├── brief/                        # professor's project brief
@@ -636,7 +616,7 @@ The draft report and this repository differ in a few places; decide which is aut
 │   └── figures/                      # perspective views, drawing sheet, enlarged views
 ├── data/
 │   ├── materials_db.json             # property database (Granta / MatWeb)
-│   ├── granta_filters.json           # hard constraints, weights, reference panel
+│   ├── granta_filters.json           # hard constraints, weights, load-case premises, reference tube
 │   ├── schedule.json                 # Gantt data
 │   └── benchmark_niero2024.json      # benchmark thesis tables
 ├── docs/
@@ -652,9 +632,9 @@ The draft report and this repository differ in a few places; decide which is aut
 │       ├── relatorio_pt_template.md  # Portuguese draft (edit this)
 │       └── relatorio_final.docx/.pdf # generated Portuguese deliverable
 ├── src/
-│   ├── math_modeling/                # merit_indices, ashby_selection, rotating_parts, symbolic_derivations + statics_torsors (SymPy), composite_anisotropy, vibration_fatigue, pareto_optimization
+│   ├── math_modeling/                # merit_indices, ashby_selection, rotating_parts (blade stress), load_case_screening, symbolic_derivations + statics_torsors (SymPy), composite_anisotropy, vibration_fatigue, pareto_optimization
 │   └── analysis/                     # decision_matrix, export_tables, gantt_chart, ashby_charts, forces_on_drone, verification_figure, build_tikz_figures, figure_utils (adjustText)
-└── tests/                            # pytest: math, benchmark, symbolic derivations, statics torsors, Ashby procedure, rotating parts and fatigue, verification, figure label overlap, README math syntax, Python 3.10 compatibility
+└── tests/                            # pytest: math, benchmark, symbolic derivations, statics torsors, Ashby procedure, blade stress and fatigue cycles, verification, figure label overlap, README math syntax, Python 3.10 compatibility
 ```
 
 ## Quick Start

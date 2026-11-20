@@ -42,8 +42,12 @@ At 40 000 rpm, $f=666.7$ Hz: $10^7$ cycles in 4.2 h, $10^9$ cycles in about 417 
 
 Coatings, shot peening, and rounding sharp angles (fillets) where cracks start.
 
+## Why the motor frequency is the cycle frequency
+
+The unbalance force is a vector of constant magnitude rotating with the rotor, $\vec F_u(t)=m_ue\omega^2(\cos\omega t\,\vec x+\sin\omega t\,\vec y)$. Each component on the arm and fuselage goes through one full load cycle per revolution, so a motor at $n$ rpm imposes $f=n/60$ on every part that carries that force (the course monitor asked for this to be justified). Blade-pass and harmonics add higher frequencies with lower amplitude.
+
 ## Report rules
 
-- State $\sigma_a$, $\sigma_m$ and $R$ for every fatigue claim, and where they come from. Nothing is measured in this project: the unbalance amplitude comes from the premised ISO 21940-11 balance grade (`unbalance_force`, premises in `data/granta_filters.json` -> `load_cases`), and the fatigue strength from a premised fatigue-to-tensile ratio until the Granta value replaces it. Label every such number as a premise, never as a result; never invent a measurement.
+- State $\sigma_a$, $\sigma_m$ and $R$ for every fatigue claim, and where they come from. Nothing is measured in this project, and the unbalance amplitude is not known: justify the number of cycles, leave the amplitude as an open item, and never invent a measurement.
 - Do not use ceramics for cyclic or tensile loads.
-- Pair with `safety-factor-selection` and `rotating-parts-merit-indices`.
+- Pair with `safety-factor-selection`.

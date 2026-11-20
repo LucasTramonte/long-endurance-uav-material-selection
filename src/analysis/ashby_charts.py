@@ -88,14 +88,13 @@ RHO = r"Density $\rho$ (kg/m$^3$)"
 CVR = r"Relative cost per unit volume $C_{v,R}$"
 CHARTS = (
     ChartSpec("E_rho", "density_kg_m3", "youngs_modulus_GPa", RHO, "Young's modulus $E$ (GPa)",
-              (Guide("E^(1/3)/rho", BLUE, r"$E^{1/3}/\rho$ (panel)"), Guide("E^(1/2)/rho", GREEN, r"$E^{1/2}/\rho$ (arm)")),
+              (Guide("E/rho", BLUE, r"$E/\rho$ (tube)"),),
               "mapas_ashby", 1, Calib(407, 2, 288.5, 205, 2, 107.3), (2.8, 3.7), (-0.3, 2.4)),
     ChartSpec("sigma_rho", "density_kg_m3", "yield_strength_MPa", RHO, r"Strength $\sigma_f$ (MPa)",
               (Guide("sigma/rho", BLUE, r"$\sigma_f/\rho$"),),
               "mapas_ashby", 0, Calib(412, 2, 286.5, 277, 2, 133.2), (2.8, 3.7), (0.5, 3.3)),
     ChartSpec("E_cost", "Cv_R", "youngs_modulus_GPa", CVR, "Young's modulus $E$ (GPa)",
-              (Guide("E^(1/3)/rho", BLUE, r"$E^{1/3}/C_{v,R}$ (panel)"),
-               Guide("E^(1/2)/rho", GREEN, r"$E^{1/2}/C_{v,R}$ (arm)")),
+              (Guide("E/rho", BLUE, r"$E/C_{v,R}$ (tube)"),),
               "diagrama_custo", 0, Calib(550, 0, 212.5, 199, 2, 124.7), (-0.3, 2.0), (-0.3, 2.4)),
     ChartSpec("sigma_cost", "Cv_R", "yield_strength_MPa", CVR, r"Strength $\sigma_f$ (MPa)",
               (Guide("sigma/rho", BLUE, r"$\sigma_f/C_{v,R}$"),),

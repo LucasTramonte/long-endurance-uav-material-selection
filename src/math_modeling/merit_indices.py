@@ -2,9 +2,10 @@
 
 Derivations are given in README.md, Section 2. Summary
 ------------------------------------------------------
-* IM1 = E^(1/3) / rho      - minimum-mass panel, prescribed bending stiffness
+* IM1 = E / rho            - minimum-mass thin-walled tube (fixed radius, free wall thickness),
+                             prescribed flexural stiffness (course monitor's formulation)
 * IM2 = sigma_y / rho      - minimum-mass tie/skin, prescribed tensile strength
-* IM3 = E^(1/3) / C_v,R    - minimum-cost panel, prescribed bending stiffness,
+* IM3 = E / C_v,R          - minimum-cost tube, prescribed flexural stiffness,
                              with C_v,R = C_m * rho (volumetric cost, USD/m^3)
 
 Assumptions: Hookean (linear-elastic) regime, small-deflection (Euler-Bernoulli /
@@ -97,14 +98,38 @@ def cost_index(E_GPa: ArrayLike, Cv_usd_m3: ArrayLike) -> np.ndarray:
     return np.cbrt(_as_array(E_GPa)) / (_as_array(Cv_usd_m3) / 1000.0)
 
 
-def beam_cost_index(E_GPa: ArrayLike, Cv_usd_m3: ArrayLike) -> np.ndarray:
-    """Minimum-cost beam in bending (square section free): IM = E^(1/2)/(C_m rho) = E^(1/2)/C_v,R.
+def tube_bending_index(E_GPa: ArrayLike, rho_kg_m3: ArrayLike) -> np.ndarray:
+    """IM1 = E/rho  [GPa / (Mg/m^3)] - thin-walled tube of FIXED radius R and free wall thickness t.
 
-    Cost C = C_m m with m = (12 S / C_1)^(1/2) L^(5/2) rho / E^(1/2), so the material group to minimise is
-    C_m rho / E^(1/2). Units: GPa^(1/2) / (kUSD/m^3).
+    Flexural stiffness S = 48 E I / L^3 with I = pi R^3 t (simply supported, central load), so
+    t = S L^3 / (48 pi E R^3) and m = 2 pi R t L rho = S L^4 rho / (24 E R^2): the mass scales as rho/E.
     """
+    _check_positive(E_GPa=E_GPa, rho_kg_m3=rho_kg_m3)
+    return _as_array(E_GPa) / (_as_array(rho_kg_m3) / 1000.0)
+
+
+def tube_cost_index(E_GPa: ArrayLike, Cv_usd_m3: ArrayLike) -> np.ndarray:
+    """IM3 = E/C_v,R  [GPa / (kUSD/m^3)] - cheapest tube for a prescribed flexural stiffness (C = C_m m)."""
     _check_positive(E_GPa=E_GPa, Cv_usd_m3=Cv_usd_m3)
-    return np.sqrt(_as_array(E_GPa)) / (_as_array(Cv_usd_m3) / 1000.0)
+    return _as_array(E_GPa) / (_as_array(Cv_usd_m3) / 1000.0)
+
+
+def tube_thickness_for_rigidity(E_GPa: float, EI_target_Nm2: float, R_m: float) -> float:
+    """Wall thickness t [m] of a thin tube of mean radius R with flexural rigidity E*I = E*pi*R^3*t."""
+    _check_positive(E_GPa=E_GPa, EI_target_Nm2=EI_target_Nm2, R_m=R_m)
+    return float(EI_target_Nm2 / (E_GPa * 1e9 * np.pi * R_m**3))
+
+
+def tube_mass_for_rigidity(E_GPa: float, rho_kg_m3: float, EI_target_Nm2: float, R_m: float, L_m: float) -> float:
+    """Mass [kg] of a thin tube (mean radius R, length L) meeting the rigidity target E*I."""
+    t = tube_thickness_for_rigidity(E_GPa, EI_target_Nm2, R_m)
+    return rho_kg_m3 * 2.0 * np.pi * R_m * t * L_m
+
+
+def tube_rigidity(E_GPa: float, t_m: float, R_m: float) -> float:
+    """Flexural rigidity E*I = E*pi*R^3*t [N*m^2] of a thin tube."""
+    _check_positive(E_GPa=E_GPa, t_m=t_m, R_m=R_m)
+    return E_GPa * 1e9 * np.pi * R_m**3 * t_m
 
 
 def panel_thickness_for_rigidity(E_GPa: float, D_per_width_Nm: float) -> float:
@@ -135,21 +160,21 @@ def performance_indices(E_GPa: ArrayLike, rho_kg_m3: ArrayLike, sigma_y_MPa: Arr
                         price_usd_kg: ArrayLike) -> dict[str, np.ndarray]:
     """Minimisation form of the merit indices: P_k = 1/IM_k (the quantity to *minimise*).
 
-    ``P1 = rho/E^(1/3)`` (panel mass), ``P2 = rho/sigma_y`` (tie mass), ``P3 = C_v,R/E^(1/3)`` (panel cost).
+    ``P1 = rho/E`` (tube mass), ``P2 = rho/sigma_y`` (tie mass), ``P3 = C_v,R/E`` (tube cost).
     Selecting the material with the smallest P is the same as selecting the largest IM; the symbolic
     derivation (``symbolic_derivations.py``) shows each P as the material group of a constrained
     minimisation problem  min m  s.t.  stiffness (or strength) >= requirement.
     """
     cv = volumetric_cost(price_usd_kg, rho_kg_m3)
     return {
-        "P1": 1.0 / bending_panel_index(E_GPa, rho_kg_m3),
+        "P1": 1.0 / tube_bending_index(E_GPa, rho_kg_m3),
         "P2": 1.0 / tensile_strength_index(sigma_y_MPa, rho_kg_m3),
-        "P3": 1.0 / cost_index(E_GPa, cv),
+        "P3": 1.0 / tube_cost_index(E_GPa, cv),
     }
 
 
 def compute_all_indices(materials: Iterable[dict]) -> list[dict]:
-    """Attach IM1, IM2, IM3, the beam indices IM_beam, IM3_beam and C_v,R to each material dict (returns copies)."""
+    """Attach IM1 (E/rho), IM2 (sigma_y/rho), IM3 (E/C_v,R) and C_v,R to each material dict (returns copies)."""
     out = []
     for m in materials:
         cv = float(volumetric_cost(m["price_usd_kg"], m["density_kg_m3"]))
@@ -157,11 +182,9 @@ def compute_all_indices(materials: Iterable[dict]) -> list[dict]:
             {
                 **m,
                 "Cv_usd_m3": cv,
-                "IM1": float(bending_panel_index(m["youngs_modulus_GPa"], m["density_kg_m3"])),
+                "IM1": float(tube_bending_index(m["youngs_modulus_GPa"], m["density_kg_m3"])),
                 "IM2": float(tensile_strength_index(m["yield_strength_MPa"], m["density_kg_m3"])),
-                "IM3": float(cost_index(m["youngs_modulus_GPa"], cv)),
-                "IM_beam": float(bending_beam_index(m["youngs_modulus_GPa"], m["density_kg_m3"])),
-                "IM3_beam": float(beam_cost_index(m["youngs_modulus_GPa"], cv)),
+                "IM3": float(tube_cost_index(m["youngs_modulus_GPa"], cv)),
             }
         )
     return out

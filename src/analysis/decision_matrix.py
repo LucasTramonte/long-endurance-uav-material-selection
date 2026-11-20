@@ -3,11 +3,11 @@
 Pipeline
 --------
 1. Hard filters (data/granta_filters.json): UV, water absorption, KIc, temperature, density, then the
-   load-case filters (arm stiffness, arm and blade strength, arm fatigue, ceramics in tension; premises in
+   load-case filters (arm stiffness, arm and blade-root strength, ceramics in tension; premises in
    ``load_cases``, see src/math_modeling/load_case_screening.py).
-2. Criterion scores in [0, 1] (each part of the airframe has its own index):
-     * Mechanical performance = mean(IM1 panel, IM_beam arms, IM2 ties/blades), each divided by its maximum
-     * Cost                   = mean(IM3 panel, IM3_beam arms), each divided by its maximum
+2. Criterion scores in [0, 1]:
+     * Mechanical performance = mean(IM1/max(IM1), IM2/max(IM2)), IM1 = E/rho (tube), IM2 = sigma_y/rho
+     * Cost                   = IM3/max(IM3), IM3 = E/C_v,R
      * Manufacturability      = score/5   (qualitative, data/materials_db.json)
      * Environmental durability = score/5
 3. Weighted sum with user-defined weights (normalised to sum to 1).
@@ -71,13 +71,11 @@ def score_materials(materials: list[dict], weights: dict[str, float]) -> list[di
     max1 = max(r["IM1"] for r in rows)
     max2 = max(r["IM2"] for r in rows)
     max3 = max(r["IM3"] for r in rows)
-    max_beam = max(r["IM_beam"] for r in rows)
-    max3_beam = max(r["IM3_beam"] for r in rows)
     out = []
     for r in rows:
         s = {
-            "mechanical_performance": (r["IM1"] / max1 + r["IM_beam"] / max_beam + r["IM2"] / max2) / 3.0,
-            "cost": 0.5 * (r["IM3"] / max3 + r["IM3_beam"] / max3_beam),
+            "mechanical_performance": 0.5 * (r["IM1"] / max1 + r["IM2"] / max2),
+            "cost": r["IM3"] / max3,
             "manufacturability": r["scores"]["manufacturability"] / 5.0,
             "environmental_durability": r["scores"]["environmental_durability"] / 5.0,
         }
