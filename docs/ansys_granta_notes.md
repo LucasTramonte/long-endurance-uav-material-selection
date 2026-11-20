@@ -33,7 +33,7 @@ Mirror of `data/granta_filters.json`. Enter each as a Limit stage in Granta.
 | C | E vs relative cost per unit volume (or price x density) | slope 1 (E/Cv = C) | Maximise IM3 | `docs/figures/granta_E_cost.png` |
 | D | Fracture toughness vs Young's modulus | none | Toughness check | |
 
-Procedure: add the chart stage, set axes, add *Selection Line* with the stated slope, drag it until only the shortlist remains above the line, and note the intercept value C used. Blank charts (local, git-ignored): `assets/ashby_charts/mapas_ashby.pdf`, `assets/ashby_charts/diagrama_custo.pdf` (Ashby [1]; see README References).
+Procedure: add the chart stage, set axes, add *Selection Line* with the stated slope, drag it until only the shortlist remains above the line, and note the intercept value C used.
 
 ## 4. Property export checklist
 
@@ -75,7 +75,7 @@ PNG, >= 1600 px wide, light background, axes legible. Name: `granta_<chart>_<nn>
 
 ## 7. Status of the Granta prints and checklist for the team
 
-Done (screens collected in the team's local PDF `assets/Informacoes granta (2).pdf`, not published): the material tree; the property records of CFRP, GFRP, aluminium alloys, magnesium alloys, PEEK, PC, ABS and low carbon steel; the Help > About screen (EduPack 2024 R1, 24.1.1); the chart-stage and limit-stage dialogs; the limit stages (density <= 3000, K_Ic >= 2, T_max >= 80, then E >= 3.84, then yield >= 7.2) with their result lists; and single-property bar charts (fatigue strength, Young's modulus, yield strength). Granta keeps PEEK at E >= 3.84 because its range (3.76-3.95 GPa) overlaps the limit; the report discards it (the constraint cuts its bubble).
+Done (screens collected in the team's local PDF `assets/Informacoes granta (2).pdf`, not published): the property records of CFRP, GFRP, aluminium alloys, magnesium alloys, PEEK, PC, ABS and low carbon steel; the limit stages (density <= 3000, K_Ic >= 2, T_max >= 80, then E >= 3.84, then yield >= 7.2) with their result lists; and single-property bar charts (fatigue strength, Young's modulus, yield strength). Granta keeps PEEK at E >= 3.84 because its range (3.76-3.95 GPa) overlaps the limit; the report discards it (the constraint cuts its bubble).
 
 **Still to do: the two-axis Ashby charts** (set the property on the X tab *and* on the Y tab of the chart-stage dialog; the bar charts so far have only the Y axis). Make them in a selection *without* limit stages, so the materials that the constraint cuts stay visible. Every chart has log axes, the seven records labelled with the same colours, a horizontal constraint line and a slope-1 guide line.
 

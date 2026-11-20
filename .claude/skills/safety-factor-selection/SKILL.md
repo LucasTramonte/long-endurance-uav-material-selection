@@ -13,7 +13,7 @@ A safety factor is **taken from a cited source and written with its scope**. It 
 2. Use the table `SAFETY_FACTORS` in `src/math_modeling/ashby_selection.py`. Add a row only after reading the source; set `verified=True` only when the primary text (standard or textbook table) was read, otherwise leave it `False` and say so in the report.
 3. Say which load the factor multiplies: the **limit load** (maximum expected in service) gives the **ultimate load**. Do not apply a factor twice to a load that is already ultimate.
 4. Brittle materials and composites need more care: use design allowables (A- or B-basis for composites, MIL-HDBK-17 / CMH-17) *before* the factor, and a larger factor for brittle fracture. Ceramics are excluded from tension altogether (`ashby-chart-selection`).
-5. Show a sensitivity: re-run the selection for two or three values of $s$ (`python -m src.analysis.ashby_charts --open --safety 2.5`) and state whether the ranking changes.
+5. Show a sensitivity: re-run the selection for two or three values of $s$ (`safety_factor` in `data/granta_filters.json`, then `python -m src.analysis.decision_matrix`) and state whether the ranking changes.
 
 ## What has been read so far (honest status)
 

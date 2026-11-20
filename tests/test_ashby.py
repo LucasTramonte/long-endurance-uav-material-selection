@@ -1,18 +1,15 @@
-"""Ashby chart procedure: constraint, screening, guide lines, safety factor, and the drawn charts."""
+"""Ashby chart procedure: constraint, screening, guide lines and safety factor."""
 
 import matplotlib
 import numpy as np
 import pytest
 
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
 
-from src.analysis import ashby_charts as ac  # noqa: E402
 from src.analysis.export_tables import load_cases, load_materials  # noqa: E402
-from src.analysis.figure_utils import text_overlaps  # noqa: E402
 from src.math_modeling import ashby_selection as sel  # noqa: E402
 from src.math_modeling.load_case_screening import derived_limits  # noqa: E402
-from src.math_modeling.merit_indices import bending_panel_index, compute_all_indices  # noqa: E402
+from src.math_modeling.merit_indices import bending_panel_index  # noqa: E402
 
 ARM = dict(F=0.30, L=0.030, b=0.005, h=0.0015)
 
@@ -59,40 +56,10 @@ def test_guide_line_slope_and_offset():
     assert bending_panel_index(8e1 / 8, 1000) == pytest.approx(bending_panel_index(80, 2000))
 
 
-@pytest.mark.parametrize("spec", ac.CHARTS, ids=lambda s: s.key)
-def test_selected_material_has_the_best_merit_index(spec):
-    """The guide-line anchor of each chart is the survivor with the largest index of that guide."""
-    fig, ax = plt.subplots()
-    ax.set_xlim(*spec.open_xlim)
-    ax.set_ylim(*spec.open_ylim)
-    anchors, dropped, _ = ac.draw_overlay(ax, spec, load_cases(), spec.open_xlim, spec.open_ylim)
-    plt.close(fig)
-    rows = {r["id"]: r for r in compute_all_indices(load_materials()) if r["id"] not in dropped}
-    key = {"E_rho": ("IM1",), "sigma_rho": ("IM2",), "E_cost": ("IM3",), "sigma_cost": ("IM2",)}
-    for guide, name in zip(spec.guides, key[spec.key], strict=True):
-        if spec.key == "sigma_cost":          # sigma/C_v,R is a different index from IM2 (sigma/rho): recompute
-            best = max(rows.values(), key=lambda r: r["yield_strength_MPa"] / r["Cv_usd_m3"])["id"]
-        else:
-            best = max(rows.values(), key=lambda r: r[name])["id"]
-        assert anchors[guide.index]["id"] == best
-
-
-def test_load_case_constraints_on_the_charts():
+def test_load_case_constraints():
     lim = derived_limits(load_cases())
     assert lim["E_min_GPa"] == pytest.approx(3.84)
     assert lim["sigma_mean_MPa"] == pytest.approx(4.8)
-
-
-@pytest.mark.parametrize("spec", ac.CHARTS, ids=lambda s: s.key)
-def test_open_charts_have_no_overlapping_labels(spec):
-    fig = ac.build_open(spec)
-    try:
-        # the numbered step circles (single digits) sit on their arrows; the label placement of adjustText varies
-        # slightly with the matplotlib version, so the check is on the readable labels and the legend lines
-        bad = [pair for pair in text_overlaps(fig) if not any(t.isdigit() for t in pair)]
-        assert bad == []
-    finally:
-        plt.close(fig)
 
 
 def test_safety_factors_carry_their_verification_status():

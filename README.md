@@ -387,29 +387,25 @@ The selection is made on the charts with five explicit steps. They are also writ
 
 **Two rules that are always applied.** (i) *Ceramics are not used in tension*: their tensile strength is low and scattered, and the strength printed for ceramics on the chart is the modulus of rupture, not a tensile strength; they are removed from every tension-loaded selection. (ii) *The strength constraint includes a safety factor $`s`$ taken from the literature*, not chosen by the team: the default is $`s=1.5`$, the factor between limit and ultimate load in 14 CFR 25.303 [27]. That rule is written for transport aircraft, not for a 150 g UAV, and it was read through secondary copies; handbook values of 2.5 to 4 for uncertain dynamic loads exist (course slides and a trade article, not the textbook table). The factor is therefore an *assumption to be confirmed* against Shigley or the standard the course adopts; the charts can be redrawn for any $`s`$.
 
-![Ashby chart E-rho with constraint, guide lines and arrows](docs/figures/ashby_E_rho_annotated.png)
+**Granta diagrams and screens.** Every figure of this section comes from the software itself. The prints done so far are in [`docs/figures/granta/`](docs/figures/granta) and in the appendices of the Portuguese report: the property records of the eight materials, the limit stages with their result lists and single-property bar charts (Figures 6 and 7 below). The **two-axis Ashby diagrams** made in Granta ($`E`$-$`\rho`$, $`\sigma_y`$-$`\rho`$ and $`E`$-$`C_v`$, each with its constraint line and the slope-1 guide line through the point of the table below) are still to be made; they will be added here when ready (checklist in [`docs/ansys_granta_notes.md`](docs/ansys_granta_notes.md), Section 7).
 
-**Figure 6** - $`E`$-$`\rho`$ chart. Original chart: Ashby, *Materials Selection in Mechanical Design*, 4th ed., 2011 (Granta MFA) [1], annotated by the team. Arrow 1: the constraint $`E\ge 3.84`$ GPa (shaded: discarded region). Arrow 2: it cuts the boxes of PEEK ($`E`$ from 3.76 GPa), PC (2.32-2.44 GPa) and ABS (2.07-2.76 GPa), which are discarded. Arrow 3: the guide line of $`E/\rho`$ (slope 1). Arrow 4: the ruler slides along the slope. Arrow 5: the line passes through the centre of the CFRP box, the selected material; the aluminium and magnesium boxes lie below it. The green arrow points to the higher index. The shaded boxes are the Granta ranges of `data/materials_db.json` (the extent of each bubble), with a dot at the centre.
-
-![Ashby chart sigma-rho with constraints, guide line and arrows](docs/figures/ashby_sigma_rho_annotated.png)
-
-**Figure 7** - $`\sigma`$-$`\rho`$ chart (same source). The horizontal constraint $`\sigma_y\ge 7.2`$ MPa (arm, $`s=1.5`$) and the sloped blade-root line (pink, $`\sigma_y\ge s\rho\omega^{2}R_b^{2}/2`$) cut none of the Granta ranges: the lowest yield strength of the six records (34.5 MPa, ABS) is above both. Strength therefore does not decide the choice; the guide line of slope 1 ranks the materials, with CFRP first. The binding limits are elsewhere (stiffness and fatigue, Section 5.4).
-
-**Cost charts.** The cost step is made in Granta with the price times the density (BRL/m^3) on the axis, since the attribute list of this installation has no relative cost; the slope-1 guide line of $`E/C_v`$ is the same in any unit of volumetric cost. The Granta prints go to `docs/figures/granta_*.png` (body: the three selection charts; appendix: every step). Chart stages and Granta notes: [`docs/ansys_granta_notes.md`](docs/ansys_granta_notes.md).
-
-**Granta screens (done so far).** The prints from the software itself are in [`docs/figures/granta/`](docs/figures/granta) and in the appendices of the Portuguese report: the property records of the eight materials, the limit stages with their result lists and single-property bar charts. Figures 6 and 7 above are a *provisional construction* on the original Ashby chart (with the Granta ranges), because the **two-axis Granta diagrams** ($`E`$-$`\rho`$, $`\sigma_y`$-$`\rho`$, $`E`$-$`C_v`$ with the constraint and the slope-1 guide line) are still to be made; they will replace Figures 6 and 7 (checklist in [`docs/ansys_granta_notes.md`](docs/ansys_granta_notes.md), Section 7). Figures 8 and 9 show what the software gives so far.
+| Diagram | Constraint line | Guide line (slope 1, through) |
+|---|---|---|
+| $`E`$ against $`\rho`$ | $`E=3.84`$ GPa (cuts PEEK, PC and ABS) | $`E=0.0657\,\rho`$, through the CFRP centre (1549 kg/m^3; 101.7 GPa) |
+| $`\sigma_y`$ against $`\rho`$ | 7.2 MPa and the line $`\sigma=0.00758\,\rho`$ (blade root) | $`\sigma=0.4905\,\rho`$, through the CFRP centre (1549; 760 MPa) |
+| $`E`$ against $`C_v`$ (price x density, BRL/m^3) | $`E=3.84`$ GPa | $`E=1.498`$ GPa per 1000 BRL/m^3, through the aluminium centre (48,017; 71.9 GPa) |
 
 ![Granta limit stage E >= 3.84 GPa](docs/figures/granta/p26_0.png)
 
 ![Granta bar chart of Young's modulus](docs/figures/granta/p26_1.png)
 
-**Figure 8** - Granta (EduPack 2024 R1): limit stage $`E\ge3.84`$ GPa and the bar chart of Young's modulus (one property, the bubbles are the vertical bars). In the result list of this stage the PEEK record stays, because its range (3.76-3.95 GPa) overlaps the limit; this report discards it.
+**Figure 6** - Granta (EduPack 2024 R1): limit stage $`E\ge3.84`$ GPa and the bar chart of Young's modulus (one property, the bubbles are the vertical bars). In the result list of this stage the PEEK record stays, because its range (3.76-3.95 GPa) overlaps the limit; this report discards it.
 
 ![Granta limit stage yield strength >= 7.2 MPa](docs/figures/granta/p28_0.png)
 
 ![Granta bar chart of yield strength](docs/figures/granta/p28_1.png)
 
-**Figure 9** - Granta: limit stage $`\sigma_y\ge7.2`$ MPa and the bar chart of yield strength.
+**Figure 7** - Granta: limit stage $`\sigma_y\ge7.2`$ MPa and the bar chart of yield strength.
 
 ### 3.4 Pareto view: mass vs cost vs toughness
 
@@ -590,7 +586,7 @@ Deadlines from the project brief [14]: written project **and** 5-8 min video pit
 
 ![Gantt chart](docs/figures/gantt.png)
 
-**Figure 10** - Gantt chart, 04/11 to 03/12/2026.
+**Figure 8** - Gantt chart, 04/11 to 03/12/2026.
 
 | # | Activity | Owner(s) | Start | End | Days |
 |:-:|:--|:--|:-:|:-:|:-:|
@@ -631,7 +627,6 @@ The draft report and this repository differ in a few places; decide which is aut
 ├── .gitignore
 ├── assets/                           # inputs - see assets/README.md
 │   ├── brief/                        # professor's project brief
-│   ├── ashby_charts/                 # source PDFs of the Ashby / cost charts (git-ignored)
 │   ├── drafts/                       # team report draft (.docx)
 │   ├── benchmark/                    # published thesis used as benchmark [20]
 │   └── courses/                      # lecture slides (git-ignored, private)
@@ -657,7 +652,7 @@ The draft report and this repository differ in a few places; decide which is aut
 │       └── relatorio_final.docx/.pdf # generated Portuguese deliverable
 ├── src/
 │   ├── math_modeling/                # merit_indices, ashby_selection, rotating_parts (blade stress), load_case_screening, symbolic_derivations + statics_torsors (SymPy), composite_anisotropy, vibration_fatigue, pareto_optimization
-│   └── analysis/                     # decision_matrix, export_tables, gantt_chart, ashby_charts, forces_on_drone, verification_figure, build_tikz_figures, figure_utils (adjustText)
+│   └── analysis/                     # decision_matrix, export_tables, gantt_chart, forces_on_drone, verification_figure, build_tikz_figures, figure_utils (adjustText)
 └── tests/                            # pytest: math, benchmark, symbolic derivations, statics torsors, Ashby procedure, blade stress and fatigue cycles, verification, figure label overlap, README math syntax, Python 3.10 compatibility
 ```
 
@@ -678,7 +673,6 @@ python -m src.math_modeling.pareto_optimization --plot docs/figures/pareto.png
 python -m src.analysis.export_tables --out outputs     # Markdown + CSV tables
 python -m src.analysis.gantt_chart --table             # Gantt PNG + Markdown table
 python -m src.analysis.forces_on_drone                 # 3D free-body figure
-python -m src.analysis.ashby_charts                    # original Ashby charts with constraint lines, guide lines and arrows
 python -m src.analysis.build_tikz_figures              # TikZ figures (needs LaTeX, e.g. MiKTeX)
 python docs/build_english_report.py                    # English report PDF (needs Edge or Chrome)
 python -m src.math_modeling.composite_anisotropy       # laminate stiffness demo

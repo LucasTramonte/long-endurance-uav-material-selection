@@ -553,18 +553,39 @@ k^\star=\arg\min_{k\in\mathcal K}\;\sum_{j=1}^{4} w_j\,\bigl(1-s_{kj}\bigr)\;=\;
 </ol>
 <p><strong>Premises (nothing is measured).</strong> The loads come from <code>data/granta_filters.json</code>, block <code>load_cases</code>, and are assumptions of the team: arm <span class="arithmatex">\(F=0.30\)</span> N, <span class="arithmatex">\(L=30\)</span> mm, <span class="arithmatex">\(b\times h=5\times1.5\)</span> mm, allowable tip deflection 0.5 mm; rotor 40 000 rpm and blade length <span class="arithmatex">\(R_b=24\)</span> mm; safety factor <span class="arithmatex">\(s=1.5\)</span>. The material properties are Granta ranges, not premises.</p>
 <p><strong>Two rules that are always applied.</strong> (i) <em>Ceramics are not used in tension</em>: their tensile strength is low and scattered, and the strength printed for ceramics on the chart is the modulus of rupture, not a tensile strength; they are removed from every tension-loaded selection. (ii) <em>The strength constraint includes a safety factor <span class="arithmatex">\(s\)</span> taken from the literature</em>, not chosen by the team: the default is <span class="arithmatex">\(s=1.5\)</span>, the factor between limit and ultimate load in 14 CFR 25.303 [27]. That rule is written for transport aircraft, not for a 150 g UAV, and it was read through secondary copies; handbook values of 2.5 to 4 for uncertain dynamic loads exist (course slides and a trade article, not the textbook table). The factor is therefore an <em>assumption to be confirmed</em> against Shigley or the standard the course adopts; the charts can be redrawn for any <span class="arithmatex">\(s\)</span>.</p>
-<p><img alt="Ashby chart E-rho with constraint, guide lines and arrows" src="docs/figures/ashby_E_rho_annotated.png" /></p>
-<p><strong>Figure 6</strong> - <span class="arithmatex">\(E\)</span>-<span class="arithmatex">\(\rho\)</span> chart. Original chart: Ashby, <em>Materials Selection in Mechanical Design</em>, 4th ed., 2011 (Granta MFA) [1], annotated by the team. Arrow 1: the constraint <span class="arithmatex">\(E\ge 3.84\)</span> GPa (shaded: discarded region). Arrow 2: it cuts the boxes of PEEK (<span class="arithmatex">\(E\)</span> from 3.76 GPa), PC (2.32-2.44 GPa) and ABS (2.07-2.76 GPa), which are discarded. Arrow 3: the guide line of <span class="arithmatex">\(E/\rho\)</span> (slope 1). Arrow 4: the ruler slides along the slope. Arrow 5: the line passes through the centre of the CFRP box, the selected material; the aluminium and magnesium boxes lie below it. The green arrow points to the higher index. The shaded boxes are the Granta ranges of <code>data/materials_db.json</code> (the extent of each bubble), with a dot at the centre.</p>
-<p><img alt="Ashby chart sigma-rho with constraints, guide line and arrows" src="docs/figures/ashby_sigma_rho_annotated.png" /></p>
-<p><strong>Figure 7</strong> - <span class="arithmatex">\(\sigma\)</span>-<span class="arithmatex">\(\rho\)</span> chart (same source). The horizontal constraint <span class="arithmatex">\(\sigma_y\ge 7.2\)</span> MPa (arm, <span class="arithmatex">\(s=1.5\)</span>) and the sloped blade-root line (pink, <span class="arithmatex">\(\sigma_y\ge s\rho\omega^{2}R_b^{2}/2\)</span>) cut none of the Granta ranges: the lowest yield strength of the six records (34.5 MPa, ABS) is above both. Strength therefore does not decide the choice; the guide line of slope 1 ranks the materials, with CFRP first. The binding limits are elsewhere (stiffness and fatigue, Section 5.4).</p>
-<p><strong>Cost charts.</strong> The cost step is made in Granta with the price times the density (BRL/m^3) on the axis, since the attribute list of this installation has no relative cost; the slope-1 guide line of <span class="arithmatex">\(E/C_v\)</span> is the same in any unit of volumetric cost. The Granta prints go to <code>docs/figures/granta_*.png</code> (body: the three selection charts; appendix: every step). Chart stages and Granta notes: <a href="docs/ansys_granta_notes.md"><code>docs/ansys_granta_notes.md</code></a>.</p>
-<p><strong>Granta screens (done so far).</strong> The prints from the software itself are in <a href="docs/figures/granta"><code>docs/figures/granta/</code></a> and in the appendices of the Portuguese report: the property records of the eight materials, the limit stages with their result lists and single-property bar charts. Figures 6 and 7 above are a <em>provisional construction</em> on the original Ashby chart (with the Granta ranges), because the <strong>two-axis Granta diagrams</strong> (<span class="arithmatex">\(E\)</span>-<span class="arithmatex">\(\rho\)</span>, <span class="arithmatex">\(\sigma_y\)</span>-<span class="arithmatex">\(\rho\)</span>, <span class="arithmatex">\(E\)</span>-<span class="arithmatex">\(C_v\)</span> with the constraint and the slope-1 guide line) are still to be made; they will replace Figures 6 and 7 (checklist in <a href="docs/ansys_granta_notes.md"><code>docs/ansys_granta_notes.md</code></a>, Section 7). Figures 8 and 9 show what the software gives so far.</p>
+<p><strong>Granta diagrams and screens.</strong> Every figure of this section comes from the software itself. The prints done so far are in <a href="docs/figures/granta"><code>docs/figures/granta/</code></a> and in the appendices of the Portuguese report: the property records of the eight materials, the limit stages with their result lists and single-property bar charts (Figures 6 and 7 below). The <strong>two-axis Ashby diagrams</strong> made in Granta (<span class="arithmatex">\(E\)</span>-<span class="arithmatex">\(\rho\)</span>, <span class="arithmatex">\(\sigma_y\)</span>-<span class="arithmatex">\(\rho\)</span> and <span class="arithmatex">\(E\)</span>-<span class="arithmatex">\(C_v\)</span>, each with its constraint line and the slope-1 guide line through the point of the table below) are still to be made; they will be added here when ready (checklist in <a href="docs/ansys_granta_notes.md"><code>docs/ansys_granta_notes.md</code></a>, Section 7).</p>
+<table>
+<thead>
+<tr>
+<th>Diagram</th>
+<th>Constraint line</th>
+<th>Guide line (slope 1, through)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(E\)</span> against <span class="arithmatex">\(\rho\)</span></td>
+<td><span class="arithmatex">\(E=3.84\)</span> GPa (cuts PEEK, PC and ABS)</td>
+<td><span class="arithmatex">\(E=0.0657\,\rho\)</span>, through the CFRP centre (1549 kg/m^3; 101.7 GPa)</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(\sigma_y\)</span> against <span class="arithmatex">\(\rho\)</span></td>
+<td>7.2 MPa and the line <span class="arithmatex">\(\sigma=0.00758\,\rho\)</span> (blade root)</td>
+<td><span class="arithmatex">\(\sigma=0.4905\,\rho\)</span>, through the CFRP centre (1549; 760 MPa)</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(E\)</span> against <span class="arithmatex">\(C_v\)</span> (price x density, BRL/m^3)</td>
+<td><span class="arithmatex">\(E=3.84\)</span> GPa</td>
+<td><span class="arithmatex">\(E=1.498\)</span> GPa per 1000 BRL/m^3, through the aluminium centre (48,017; 71.9 GPa)</td>
+</tr>
+</tbody>
+</table>
 <p><img alt="Granta limit stage E &gt;= 3.84 GPa" src="docs/figures/granta/p26_0.png" /></p>
 <p><img alt="Granta bar chart of Young's modulus" src="docs/figures/granta/p26_1.png" /></p>
-<p><strong>Figure 8</strong> - Granta (EduPack 2024 R1): limit stage <span class="arithmatex">\(E\ge3.84\)</span> GPa and the bar chart of Young's modulus (one property, the bubbles are the vertical bars). In the result list of this stage the PEEK record stays, because its range (3.76-3.95 GPa) overlaps the limit; this report discards it.</p>
+<p><strong>Figure 6</strong> - Granta (EduPack 2024 R1): limit stage <span class="arithmatex">\(E\ge3.84\)</span> GPa and the bar chart of Young's modulus (one property, the bubbles are the vertical bars). In the result list of this stage the PEEK record stays, because its range (3.76-3.95 GPa) overlaps the limit; this report discards it.</p>
 <p><img alt="Granta limit stage yield strength &gt;= 7.2 MPa" src="docs/figures/granta/p28_0.png" /></p>
 <p><img alt="Granta bar chart of yield strength" src="docs/figures/granta/p28_1.png" /></p>
-<p><strong>Figure 9</strong> - Granta: limit stage <span class="arithmatex">\(\sigma_y\ge7.2\)</span> MPa and the bar chart of yield strength.</p>
+<p><strong>Figure 7</strong> - Granta: limit stage <span class="arithmatex">\(\sigma_y\ge7.2\)</span> MPa and the bar chart of yield strength.</p>
 <h3>3.4 Pareto view: mass vs cost vs toughness</h3>
 <p><code>python -m src.math_modeling.pareto_optimization --all --plot docs/figures/pareto.png</code></p>
 <p><img alt="Pareto front" src="docs/figures/pareto.png" /></p>
@@ -926,7 +947,7 @@ R=\frac{\sigma_{min}}{\sigma_{max}}
 <h2>Schedule (04/11/2026 - 03/12/2026)</h2>
 <p>Deadlines from the project brief [14]: written project <strong>and</strong> 5-8 min video pitch due <strong>01/12/2026, 23:59</strong>; presentation and Q&amp;A (up to 10 min per group) on <strong>03/12/2026</strong>, attendance of all members mandatory. Activities and week allocation follow the team draft.</p>
 <p><img alt="Gantt chart" src="docs/figures/gantt.png" /></p>
-<p><strong>Figure 10</strong> - Gantt chart, 04/11 to 03/12/2026.</p>
+<p><strong>Figure 8</strong> - Gantt chart, 04/11 to 03/12/2026.</p>
 <table>
 <thead>
 <tr>

@@ -34,10 +34,7 @@ Portuguese** (`docs/unicamp_deliverable/`, .docx + .pdf). README, code and commi
 
 ## Privacy and redistribution
 
-Everything in `assets/` except its README is git-ignored (slides, brief, drafts with student RA numbers, benchmark thesis). Never `git add -f` them and never link to them from published documents; cite instead. Exception decided by the team: the
-annotated Ashby charts in `docs/figures/ashby_*_annotated.png` are published (source credited in the image); the source PDFs in
-`assets/ashby_charts/` stay git-ignored. Material data in `data/materials_db.json` are representative placeholders until replaced by
-Granta/MatWeb exports.
+Everything in `assets/` except its README is git-ignored (slides, brief, drafts with student RA numbers, benchmark thesis). Never `git add -f` them and never link to them from published documents; cite instead. Material data come only from Ansys Granta EduPack (`data/materials_db.json` holds the Granta ranges); the figures of the Ashby diagrams are the prints of the software (`docs/figures/granta/`), never redrawn charts.
 
 Skills in `.claude/skills/` are never deleted because the current report does not use them: they are the team's reusable method.
 
