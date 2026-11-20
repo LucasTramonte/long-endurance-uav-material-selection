@@ -34,14 +34,16 @@ def markdown_table(sched: dict) -> str:
     return "\n".join(lines)
 
 
-def plot_gantt(sched: dict, out: Path) -> None:
+def plot_gantt(sched: dict, out: Path, lang: str = "en") -> None:
     import matplotlib
 
     matplotlib.use("Agg")
     import matplotlib.dates as mdates
     import matplotlib.pyplot as plt
 
+    pt = lang == "pt"
     tasks = sched["tasks"]
+    name = (lambda t: t["name_pt"]) if pt else (lambda t: t["name"])
     start, end = _d(sched["start"]), _d(sched["end"]) + timedelta(days=1)
     fig, ax = plt.subplots(figsize=(11, 0.62 * (len(tasks) + len(sched['milestones'])) + 1.6))
     colours = ["#1f77b4", "#1f77b4", "#2ca02c", "#d95f02", "#d95f02"]
@@ -57,9 +59,9 @@ def plot_gantt(sched: dict, out: Path) -> None:
         y = -j
         x = mdates.date2num(_d(m["date"])) + 0.5
         ax.plot(x, y, marker="D", color="#c0392b", markersize=10, zorder=5)
-        ax.text(x - 0.35, y, f"{m['name']} - {_d(m['date']):%d/%m}", ha="right", va="center", fontsize=8.5)
+        ax.text(x - 0.35, y, f"{name(m)} - {_d(m['date']):%d/%m}", ha="right", va="center", fontsize=8.5)
     ax.set_yticks(list(range(n, 0, -1)) + [-j for j in range(len(ms))])
-    ax.set_yticklabels([f"{t['id']}. {t['name']}" for t in tasks] + ["Milestone"] * len(ms), fontsize=9)
+    ax.set_yticklabels([f"{t['id']}. {name(t)}" for t in tasks] + ["Marco" if pt else "Milestone"] * len(ms), fontsize=9)
     ax.set_ylim(-len(ms) + 0.4, n + 0.7)
     ax.set_xlim(mdates.date2num(start), mdates.date2num(end))
     ax.xaxis.set_major_locator(mdates.DayLocator(interval=7))
@@ -70,7 +72,9 @@ def plot_gantt(sched: dict, out: Path) -> None:
     ax.grid(axis="x", which="minor", color="#ccc", alpha=0.4, zorder=0)
     for s_ in ("right", "bottom"):
         ax.spines[s_].set_visible(False)
-    ax.set_title(sched["project"] + f" — {start:%d/%m/%Y} to {_d(sched['end']):%d/%m/%Y}", fontsize=11, pad=28, loc="left")
+    title = (sched["project_pt"] + f" — {start:%d/%m/%Y} a {_d(sched['end']):%d/%m/%Y}") if pt else (
+        sched["project"] + f" — {start:%d/%m/%Y} to {_d(sched['end']):%d/%m/%Y}")
+    ax.set_title(title, fontsize=11, pad=28, loc="left")
     fig.tight_layout()
     out.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(out, dpi=200, bbox_inches="tight", facecolor="white")
@@ -83,7 +87,8 @@ def main() -> None:
     args = ap.parse_args()
     sched = load_schedule()
     plot_gantt(sched, args.out)
-    print(f"Saved {args.out}")
+    plot_gantt(sched, args.out.with_name(args.out.stem + "_pt.png"), lang="pt")      # Portuguese version for the report
+    print(f"Saved {args.out} and the _pt version")
     if args.table:
         print(markdown_table(sched))
 

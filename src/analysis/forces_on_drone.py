@@ -69,12 +69,27 @@ def label(xyz, text, color, offset=(0, 14), size=13):
     LABELS.append((xyz, text, color, offset, size))
 
 
-def build_figure():
+TEXT = {
+    "en": {"each": "(each blade)", "thrust": "thrust", "torque": "reaction torque", "weight": "weight", "at": "at",
+           "cf": "centrifugal force", "per": "(per blade)", "unb": "unbalance",
+           "title": r"Free-body diagram of the airframe, frame $\mathcal{R}_G=(G;\vec{x},\vec{y},\vec{z})$, hover",
+           "sub": "CAD dimensions: motor axes at (±30, ±30) mm; duct Ø52.08 x 9 mm; motor pods 21 mm. "
+                  r"$\vec{F}_c$ and $\vec{F}_u$ are drawn on rotor 1 only."},
+    "pt": {"each": "(cada pá)", "thrust": "empuxo", "torque": "torque de reação", "weight": "peso", "at": "em",
+           "cf": "força centrífuga", "per": "(por pá)", "unb": "desbalanceamento",
+           "title": r"Diagrama de corpo livre da estrutura, referencial $\mathcal{R}_G=(G;\vec{x},\vec{y},\vec{z})$, voo pairado",
+           "sub": "Dimensões do CAD: eixos dos motores em (±30, ±30) mm; duto Ø52,08 × 9 mm; nacelas de 21 mm. "
+                  r"$\vec{F}_c$ e $\vec{F}_u$ são desenhadas apenas no rotor 1."},
+}
+
+
+def build_figure(lang: str = "en"):
     """Draw the airframe + vectors, then place every label on a 2D overlay with adjustText."""
     from matplotlib.lines import Line2D
     from mpl_toolkits.mplot3d import proj3d
 
     LABELS.clear()
+    tx = TEXT[lang]
     fig = plt.figure(figsize=(12.5, 8.8))
     ax = fig.add_axes([0.0, 0.07, 1.0, 0.88], projection="3d")
     draw_airframe(ax)
@@ -103,7 +118,7 @@ def build_figure():
     x1, y1, _ = ROTORS[0]
     for sgn in (-1, 1):
         vec(ax, (x1 + sgn * 11, y1, zr + 2), (sgn * 11, 0, 0), RED, 1.8, 0.35)
-    label((x1 + 22, y1, zr + 2), r"$\vec{F}_c$ (each blade)", RED, (70, 40), 12)
+    label((x1 + 22, y1, zr + 2), rf"$\vec{{F}}_c$ {tx['each']}", RED, (70, 40), 12)
     vec(ax, (x1, y1, zr - 3.5), (0, 12, 0), PURPLE, 1.6, 0.4)
     label((x1, y1 + 12, zr - 3.5), r"$\vec{F}_u(t)$", PURPLE, (-30, 58), 12)
 
@@ -147,16 +162,14 @@ def build_figure():
     declutter(ov, texts, avoid=anchors, leader=False)
 
     fig.legend(handles=[
-        Line2D([0], [0], color=GREEN, lw=3, label=r"thrust $\vec{T}_i=k_T\,\omega_i^{2}\,\vec{z}$"),
-        Line2D([0], [0], color=ORANGE, lw=3, label=r"reaction torque $\vec{Q}_i=-\varepsilon_i\,k_Q\,\omega_i^{2}\,\vec{z}$"),
-        Line2D([0], [0], color=GREY, lw=3, label=r"weight $\vec{P}=-mg\,\vec{z}$ at $G$"),
-        Line2D([0], [0], color=RED, lw=3, label=r"centrifugal force $\vec{F}_c=m_p\,\omega^{2}\,r_G\,\vec{e}_r$ (per blade)"),
-        Line2D([0], [0], color=PURPLE, lw=3, label=r"unbalance $\vec{F}_u(t)=m_u\,e\,\omega^{2}\,\vec{e}_r(\omega t)$"),
+        Line2D([0], [0], color=GREEN, lw=3, label=rf"{tx['thrust']} $\vec{{T}}_i=k_T\,\omega_i^{{2}}\,\vec{{z}}$"),
+        Line2D([0], [0], color=ORANGE, lw=3, label=rf"{tx['torque']} $\vec{{Q}}_i=-\varepsilon_i\,k_Q\,\omega_i^{{2}}\,\vec{{z}}$"),
+        Line2D([0], [0], color=GREY, lw=3, label=rf"{tx['weight']} $\vec{{P}}=-mg\,\vec{{z}}$ {tx['at']} $G$"),
+        Line2D([0], [0], color=RED, lw=3, label=rf"{tx['cf']} $\vec{{F}}_c=m_p\,\omega^{{2}}\,r_G\,\vec{{e}}_r$ {tx['per']}"),
+        Line2D([0], [0], color=PURPLE, lw=3, label=rf"{tx['unb']} $\vec{{F}}_u(t)=m_u\,e\,\omega^{{2}}\,\vec{{e}}_r(\omega t)$"),
     ], loc="lower center", ncol=2, fontsize=10, frameon=False, bbox_to_anchor=(0.5, 0.0))
-    fig.text(0.5, 0.975, r"Free-body diagram of the airframe, frame $\mathcal{R}_G=(G;\vec{x},\vec{y},\vec{z})$, hover",
-             ha="center", fontsize=12)
-    fig.text(0.5, 0.945, "CAD dimensions: motor axes at (±30, ±30) mm; duct Ø52.08 x 9 mm; motor pods 21 mm. "
-             r"$\vec{F}_c$ and $\vec{F}_u$ are drawn on rotor 1 only.", ha="center", fontsize=8.5, color="#555")
+    fig.text(0.5, 0.975, tx["title"], ha="center", fontsize=12)
+    fig.text(0.5, 0.945, tx["sub"], ha="center", fontsize=8.5, color="#555")
     return fig
 
 
@@ -164,10 +177,10 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--out", type=Path, default=ROOT / "docs" / "figures" / "forces_on_drone.png")
     args = ap.parse_args()
-    fig = build_figure()
     args.out.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(args.out, dpi=170, facecolor="white")
-    print(f"Saved {args.out}")
+    for lang, out in (("en", args.out), ("pt", args.out.with_name(args.out.stem + "_pt.png"))):
+        build_figure(lang).savefig(out, dpi=170, facecolor="white")
+        print(f"Saved {out}")
 
 
 if __name__ == "__main__":

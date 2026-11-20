@@ -19,9 +19,11 @@ ano: 2026
 
 Este relatório apresenta a seleção de materiais e o projeto de manufatura da fuselagem de um quadricóptero de longa autonomia destinado ao mapeamento ambiental, com volume de produção de 50.000 unidades por ano e tolerâncias gerais conforme a norma ISO 2768-m. O método de Ashby [1] foi empregado para traduzir requisitos funcionais em índices de mérito, e o *software* Ansys Granta [9] e os gráficos de Ashby foram utilizados para a triagem e o mapeamento visual dos candidatos.
 
-**Objetivo geral.** Selecionar o material e o processo de fabricação que minimizem a massa e o custo da fuselagem, atendendo aos requisitos de rigidez, resistência, tenacidade, fadiga e durabilidade ambiental.
+## 1.1 Objetivo geral
 
-**Objetivos específicos.**
+Selecionar o material e o processo de fabricação que minimizem a massa e o custo da fuselagem, atendendo aos requisitos de rigidez, resistência, tenacidade, fadiga e durabilidade ambiental.
+
+## 1.2 Objetivos específicos
 
 - Definir requisitos funcionais, restrições e objetivos do componente e modelar as ações mecânicas sobre a estrutura.
 - Deduzir os índices de mérito de rigidez à flexão de casca tubular (IM1 = E/ρ), de resistência à tração (IM2) e de custo (IM3), como problemas de minimização com restrições.
@@ -30,7 +32,9 @@ Este relatório apresenta a seleção de materiais e o projeto de manufatura da 
 - Definir o processo de manufatura e o isolamento de vibração dos motores.
 - Recomendar o material final por meio de uma matriz de decisão ponderada.
 
-**Divisão do trabalho.** Lucas Tramonte, Thais Harumi Shinkai e Luis Felipe Cremonezzi Correa ficaram responsáveis pelas deduções matemáticas dos índices de mérito e pela escolha dos materiais no *software* Ansys Granta. Beatriz Mendonça Duarte, João Pedro Michelini Masili e Luiz Gustavo Rossi Pernassi ficaram responsáveis pelo CAD (desenho técnico, cotas e tolerâncias).
+## 1.3 Divisão do trabalho
+
+Lucas Tramonte, Thais Harumi Shinkai e Luis Felipe Cremonezzi Correa ficaram responsáveis pelas deduções matemáticas dos índices de mérito e pela escolha dos materiais no *software* Ansys Granta. Beatriz Mendonça Duarte, João Pedro Michelini Masili e Luiz Gustavo Rossi Pernassi ficaram responsáveis pelo CAD (desenho técnico, cotas e tolerâncias).
 
 # 2 Especificações do Produto
 
@@ -60,11 +64,13 @@ O modelo é um quadricóptero com quatro dutos (envelope de 112 × 112 × 40 mm)
 
 O modelo usa o formalismo vetorial e de torsores da mecânica clássica [17]: isola-se o sistema, define-se um referencial, escrevem-se os torsores de ações, aplica-se o princípio fundamental da estática (PFS) ou da dinâmica (PFD) e, no braço, corta-se a viga para obter o torsor de coesão. O referencial *R*_{G} tem origem no centro de massa G e eixo *z* para cima. Os rotores 1 a 4 ficam em (±*a*, ±*a*), com *a* = 30 mm. A Figura 3 mostra o diagrama de corpo livre sobre o desenho do drone, e a Figura 4 mostra os caminhos de carga na pá, no cubo e no braço.
 
-![Figura 3 – Diagrama de corpo livre em voo pairado: empuxo de cada rotor, torque de reação aerodinâmico, peso, força centrífuga e força de desbalanceamento. Fonte: elaborado pelos autores](../../docs/figures/forces_on_drone.png)
+![Figura 3 – Diagrama de corpo livre em voo pairado: empuxo de cada rotor, torque de reação aerodinâmico, peso, força centrífuga e força de desbalanceamento. Fonte: elaborado pelos autores](../../docs/figures/forces_on_drone_pt.png)
 
-![Figura 4 – Caminhos de carga na pá, no cubo e no braço (viga engastada com diagrama de momento fletor). Fonte: elaborado pelos autores](../../docs/figures/load_paths.png)
+![Figura 4 – Caminhos de carga na pá, no cubo e no braço (viga engastada com diagrama de momento fletor). Fonte: elaborado pelos autores](../../docs/figures/load_paths_pt.png)
 
-**Ações dos rotores.** O empuxo e o torque de reação de cada rotor são proporcionais ao quadrado da velocidade angular:
+### 2.3.1 Ações dos rotores
+
+O empuxo e o torque de reação de cada rotor são proporcionais ao quadrado da velocidade angular:
 
 $$
 T_i = k_T\,\omega_i^{2},\qquad Q_i = -\varepsilon_i\,k_Q\,\omega_i^{2},\qquad k_T = C_T\,\rho_a\,\pi R^{4}
@@ -78,7 +84,9 @@ $$
 
 Por simetria, *T*_{i} = *mg*/4 = 0,368 N por rotor para a massa de decolagem de 150 g.
 
-**Força centrífuga na pá.** Para uma pá de massa *m*_{p} e centro de massa à distância *r*_{G} do eixo, a força na raiz e a tensão de tração de uma pá uniforme de comprimento *R*_{b} são:
+### 2.3.2 Força centrífuga na pá
+
+Para uma pá de massa *m*_{p} e centro de massa à distância *r*_{G} do eixo, a força na raiz e a tensão de tração de uma pá uniforme de comprimento *R*_{b} são:
 
 $$
 F_c = m_p\,\omega^{2}\,r_G,\qquad \sigma_c = \frac{\rho\,\omega^{2}R_b^{2}}{2}
@@ -86,25 +94,33 @@ $$
 
 A 40.000 rpm, *ω* = 4189 rad/s e *f* = 666,7 Hz. Com os valores *assumidos* *m*_{p} = 0,2 g e *r*_{G} = 12 mm, obtém-se *F*_{c} = 42 N, cerca de 2×10⁴ vezes o peso da pá. Com *R*_{b} = 24 mm, a tensão na raiz é 7,8 MPa (CFRP), 13,8 MPa (ligas de alumínio) e 9,1 MPa (ligas de magnésio), no centro das faixas de densidade do Granta. Com fator de segurança 1,5, isso consome apenas 2%, 19% e 13% da menor resistência ao escoamento de cada faixa, de modo que a tração centrífuga estática não decide o material; a fadiga decide (Seção 6.4).
 
-**Braço como viga engastada.** O braço é uma viga de Euler-Bernoulli de comprimento *L*, seção retangular *b*×*h*, engastada no corpo e carregada na ponta pela força *F* = *T* − *m*_{m}*g*. O momento fletor, a tensão normal máxima de Navier e a flecha na ponta são:
+### 2.3.3 Braço como viga engastada
+
+O braço é uma viga de Euler-Bernoulli de comprimento *L*, seção retangular *b*×*h*, engastada no corpo e carregada na ponta pela força *F* = *T* − *m*_{m}*g*. O momento fletor, a tensão normal máxima de Navier e a flecha na ponta são:
 
 $$
 M_{f}(x) = -(T-m_m g)(L-x),\qquad \sigma_{\mathrm{max}} = \frac{6\,(T-m_m g)\,L}{b\,h^{2}},\qquad w(L) = \frac{(T-m_m g)\,L^{3}}{3\,E\,I},\quad I=\frac{b h^{3}}{12}
 $$
 
-**Excitação por vibração.** Um desbalanceamento *m*_{u} com excentricidade *e* gera uma força rotativa de amplitude *F*_{u} = *m*_{u} *e* *ω*², na frequência de 666,7 Hz, transmitida ao braço pelo suporte elastomérico (Seção 6.3).
+### 2.3.4 Excitação por vibração
 
-**Escopo das cargas aerodinâmicas.** O modelo inclui a aerodinâmica dos rotores em voo pairado: o empuxo e o torque de reação de cada rotor, a decomposição da força da pá em empuxo e arrasto e o empuxo como carga que flexiona o braço. O empuxo é fixado pelo equilíbrio (*T*_{i} = *mg*/4), e não calculado pela aerodinâmica da pá. Não estão incluídos o arrasto e a sustentação do duto e da fuselagem, o voo à frente, as rajadas, os transientes de manobra (fator de carga *n* > 1), o efeito solo e o amortecimento aerodinâmico. Esses efeitos elevariam a carga de projeto acima do valor de voo pairado; enquanto não forem modelados, o fator de segurança da Seção 4.3 precisa cobri-los.
+Um desbalanceamento *m*_{u} com excentricidade *e* gera uma força rotativa de amplitude *F*_{u} = *m*_{u} *e* *ω*², na frequência de 666,7 Hz, transmitida ao braço pelo suporte elastomérico (Seção 6.3).
+
+### 2.3.5 Escopo das cargas aerodinâmicas
+
+O modelo inclui a aerodinâmica dos rotores em voo pairado: o empuxo e o torque de reação de cada rotor, a decomposição da força da pá em empuxo e arrasto e o empuxo como carga que flexiona o braço. O empuxo é fixado pelo equilíbrio (*T*_{i} = *mg*/4), e não calculado pela aerodinâmica da pá. Não estão incluídos o arrasto e a sustentação do duto e da fuselagem, o voo à frente, as rajadas, os transientes de manobra (fator de carga *n* > 1), o efeito solo e o amortecimento aerodinâmico. Esses efeitos elevariam a carga de projeto acima do valor de voo pairado; enquanto não forem modelados, o fator de segurança da Seção 4.3 precisa cobri-los.
 
 ## 2.4 Verificação dos modelos
 
 Um diagrama de forças mostra *o que* atua na estrutura, mas não prova que as equações foram resolvidas corretamente. Os dois modelos que sustentam os resultados foram verificados numericamente (Figura 5): a flecha analítica do braço foi comparada com a dupla integração numérica de *EI w″* = *M*(*x*), com erro na ponta caindo com inclinação −2 no número de elementos (regra do trapézio de segunda ordem); a transmissibilidade analítica do isolador foi comparada com a amplitude em regime permanente de uma simulação no tempo; e o erro de energia do esquema de diferenças centrais permanece limitado e proporcional a Δ*t*² (2,47%, 0,39% e 0,025% para *T*/20, *T*/50 e *T*/200). Os torsores, a matriz de mistura, o torsor de coesão, a tensão de Navier e a flecha também são recalculados simbolicamente e comparados com as fórmulas do texto. As dimensões do braço, a carga, a frequência natural e o amortecimento são *premissas* indicadas nos gráficos; a figura verifica os modelos, não o projeto.
 
-![Figura 5 – Verificação do modelo do braço e do isolador. Fonte: elaborado pelos autores](../../docs/figures/verification.png)
+![Figura 5 – Verificação do modelo do braço e do isolador. Fonte: elaborado pelos autores](../../docs/figures/verification_pt.png)
 
 # 3 Índices de Mérito
 
 ## 3.1 Formulação geral
+
+### 3.1.1 Problema de minimização com restrições
 
 Cada índice é a resposta de um problema de minimização com restrições. Sendo **x** as variáveis livres de projeto (a espessura ou a área) e **p** as propriedades do material:
 
@@ -114,7 +130,9 @@ $$
 
 em que *f* é o objetivo (massa *m* ou custo *C*) e *g*_{j} são as restrições (rigidez, resistência). Eliminando *x* com a restrição ativa, obtém-se a equação de desempenho *f*_{ót} = Φ·Γ·*P*(**p**), em que *P* é o grupo de propriedades a minimizar. O índice de mérito clássico é o inverso, *IM* = 1/*P*; minimizar *P* e maximizar *IM* selecionam o mesmo material.
 
-**Hipóteses.** Regime elástico linear (lei de Hooke); teoria de pequenas deflexões (Euler-Bernoulli e Kirchhoff); material isotrópico ou quase-isotrópico; comprimento *L* e raio médio *R* fixos, com a espessura de parede como única variável geométrica.
+### 3.1.2 Hipóteses
+
+Regime elástico linear (lei de Hooke); teoria de pequenas deflexões (Euler-Bernoulli e Kirchhoff); material isotrópico ou quase-isotrópico; comprimento *L* e raio médio *R* fixos, com a espessura de parede como única variável geométrica.
 
 ## 3.2 IM1: casca tubular leve e rígida em flexão
 
@@ -158,15 +176,19 @@ Os índices usam um *E* escalar; para laminados de CFRP usa-se o módulo efetivo
 
 ## 4.1 Propriedades e índices dos candidatos
 
-**Fonte dos dados.** Todas as propriedades vêm do Ansys Granta EduPack 2024 R1 (versão 24.1.1), a única fonte de dados de materiais deste trabalho. O Granta apresenta cada propriedade como uma *faixa* (a extensão da bolha no gráfico de Ashby). Os registros lidos até agora são **CFRP, matriz epóxi (isotrópico)** (epóxi com fibra de carbono contínua em laminado quase-isotrópico), **Aluminum alloys**, **Magnesium alloys**, **Polyetheretherketone (PEEK)**, **Polycarbonate (PC)** e **Acrylonitrile butadiene styrene (ABS)**; o registro **Low carbon steel** foi lido como referência do custo relativo, e não como candidato e **GFRP, matriz epóxi (isotrópico)** (epóxi com fibra de vidro E contínua em laminado quase-isotrópico; o Granta marca quase todos os valores desse registro como estimados). Os registros das ligas são de família (todas as ligas de alumínio ou de magnésio); a liga 7075-T6 permanece como grau de referência na discussão de processo. O registro de PEEK é o polímero *sem carga*: o candidato da disciplina, PEEK com 30% de fibra de carbono, não foi encontrado na árvore. A resistência a UV e a absorção de água não estão entre os atributos desta instalação do Granta (verificado nas listas de eixos e de limites). Os preços estão em R$/kg, como esta instalação do Granta mostra, e o Granta marca alguns valores como estimados (por exemplo preço e tenacidade do CFRP, módulo e preço do PEEK, resistências à fadiga).
+### 4.1.1 Fonte dos dados
 
-O valor representativo é o **centro da bolha** (média geométrica da faixa), usado nos índices e no ranking. Uma restrição que **corta a bolha** descarta o material; por isso a triagem usa o menor valor da faixa para um requisito mínimo e o maior para um máximo.
+Todas as propriedades vêm do Ansys Granta EduPack 2024 R1 (versão 24.1.1), a única fonte de dados de materiais deste trabalho. O Granta apresenta cada propriedade como uma *faixa* (a extensão da bolha no gráfico de Ashby). Os registros lidos até agora são CFRP, matriz epóxi (isotrópico) (epóxi com fibra de carbono contínua em laminado quase-isotrópico), ligas de alumínio, ligas de magnésio, polieteretercetona (PEEK), policarbonato (PC) e acrilonitrila-butadieno-estireno (ABS); o registro aço de baixo carbono foi lido como referência do custo relativo, e não como candidato e GFRP, matriz epóxi (isotrópico) (epóxi com fibra de vidro E contínua em laminado quase-isotrópico; o Granta marca quase todos os valores desse registro como estimados). Os registros das ligas são de família (todas as ligas de alumínio ou de magnésio); a liga 7075-T6 permanece como grau de referência na discussão de processo. O registro de PEEK é o polímero *sem carga*: o candidato da disciplina, PEEK com 30% de fibra de carbono, não foi encontrado na árvore. A resistência a UV e a absorção de água não estão entre os atributos desta instalação do Granta (verificado nas listas de eixos e de limites). Os preços estão em R$/kg, como esta instalação do Granta mostra, e o Granta marca alguns valores como estimados (por exemplo preço e tenacidade do CFRP, módulo e preço do PEEK, resistências à fadiga).
+
+O valor representativo é o centro da bolha (média geométrica da faixa), usado nos índices e no ranking. Uma restrição que corta a bolha descarta o material; por isso a triagem usa o menor valor da faixa para um requisito mínimo e o maior para um máximo.
+
+### 4.1.2 Propriedades e índices dos candidatos
 
 | Material | ρ (kg/m³) | E (GPa) | σ_{y} (MPa) | K_{Ic} (MPa·m^{0,5}) | Preço (R$/kg) | IM1 | IM2 | IM3 |
 |---|---|---|---|---|---|---|---|---|
 | CFRP, matriz epóxi (isotrópico) | 1500–1600 | 69–150 | 550–1050 | 6,12–20 | 197–219 | 65,7 | 490,5 | 0,32 |
-| Aluminum alloys | 2640–2810 | 69–75 | 109–439 | 23–38 | 14,8–21 | 26,4 | 80,3 | 1,50 |
-| Magnesium alloys | 1780–1840 | 42–46 | 109–216 | 14–18 | 31,7–38,8 | 24,3 | 84,8 | 0,69 |
+| Ligas de alumínio | 2640–2810 | 69–75 | 109–439 | 23–38 | 14,8–21 | 26,4 | 80,3 | 1,50 |
+| Ligas de magnésio | 1780–1840 | 42–46 | 109–216 | 14–18 | 31,7–38,8 | 24,3 | 84,8 | 0,69 |
 | PEEK (sem carga) | 1300–1320 | 3,76–3,95 | 90–110 | 2,73–4,3 | 368–410 | 2,9 | 76,0 | 0,008 |
 | Policarbonato | 1190–1210 | 2,32–2,44 | 59,1–65,2 | 2,1–2,3 | 17,6–19,1 | 2,0 | 51,7 | 0,11 |
 | ABS | 1030–1060 | 2,07–2,76 | 34,5–49,6 | 1,46–4,29 | 11,7–14,7 | 2,3 | 39,6 | 0,17 |
@@ -174,25 +196,47 @@ O valor representativo é o **centro da bolha** (média geométrica da faixa), u
 
 Unidades: IM1 em GPa/(Mg/m³); IM2 em MPa/(Mg/m³); IM3 em GPa/(kR$/m³). Os índices usam o centro de cada faixa. Em relação ao registro do aço (*C*_{v} = 59.506 R$/m³), o custo volumétrico é 5,4 (CFRP), 0,81 (alumínio), 1,07 (magnésio), 8,6 (PEEK), 0,37 (PC), 0,23 (ABS) e 5,8 (GFRP).
 
+### 4.1.3 Tubo de referência com a mesma rigidez
+
 Massa de um tubo de referência (raio médio de 18 mm, comprimento de 30 mm, premissas lidas do detalhe Ø36 do desenho) com a mesma rigidez à flexão de um tubo de parede de 1,0 mm do registro de ligas de alumínio: CFRP, parede de 0,71 mm e 3,7 g; ligas de alumínio, 9,2 g; ligas de magnésio, parede de 1,64 mm e 10,0 g; GFRP, parede de 3,36 mm e 21,2 g; PEEK, PC e ABS exigiriam paredes de 18,7 mm, 30,2 mm e 30,1 mm, maiores que o raio (valores formais de 83,0 g, 123,1 g e 106,7 g), isto é, não alcançam essa rigidez como tubo de parede fina.
 
 ## 4.2 Leitura dos gráficos de Ashby: linha de restrição e linha-guia
 
-A seleção é feita sobre os próprios gráficos, em cinco passos explícitos.
+A seleção é feita sobre os próprios gráficos, em cinco passos explícitos (Seções 4.2.1 a 4.2.5).
 
-1. **Marcar a restrição.** O requisito é desenhado como uma reta: horizontal para um *E* ou *σ* mínimo. A restrição de rigidez do braço é *E* ≥ 4*FL*³/(*bh*³*w*_{máx}); a de resistência é *σ*_{y} ≥ *s*·6*FL*/(*bh*²). A raiz da pá acrescenta uma restrição inclinada, *σ*_{y} ≥ *s ρω*²*R*_{b}²/2, que é uma reta de inclinação 1 no gráfico *σ*–*ρ*.
-2. **Descartar os materiais que a restrição corta.** Se a reta cruza a bolha de um material, parte dele não atende ao requisito, e o material é descartado.
-3. **Selecionar a linha-guia do índice de mérito:** inclinação 1 para *E*/*ρ*, para *σ*/*ρ* e para *E*/*C*_{v,R}.
-4. **Deslizar a régua** ao longo da inclinação da linha-guia pelo diagrama, mantendo a inclinação.
-5. **Considerar o material selecionado apenas quando a linha-guia passa pelo centro da sua bolha.** Os materiais acima e à esquerda da reta têm índice maior; os distantes dela são classificados, não selecionados.
+### 4.2.1 Marcar a restrição
 
-Duas regras valem sempre: (i) **cerâmicas não resistem a aplicações de tração** (resistência baixa e dispersa; a resistência impressa para cerâmicas é o módulo de ruptura, não a resistência à tração), e por isso saem de toda seleção com carga de tração; (ii) a restrição de resistência inclui o **fator de segurança *N*** (*s* no texto), tomado da literatura e não escolhido pela equipe.
+O requisito é desenhado como uma reta: horizontal para um *E* ou *σ* mínimo. A restrição de rigidez do braço é *E* ≥ 4*FL*³/(*bh*³*w*_{máx}); a de resistência é *σ*_{y} ≥ *s*·6*FL*/(*bh*²). A raiz da pá acrescenta uma restrição inclinada, *σ*_{y} ≥ *s ρω*²*R*_{b}²/2, que é uma reta de inclinação 1 no gráfico *σ*–*ρ*.
+
+### 4.2.2 Descartar os materiais que a restrição corta
+
+Se a reta cruza a bolha de um material, parte dele não atende ao requisito, e o material é descartado.
+
+### 4.2.3 Selecionar a linha-guia do índice de mérito
+
+A linha-guia tem inclinação 1 para *E*/*ρ*, para *σ*/*ρ* e para *E*/*C*_{v,R}.
+
+### 4.2.4 Deslizar a régua
+
+A régua desliza ao longo do diagrama mantendo a inclinação da linha-guia.
+
+### 4.2.5 Considerar o material selecionado
+
+O material só é considerado selecionado quando a linha-guia passa pelo centro da sua bolha. Os materiais acima e à esquerda da reta têm índice maior; os distantes dela são classificados, não selecionados.
+
+### 4.2.6 Regras que valem sempre
+
+Duas regras valem sempre: (i) cerâmicas não resistem a aplicações de tração (resistência baixa e dispersa; a resistência impressa para cerâmicas é o módulo de ruptura, não a resistência à tração), e por isso saem de toda seleção com carga de tração; (ii) a restrição de resistência inclui o fator de segurança *N* (*s* no texto), tomado da literatura e não escolhido pela equipe.
 
 ## 4.3 Premissas e fator de segurança
 
+### 4.3.1 Premissas de carga
+
 Nada foi medido. As cargas são premissas da equipe, reunidas em `data/granta_filters.json`: braço com *F* = 0,30 N, *L* = 30 mm, seção *b*×*h* = 5×1,5 mm e flecha admissível de 0,5 mm; rotor a 40.000 rpm e comprimento de pá *R*_{b} = 24 mm. As propriedades dos materiais não são premissas: são as faixas do Granta.
 
-O **fator de segurança** padrão é *N* = 1,5, o fator entre a carga limite e a carga última da regra 14 CFR 25.303 [12]. Essa regra é escrita para aviões de transporte, não para um UAV de 150 g, e foi lida em cópias secundárias; existem valores de manuais de 2,5 a 4 para cargas dinâmicas incertas (slides de curso e artigo técnico, não a tabela do livro-texto). O fator é, portanto, uma premissa a confirmar no Shigley ou na norma adotada pelo curso, e os gráficos podem ser refeitos com qualquer valor.
+### 4.3.2 Fator de segurança
+
+O fator de segurança padrão é *N* = 1,5, o fator entre a carga limite e a carga última da regra 14 CFR 25.303 [12]. Essa regra é escrita para aviões de transporte, não para um UAV de 150 g, e foi lida em cópias secundárias; existem valores de manuais de 2,5 a 4 para cargas dinâmicas incertas (slides de curso e artigo técnico, não a tabela do livro-texto). O fator é, portanto, uma premissa a confirmar no Shigley ou na norma adotada pelo curso, e os gráficos podem ser refeitos com qualquer valor.
 
 ## 4.4 Diagramas de Ashby no Granta
 
@@ -212,7 +256,7 @@ Com as faixas do Granta, a restrição de rigidez corta as caixas do PEEK (*E* a
 
 Aplicaram-se as restrições: resistência a UV mínima "aceitável", absorção de água em 24 h inferior a 0,2% e tenacidade à fratura *K*_{Ic} superior a 2,0 MPa·m^{0,5}, além da temperatura de serviço superior a 80 °C e da densidade máxima de 3000 kg/m³. Uma restrição que corta a faixa do Granta descarta o material (testa-se o menor valor para um mínimo e o maior para um máximo).
 
-| Restrição | Limite | CFRP | Aluminum alloys | Magnesium alloys | PEEK | PC | ABS | GFRP |
+| Restrição | Limite | CFRP | Ligas de alumínio | Ligas de magnésio | PEEK | PC | ABS | GFRP |
 |---|---|---|---|---|---|---|---|---|
 | Resistência a UV | ≥ Aceitável | n/d | n/d | n/d | n/d | n/d | n/d | n/d |
 | Absorção de água, 24 h | < 0,2% | n/d | n/d | n/d | n/d | n/d | n/d | n/d |
@@ -222,7 +266,7 @@ Aplicaram-se as restrições: resistência a UV mínima "aceitável", absorção
 
 n/d: não disponível nesta instalação do Granta (as listas de atributos não têm categoria de durabilidade).
 
-CFRP, alumínio, magnésio, GFRP, PEEK e PC passam nos filtros que puderam ser avaliados (o PC só marginalmente na tenacidade, 2,1 contra um limite de 2,0). O **ABS é eliminado**: o limite inferior de sua tenacidade (1,46) está abaixo de 2,0 e sua temperatura máxima de serviço (até 76,9 °C) está abaixo de 80 °C. A resistência a UV e a absorção de água não estão disponíveis nesta instalação do Granta, e esses dois filtros **não foram avaliados**. O CFRP exige verniz ou tinta estável a UV; o registro de CFRP começa em 6,12 MPa·m^{0,5} (valor estimado no Granta), muito abaixo dos metais; ligas de alumínio forjadas, como a 7075-T6, são suscetíveis à corrosão sob tensão, e o CFRP em contato com fixadores de alumínio causa corrosão galvânica do alumínio e deve ser isolado com camada de vidro ou selante.
+CFRP, alumínio, magnésio, GFRP, PEEK e PC passam nos filtros que puderam ser avaliados (o PC só marginalmente na tenacidade, 2,1 contra um limite de 2,0). O ABS é eliminado: o limite inferior de sua tenacidade (1,46) está abaixo de 2,0 e sua temperatura máxima de serviço (até 76,9 °C) está abaixo de 80 °C. A resistência a UV e a absorção de água não estão disponíveis nesta instalação do Granta, e esses dois filtros não foram avaliados. O CFRP exige verniz ou tinta estável a UV; o registro de CFRP começa em 6,12 MPa·m^{0,5} (valor estimado no Granta), muito abaixo dos metais; ligas de alumínio forjadas, como a 7075-T6, são suscetíveis à corrosão sob tensão, e o CFRP em contato com fixadores de alumínio causa corrosão galvânica do alumínio e deve ser isolado com camada de vidro ou selante.
 
 ## 5.2 Filtros de carga
 
@@ -231,8 +275,8 @@ Os filtros de carga usam as premissas da Seção 4.3 e removem o material que fa
 | Material | Rigidez do braço (menor E) | Resistência (menor σ_{y}) | Resultado |
 |---|---|---|---|
 | CFRP, matriz epóxi (isotrópico) | 69 GPa: passa | 550 MPa: passa | Aprovado |
-| Aluminum alloys | 69 GPa: passa | 109 MPa: passa | Aprovado |
-| Magnesium alloys | 42 GPa: passa | 109 MPa: passa | Aprovado |
+| Ligas de alumínio | 69 GPa: passa | 109 MPa: passa | Aprovado |
+| Ligas de magnésio | 42 GPa: passa | 109 MPa: passa | Aprovado |
 | PEEK (sem carga) | 3,76 GPa: reprova (< 3,84) | 90 MPa: passa | Reprovado |
 | Policarbonato | 2,32 GPa: reprova | 59,1 MPa: passa | Reprovado |
 | ABS | 2,07 GPa: reprova | 34,5 MPa: passa | Reprovado |
@@ -254,7 +298,7 @@ Descrever o ciclo de cura (patamar de temperatura, pressão e vácuo), a taxa de
 
 ## 6.3 Isolamento de vibração dos motores
 
-Os motores *brushless* a 40.000 rpm excitam a estrutura em 666,7 Hz (mais harmônicos e a frequência de passagem de pá). Amortecedores elastoméricos entre os suportes dos motores e a carcaça são modelados como um isolador de um grau de liberdade (Kelvin-Voigt) [16], cuja transmissibilidade é:
+Os motores sem escovas a 40.000 rpm excitam a estrutura em 666,7 Hz (mais harmônicos e a frequência de passagem de pá). Amortecedores elastoméricos entre os suportes dos motores e a carcaça são modelados como um isolador de um grau de liberdade (Kelvin-Voigt) [16], cuja transmissibilidade é:
 
 $$
 T=\sqrt{\frac{1+(2\zeta r)^{2}}{(1-r^{2})^{2}+(2\zeta r)^{2}}},\qquad r=\frac{f}{f_n}
@@ -263,6 +307,8 @@ $$
 O isolamento (*T* < 1) exige *r* > √2. Para *T* = 0,1 com *ζ* = 0,1, a frequência natural deve ser *f*_{n} ≤ 182 Hz (*r* = 3,7); para um conjunto motor/ESC de 10 g (premissa), isso implica rigidez total de cerca de 13 kN/m. Uma placa plana idealizada de Al, simplesmente apoiada, de 100 × 50 × 1,0 mm, tem *f*_{11} ≈ 1,2 kHz e *f*_{12} ≈ 4,1 kHz, acima da excitação; o risco passa aos braços em balanço e às nacelas, cujos primeiros modos de flexão devem ficar fora de 667 Hz ± 15%.
 
 ## 6.4 Fadiga: ciclo de tensão, curva S–N e vida a 40.000 rpm
+
+### 6.4.1 Ciclo de tensão e curva S–N
 
 Cargas dinâmicas devem ser verificadas quanto à fadiga; a resistência estática não basta. Para um ciclo de amplitude constante, com tração positiva e compressão negativa:
 
@@ -274,11 +320,17 @@ Exemplo de aula: 20 MPa de tração e 10 MPa de compressão dão Δ*σ* = 30 MPa
 
 A curva S–N relaciona a amplitude de tensão *σ*_{a} (escala logarítmica) ao número de ciclos *N* (escala logarítmica). Ligas ferrosas costumam apresentar um limite de resistência à fadiga, abaixo do qual não há falha; ligas de alumínio, polímeros e compósitos, em geral, apresentam curva que continua caindo, de modo que se usa a vida *N* para uma amplitude dada (afirmação de conhecimento geral, não conferida em fonte neste trabalho). O ensaio retira peso a cada falha e usa um novo corpo de prova usinado e normalizado, razão pela qual *σ*_{a} cai com *N*. Usam-se a lei de Basquin, *σ*_{a} = *σ*_{f}′(2*N*)^{b} [14], e a soma de Miner, *D* = Σ*n*_{i}/*N*_{i} [15].
 
-**Vida à frequência de excitação.** A 666,7 Hz, 10⁷ ciclos são atingidos em 4,2 h e 10⁹ ciclos em cerca de 417 h; um voo de 2 h acumula 4,8 milhões de ciclos. Um drone de longa autonomia entra, portanto, no regime de alto ciclo em poucos voos, e braços e suportes devem ser projetados para vida, e não só para resistência estática.
+### 6.4.2 Vida à frequência de excitação
 
-**Por que a frequência do motor é a frequência dos ciclos de tensão.** A força de desbalanceamento é um vetor de módulo constante que gira com o rotor, *F*_{u}(*t*) = *m*_{u} *e* *ω*² (cos *ωt* **x** + sen *ωt* **y**). Cada componente sobre o braço e a fuselagem percorre, portanto, um ciclo de carga completo por rotação, e um motor a *n* = 40.000 rpm impõe a frequência de ciclos *f* = *n*/60 = 666,7 Hz a toda peça que suporta essa força. O mesmo vale para as variações de empuxo e de força centrífuga das pás, uma vez por rotação; a frequência de passagem de pá e os harmônicos acrescentam frequências mais altas com menor amplitude. A amplitude de tensão depende do desbalanceamento e da resposta dinâmica do suporte e não é conhecida neste trabalho: o número de ciclos é justificado, e a amplitude é um item em aberto.
+A 666,7 Hz, 10⁷ ciclos são atingidos em 4,2 h e 10⁹ ciclos em cerca de 417 h; um voo de 2 h acumula 4,8 milhões de ciclos. Um drone de longa autonomia entra, portanto, no regime de alto ciclo em poucos voos, e braços e suportes devem ser projetados para vida, e não só para resistência estática.
 
-**Fractografia e engenharia de superfície.** Em uma peça fraturada, as *marcas de praia* (estrias do crescimento lento da trinca, um avanço por ciclo em escala microscópica) indicam fadiga, e uma região de fratura rápida marca a ruptura final. A ausência de marcas de praia não exclui falha catastrófica, conforme o material. A vida em fadiga melhora com engenharia de superfície: revestimentos, jateamento e arredondamento de ângulos agudos onde as trincas se iniciam.
+### 6.4.3 Por que a frequência do motor é a frequência dos ciclos de tensão
+
+A força de desbalanceamento é um vetor de módulo constante que gira com o rotor, *F*_{u}(*t*) = *m*_{u} *e* *ω*² (cos *ωt* **x** + sen *ωt* **y**). Cada componente sobre o braço e a fuselagem percorre, portanto, um ciclo de carga completo por rotação, e um motor a *n* = 40.000 rpm impõe a frequência de ciclos *f* = *n*/60 = 666,7 Hz a toda peça que suporta essa força. O mesmo vale para as variações de empuxo e de força centrífuga das pás, uma vez por rotação; a frequência de passagem de pá e os harmônicos acrescentam frequências mais altas com menor amplitude. A amplitude de tensão depende do desbalanceamento e da resposta dinâmica do suporte e não é conhecida neste trabalho: o número de ciclos é justificado, e a amplitude é um item em aberto.
+
+### 6.4.4 Fractografia e engenharia de superfície
+
+Em uma peça fraturada, as *marcas de praia* (estrias do crescimento lento da trinca, um avanço por ciclo em escala microscópica) indicam fadiga, e uma região de fratura rápida marca a ruptura final. A ausência de marcas de praia não exclui falha catastrófica, conforme o material. A vida em fadiga melhora com engenharia de superfície: revestimentos, jateamento e arredondamento de ângulos agudos onde as trincas se iniciam.
 
 # 7 Matriz de Decisão e Recomendação Final
 
@@ -297,14 +349,14 @@ Os pesos-padrão, editáveis, são 0,35 (mecânico), 0,25 (custo), 0,20 (manufat
 | Posição | Material | Desempenho mecânico (0,35) | Custo (0,25) | Manufaturabilidade (0,20) | Durabilidade (0,20) | Total |
 |---|---|---|---|---|---|---|
 | 1 | CFRP, matriz epóxi (isotrópico) | 1,000 | 0,211 | 0,400 | 0,800 | 0,643 |
-| 2 | Aluminum alloys | 0,283 | 1,000 | 0,800 | 0,600 | 0,629 |
-| 3 | Magnesium alloys | 0,271 | 0,462 | 0,600 | 0,400 | 0,411 |
+| 2 | Ligas de alumínio | 0,283 | 1,000 | 0,800 | 0,600 | 0,629 |
+| 3 | Ligas de magnésio | 0,271 | 0,462 | 0,600 | 0,400 | 0,411 |
 | 4 | GFRP, matriz epóxi (isotrópico) | 0,225 | 0,041 | 0,600 | 0,600 | 0,329 |
 | (-) | PEEK (descartado) | 0,100 | 0,005 | 0,800 | 1,000 | 0,396 |
 | (-) | Policarbonato (descartado) | 0,068 | 0,072 | 1,000 | 0,600 | 0,362 |
 | (-) | ABS (descartado) | 0,058 | 0,116 | 1,000 | 0,200 | 0,289 |
 
-Os dois primeiros formam um empate técnico (diferença de 0,014). O PEEK, o PC e o ABS são removidos pelos filtros (a rigidez do braço corta suas faixas, e o ABS também reprova na tenacidade e na temperatura); sem os filtros, o PEEK (0,396) e o PC (0,362) ainda ficariam apenas em 4º e 5º lugar (linhas marcadas com (-), pontuadas entre os sete registros), e o ABS em último. No estágio de limite do próprio Granta com *E* ≥ 3,84 GPa, o registro de PEEK **permanece** (a faixa dele se sobrepõe ao limite), enquanto o PC e o ABS são removidos: o Granta mantém o registro quando qualquer parte da faixa passa, ao passo que este relatório descarta o registro cuja faixa é cortada pela restrição; a diferença não altera o ranking. As notas de manufaturabilidade e durabilidade são julgamentos da equipe (atribuídos para o CFRP, a liga 7075-T6, a AZ31B, o GFRP, o PEEK com 30% de fibra de carbono, o PC e o ABS) e não são dados do Granta. A análise de sensibilidade aos pesos é a seguinte:
+Os dois primeiros formam um empate técnico (diferença de 0,014). O PEEK, o PC e o ABS são removidos pelos filtros (a rigidez do braço corta suas faixas, e o ABS também reprova na tenacidade e na temperatura); sem os filtros, o PEEK (0,396) e o PC (0,362) ainda ficariam apenas em 4º e 5º lugar (linhas marcadas com (-), pontuadas entre os sete registros), e o ABS em último. No estágio de limite do próprio Granta com *E* ≥ 3,84 GPa, o registro de PEEK permanece (a faixa dele se sobrepõe ao limite), enquanto o PC e o ABS são removidos: o Granta mantém o registro quando qualquer parte da faixa passa, ao passo que este relatório descarta o registro cuja faixa é cortada pela restrição; a diferença não altera o ranking. As notas de manufaturabilidade e durabilidade são julgamentos da equipe (atribuídos para o CFRP, a liga 7075-T6, a AZ31B, o GFRP, o PEEK com 30% de fibra de carbono, o PC e o ABS) e não são dados do Granta. A análise de sensibilidade aos pesos é a seguinte:
 
 | Cenário | Pesos (mec / custo / manuf / durab) | Ordem |
 |---|---|---|
@@ -319,9 +371,13 @@ O CFRP fica em primeiro em quatro dos seis cenários e as ligas de alumínio nos
 
 ## 7.3 Recomendação
 
-Com os dados do Granta, a matriz seleciona o **CFRP quase-isotrópico** por uma margem pequena (0,643 contra 0,629 das ligas de alumínio nos pesos-padrão): é de longe o mais leve (-60% de massa no tubo de referência), tem os maiores IM1 e IM2 e a melhor nota em quatro dos seis cenários de peso. Deve ser produzido por rota de prensagem ou cura fora de autoclave, ponderando o índice de custo cerca de 4,7 vezes pior e a carga de processo. A alternativa de menor risco é a **liga de alumínio usinada por CNC** (7075-T6 como grau de referência): a mais barata, processo maduro de fuselagem monobloco a 50.000 un./ano e primeira colocada sempre que o peso do custo é alto. Como os dois estão em empate técnico nos pesos-padrão, a escolha depende de como a equipe pondera massa contra custo e risco de processo. Não são recomendados as ligas de magnésio (nunca em primeiro: nem mais leves nem mais baratas que as outras duas), o GFRP (mais pesado, mais caro e menos tenaz que as ligas de alumínio para a mesma rigidez, com quase todos os valores do Granta estimados), o PEEK e o PC (descartados pela rigidez do braço e últimos mesmo sem o filtro: baixa rigidez e, no caso do PEEK, preço por kg cerca de duas vezes o do CFRP) e o ABS (reprova a tenacidade, a temperatura e a rigidez).
+### 7.3.1 Escolha do material
 
-**Ressalvas.** As notas de manufaturabilidade e durabilidade são subjetivas; a resistência a UV e a absorção de água não foram lidas no Granta; os registros das ligas são de família (o grau 7075-T6 não é um registro separado) e o registro de PEEK é o polímero sem carga; todas as cargas e o fator de segurança são premissas; e a matriz usa uma soma ponderada normalizada simples, sem desempate nem análise de incerteza. O resultado deve ser refeito após a inclusão dos registros e propriedades que faltam.
+Com os dados do Granta, a matriz seleciona o CFRP quase-isotrópico por uma margem pequena (0,643 contra 0,629 das ligas de alumínio nos pesos-padrão): é de longe o mais leve (-60% de massa no tubo de referência), tem os maiores IM1 e IM2 e a melhor nota em quatro dos seis cenários de peso. Deve ser produzido por rota de prensagem ou cura fora de autoclave, ponderando o índice de custo cerca de 4,7 vezes pior e a carga de processo. A alternativa de menor risco é a liga de alumínio usinada por CNC (7075-T6 como grau de referência): a mais barata, processo maduro de fuselagem monobloco a 50.000 un./ano e primeira colocada sempre que o peso do custo é alto. Como os dois estão em empate técnico nos pesos-padrão, a escolha depende de como a equipe pondera massa contra custo e risco de processo. Não são recomendados as ligas de magnésio (nunca em primeiro: nem mais leves nem mais baratas que as outras duas), o GFRP (mais pesado, mais caro e menos tenaz que as ligas de alumínio para a mesma rigidez, com quase todos os valores do Granta estimados), o PEEK e o PC (descartados pela rigidez do braço e últimos mesmo sem o filtro: baixa rigidez e, no caso do PEEK, preço por kg cerca de duas vezes o do CFRP) e o ABS (reprova a tenacidade, a temperatura e a rigidez).
+
+### 7.3.2 Ressalvas
+
+As notas de manufaturabilidade e durabilidade são subjetivas; a resistência a UV e a absorção de água não foram lidas no Granta; os registros das ligas são de família (o grau 7075-T6 não é um registro separado) e o registro de PEEK é o polímero sem carga; todas as cargas e o fator de segurança são premissas; e a matriz usa uma soma ponderada normalizada simples, sem desempate nem análise de incerteza. O resultado deve ser refeito após a inclusão dos registros e propriedades que faltam.
 
 # 8 Gestão do Projeto
 
@@ -334,7 +390,7 @@ O trabalho foi dividido em dois pacotes: matemática e seleção de materiais, e
 
 Dentro dos pacotes: Lucas Tramonte traduziu os requisitos e deduziu formalmente os índices; Thais Harumi Shinkai ficou com a matriz de decisão, a redação segundo a ABNT/Unicamp e o roteiro do pitch; Luis Felipe Cremonezzi Correa, com a engenharia de manufatura e a análise do lote de 50.000 un./ano. O cronograma vai de 4 de novembro a 3 de dezembro de 2026, com entrega do relatório e do pitch em 01/12/2026 às 23h59 e apresentação em 03/12/2026.
 
-![Figura 6 – Cronograma de atividades. Fonte: elaborado pelos autores](../figures/gantt.png)
+![Figura 6 – Cronograma de atividades. Fonte: elaborado pelos autores](../figures/gantt_pt.png)
 
 # 9 Conclusões
 
@@ -384,23 +440,23 @@ Telas do Granta EduPack 2024 R1 (versão 24.1.1) com os registros lidos. Os valo
 
 ![Figura A1 – Registro CFRP, matriz epóxi (isotrópico): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p01_0.png) ![Figura A2 – Registro CFRP, matriz epóxi (isotrópico): propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p02_0.png)
 
-![Figura A3 – Registro Aluminum alloys: descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p04_0.png) ![Figura A4 – Registro Aluminum alloys: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p05_0.png)
+![Figura A3 – Registro Ligas de alumínio: descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p04_0.png) ![Figura A4 – Registro Ligas de alumínio: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p05_0.png)
 
-![Figura A5 – Registro Magnesium alloys: descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p06_0.png) ![Figura A6 – Registro Magnesium alloys: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p07_0.png)
+![Figura A5 – Registro Ligas de magnésio: descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p06_0.png) ![Figura A6 – Registro Ligas de magnésio: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p07_0.png)
 
 ![Figura A7 – Registro GFRP, matriz epóxi (isotrópico): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p08_0.png) ![Figura A8 – Registro GFRP, matriz epóxi (isotrópico): propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p09_0.png)
 
-![Figura A9 – Registro Polyetheretherketone (PEEK): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p10_0.png) ![Figura A10 – Registro PEEK: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p11_0.png)
+![Figura A9 – Registro Polieteretercetona (PEEK): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p10_0.png) ![Figura A10 – Registro PEEK: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p11_0.png)
 
 ![Figura A11 – Registro PEEK: continuação (reciclagem e usos típicos). Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p11_1.png)
 
-![Figura A12 – Registro Polycarbonate (PC): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p13_0.png) ![Figura A13 – Registro PC: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p14_0.png)
+![Figura A12 – Registro Policarbonato (PC): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p13_0.png) ![Figura A13 – Registro PC: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p14_0.png)
 
 ![Figura A14 – Registro PC: continuação (reciclagem e usos típicos). Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p14_1.png)
 
-![Figura A15 – Registro Low carbon steel (referência do custo relativo): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p15_0.png) ![Figura A16 – Registro Low carbon steel: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p16_0.png)
+![Figura A15 – Registro Aço de baixo carbono (referência do custo relativo): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p15_0.png) ![Figura A16 – Registro Aço de baixo carbono: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p16_0.png)
 
-![Figura A17 – Registro Acrylonitrile butadiene styrene (ABS): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p17_0.png) ![Figura A18 – Registro ABS: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p18_0.png)
+![Figura A17 – Registro Acrilonitrila-butadieno-estireno (ABS): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p17_0.png) ![Figura A18 – Registro ABS: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p18_0.png)
 
 ![Figura A19 – Registro ABS: continuação (reciclagem e usos típicos). Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p18_1.png)
 
