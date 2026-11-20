@@ -1,12 +1,15 @@
-numpy>=1.24
-pandas>=2.0
+numpy>=1.24; python_version < "3.12"      # numpy 2.5 needs Python 3.12+
+numpy>=2.5.4; python_version >= "3.12"
+pandas>=2.0; python_version < "3.11"      # pandas 3.1 needs Python 3.11+
+pandas>=3.1.1; python_version >= "3.11"
 scipy>=1.10; python_version < "3.12"      # scipy 1.18+ needs Python 3.12 or newer
 scipy>=1.18.1; python_version >= "3.12"
-matplotlib>=3.7
+matplotlib>=3.7; python_version < "3.11"      # matplotlib 3.11 needs Python 3.11+
+matplotlib>=3.11.2; python_version >= "3.11"
 adjustText>=1.4.0          # non-overlapping labels in the physics figures
 sympy>=1.14.0              # symbolic derivation of the merit indices
-python-docx>=1.1
-pytest>=7.4
+python-docx>=1.2.0
+pytest>=9.2.0
 docx2pdf>=0.1.8          # PDF export of the Portuguese .docx (needs Microsoft Word or LibreOffice)
 markdown>=3.5; python_version < "3.11"      # English report PDF (3.11.3 needs Python 3.11+)
 markdown>=3.11.3; python_version >= "3.11"
