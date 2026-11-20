@@ -315,13 +315,11 @@ Os dois primeiros formam um empate técnico (diferença de 0,014). O PEEK, o PC 
 | Prioridade ao custo (0,7) | 0,10 / 0,70 / 0,10 / 0,10 | Ligas de alumínio, ligas de magnésio, CFRP, GFRP |
 | Prioridade à durabilidade (0,7) | 0,10 / 0,10 / 0,10 / 0,70 | CFRP, ligas de alumínio, GFRP, ligas de magnésio |
 
-O CFRP fica em primeiro em quatro dos seis cenários e as ligas de alumínio nos dois cenários de custo; as ligas de magnésio e o GFRP nunca ficam em primeiro. Reescalando os demais pesos em proporção, as ligas de alumínio superam o CFRP quando o peso mecânico cai abaixo de cerca de 0,34. Sem fixar pesos, o conjunto não dominado de massa, custo e tenacidade (vetor mínimo de massa, custo e −*K*_{Ic}) é formado pelo CFRP (mais leve) e pelas ligas de alumínio (mais baratas e mais tenazes); as ligas de magnésio e o GFRP são dominados pelas de alumínio (Figura 6). A massa é a do tubo de referência da Seção 4.1, e o custo está em R$.
-
-![Figura 6 – Frentes de Pareto: massa contra custo e massa contra tenacidade. Fonte: elaborado pelos autores](../../docs/figures/pareto.png)
+O CFRP fica em primeiro em quatro dos seis cenários e as ligas de alumínio nos dois cenários de custo; as ligas de magnésio e o GFRP nunca ficam em primeiro. Reescalando os demais pesos em proporção, as ligas de alumínio superam o CFRP quando o peso mecânico cai abaixo de cerca de 0,34.
 
 ## 7.3 Recomendação
 
-Com os dados do Granta, a matriz seleciona o **CFRP quase-isotrópico** por uma margem pequena (0,643 contra 0,629 das ligas de alumínio nos pesos-padrão): é de longe o mais leve (-60% de massa no tubo de referência), tem os maiores IM1 e IM2 e a melhor nota em quatro dos seis cenários de peso. Deve ser produzido por rota de prensagem ou cura fora de autoclave, ponderando o índice de custo cerca de 4,7 vezes pior e a carga de processo. A alternativa de menor risco é a **liga de alumínio usinada por CNC** (7075-T6 como grau de referência): a mais barata, processo maduro de fuselagem monobloco a 50.000 un./ano e primeira colocada sempre que o peso do custo é alto. Como os dois estão em empate técnico nos pesos-padrão, a escolha depende de como a equipe pondera massa contra custo e risco de processo. Não são recomendados as ligas de magnésio (nunca em primeiro: nem mais leves nem mais baratas que as outras duas), o GFRP (dominado pelas ligas de alumínio em massa, custo e tenacidade, com quase todos os valores do Granta estimados), o PEEK e o PC (descartados pela rigidez do braço e últimos mesmo sem o filtro: baixa rigidez e, no caso do PEEK, preço por kg cerca de duas vezes o do CFRP) e o ABS (reprova a tenacidade, a temperatura e a rigidez).
+Com os dados do Granta, a matriz seleciona o **CFRP quase-isotrópico** por uma margem pequena (0,643 contra 0,629 das ligas de alumínio nos pesos-padrão): é de longe o mais leve (-60% de massa no tubo de referência), tem os maiores IM1 e IM2 e a melhor nota em quatro dos seis cenários de peso. Deve ser produzido por rota de prensagem ou cura fora de autoclave, ponderando o índice de custo cerca de 4,7 vezes pior e a carga de processo. A alternativa de menor risco é a **liga de alumínio usinada por CNC** (7075-T6 como grau de referência): a mais barata, processo maduro de fuselagem monobloco a 50.000 un./ano e primeira colocada sempre que o peso do custo é alto. Como os dois estão em empate técnico nos pesos-padrão, a escolha depende de como a equipe pondera massa contra custo e risco de processo. Não são recomendados as ligas de magnésio (nunca em primeiro: nem mais leves nem mais baratas que as outras duas), o GFRP (mais pesado, mais caro e menos tenaz que as ligas de alumínio para a mesma rigidez, com quase todos os valores do Granta estimados), o PEEK e o PC (descartados pela rigidez do braço e últimos mesmo sem o filtro: baixa rigidez e, no caso do PEEK, preço por kg cerca de duas vezes o do CFRP) e o ABS (reprova a tenacidade, a temperatura e a rigidez).
 
 **Ressalvas.** As notas de manufaturabilidade e durabilidade são subjetivas; a resistência a UV e a absorção de água não foram lidas no Granta; os registros das ligas são de família (o grau 7075-T6 não é um registro separado) e o registro de PEEK é o polímero sem carga; todas as cargas e o fator de segurança são premissas; e a matriz usa uma soma ponderada normalizada simples, sem desempate nem análise de incerteza. O resultado deve ser refeito após a inclusão dos registros e propriedades que faltam.
 
@@ -336,7 +334,7 @@ O trabalho foi dividido em dois pacotes: matemática e seleção de materiais, e
 
 Dentro dos pacotes: Lucas Tramonte traduziu os requisitos e deduziu formalmente os índices; Thais Harumi Shinkai ficou com a matriz de decisão, a redação segundo a ABNT/Unicamp e o roteiro do pitch; Luis Felipe Cremonezzi Correa, com a engenharia de manufatura e a análise do lote de 50.000 un./ano. O cronograma vai de 4 de novembro a 3 de dezembro de 2026, com entrega do relatório e do pitch em 01/12/2026 às 23h59 e apresentação em 03/12/2026.
 
-![Figura 7 – Cronograma de atividades. Fonte: elaborado pelos autores](../figures/gantt.png)
+![Figura 6 – Cronograma de atividades. Fonte: elaborado pelos autores](../figures/gantt.png)
 
 # 9 Conclusões
 
@@ -384,41 +382,25 @@ Os índices de mérito foram deduzidos como problemas de minimização com restr
 
 Telas do Granta EduPack 2024 R1 (versão 24.1.1) com os registros lidos. Os valores usados no relatório são as faixas dessas telas.
 
-![Figura A1 – Registro CFRP, matriz epóxi (isotrópico): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p01_0.png)
+![Figura A1 – Registro CFRP, matriz epóxi (isotrópico): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p01_0.png) ![Figura A2 – Registro CFRP, matriz epóxi (isotrópico): propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p02_0.png)
 
-![Figura A2 – Registro CFRP, matriz epóxi (isotrópico): propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p02_0.png)
+![Figura A3 – Registro Aluminum alloys: descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p04_0.png) ![Figura A4 – Registro Aluminum alloys: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p05_0.png)
 
-![Figura A3 – Registro Aluminum alloys: descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p04_0.png)
+![Figura A5 – Registro Magnesium alloys: descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p06_0.png) ![Figura A6 – Registro Magnesium alloys: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p07_0.png)
 
-![Figura A4 – Registro Aluminum alloys: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p05_0.png)
+![Figura A7 – Registro GFRP, matriz epóxi (isotrópico): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p08_0.png) ![Figura A8 – Registro GFRP, matriz epóxi (isotrópico): propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p09_0.png)
 
-![Figura A5 – Registro Magnesium alloys: descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p06_0.png)
-
-![Figura A6 – Registro Magnesium alloys: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p07_0.png)
-
-![Figura A7 – Registro GFRP, matriz epóxi (isotrópico): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p08_0.png)
-
-![Figura A8 – Registro GFRP, matriz epóxi (isotrópico): propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p09_0.png)
-
-![Figura A9 – Registro Polyetheretherketone (PEEK): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p10_0.png)
-
-![Figura A10 – Registro PEEK: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p11_0.png)
+![Figura A9 – Registro Polyetheretherketone (PEEK): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p10_0.png) ![Figura A10 – Registro PEEK: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p11_0.png)
 
 ![Figura A11 – Registro PEEK: continuação (reciclagem e usos típicos). Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p11_1.png)
 
-![Figura A12 – Registro Polycarbonate (PC): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p13_0.png)
-
-![Figura A13 – Registro PC: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p14_0.png)
+![Figura A12 – Registro Polycarbonate (PC): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p13_0.png) ![Figura A13 – Registro PC: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p14_0.png)
 
 ![Figura A14 – Registro PC: continuação (reciclagem e usos típicos). Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p14_1.png)
 
-![Figura A15 – Registro Low carbon steel (referência do custo relativo): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p15_0.png)
+![Figura A15 – Registro Low carbon steel (referência do custo relativo): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p15_0.png) ![Figura A16 – Registro Low carbon steel: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p16_0.png)
 
-![Figura A16 – Registro Low carbon steel: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p16_0.png)
-
-![Figura A17 – Registro Acrylonitrile butadiene styrene (ABS): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p17_0.png)
-
-![Figura A18 – Registro ABS: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p18_0.png)
+![Figura A17 – Registro Acrylonitrile butadiene styrene (ABS): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p17_0.png) ![Figura A18 – Registro ABS: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p18_0.png)
 
 ![Figura A19 – Registro ABS: continuação (reciclagem e usos típicos). Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p18_1.png)
 
@@ -436,13 +418,9 @@ Os limites são os da Seção 5. A tabela resume o efeito de cada estágio; as l
 
 O registro de PEEK permanece no Granta porque a faixa dele (3,76–3,95 GPa) se sobrepõe ao limite de módulo; o relatório o descarta (Seção 7.2).
 
-![Figura B1 – Painel de limite do Granta, sem restrições. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p21_0.png)
+![Figura B1 – Painel de limite do Granta, sem restrições. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p21_0.png) ![Figura B2 – Estágio de limite: densidade ≤ 3000 kg/m³, tenacidade à fratura ≥ 2 MPa·m^{0,5} e temperatura máxima de serviço ≥ 80 °C. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p22_0.png)
 
-![Figura B2 – Estágio de limite: densidade ≤ 3000 kg/m³, tenacidade à fratura ≥ 2 MPa·m^{0,5} e temperatura máxima de serviço ≥ 80 °C. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p22_0.png)
-
-![Figura B3 – Estágio de limite com as três restrições anteriores e módulo de Young ≥ 3,84 GPa. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p24_0.png)
-
-![Figura B4 – Estágio de limite: módulo de Young ≥ 3,84 GPa. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p26_0.png)
+![Figura B3 – Estágio de limite com as três restrições anteriores e módulo de Young ≥ 3,84 GPa. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p24_0.png) ![Figura B4 – Estágio de limite: módulo de Young ≥ 3,84 GPa. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p26_0.png)
 
 ![Figura B5 – Estágio de limite: limite de escoamento ≥ 7,2 MPa. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p28_0.png)
 

@@ -1,4 +1,4 @@
-"""Mathematical engine: Ashby merit indices, laminate mechanics, vibration/fatigue, Pareto optimisation."""
+"""Mathematical engine: Ashby merit indices, laminate mechanics, vibration/fatigue."""
 
 from .merit_indices import (
     bending_panel_index,
