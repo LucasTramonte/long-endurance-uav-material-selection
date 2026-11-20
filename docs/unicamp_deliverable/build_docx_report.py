@@ -175,7 +175,12 @@ def add_image(doc: Document, alt: str, src: str, base: Path) -> None:
     p = doc.add_paragraph()
     fmt(p, WD_ALIGN_PARAGRAPH.CENTER, 1.0, False, before=6)
     if path.exists():
-        p.add_run().add_picture(str(path), width=Cm(16 if "ashby" in src else 13))   # text width is 16 cm
+        from PIL import Image
+
+        with Image.open(path) as im:
+            wide = im.width > 1000
+        # text width is 16 cm: Ashby charts and wide Granta screenshots use it all
+        p.add_run().add_picture(str(path), width=Cm(16 if "ashby" in src or wide else 13))
     else:
         set_font(p.add_run(f"[Figura não encontrada: {src}]"), 10, italic=True)
     cap = doc.add_paragraph()

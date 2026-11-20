@@ -397,6 +397,20 @@ The selection is made on the charts with five explicit steps. They are also writ
 
 **Cost charts.** The cost step is made in Granta with the price times the density (BRL/m^3) on the axis, since the attribute list of this installation has no relative cost; the slope-1 guide line of $`E/C_v`$ is the same in any unit of volumetric cost. The Granta prints go to `docs/figures/granta_*.png` (body: the three selection charts; appendix: every step). Chart stages and Granta notes: [`docs/ansys_granta_notes.md`](docs/ansys_granta_notes.md).
 
+**Granta screens (done so far).** The prints from the software itself are in [`docs/figures/granta/`](docs/figures/granta) and in the appendices of the Portuguese report: the property records of the eight materials, the limit stages with their result lists and single-property bar charts. Figures 6 and 7 above are a *provisional construction* on the original Ashby chart (with the Granta ranges), because the **two-axis Granta diagrams** ($`E`$-$`\rho`$, $`\sigma_y`$-$`\rho`$, $`E`$-$`C_v`$ with the constraint and the slope-1 guide line) are still to be made; they will replace Figures 6 and 7 (checklist in [`docs/ansys_granta_notes.md`](docs/ansys_granta_notes.md), Section 7). Figures 8 and 9 show what the software gives so far.
+
+![Granta limit stage E >= 3.84 GPa](docs/figures/granta/p26_0.png)
+
+![Granta bar chart of Young's modulus](docs/figures/granta/p26_1.png)
+
+**Figure 8** - Granta (EduPack 2024 R1): limit stage $`E\ge3.84`$ GPa and the bar chart of Young's modulus (one property, the bubbles are the vertical bars). In the result list of this stage the PEEK record stays, because its range (3.76-3.95 GPa) overlaps the limit; this report discards it.
+
+![Granta limit stage yield strength >= 7.2 MPa](docs/figures/granta/p28_0.png)
+
+![Granta bar chart of yield strength](docs/figures/granta/p28_1.png)
+
+**Figure 9** - Granta: limit stage $`\sigma_y\ge7.2`$ MPa and the bar chart of yield strength.
+
 ### 3.4 Pareto view: mass vs cost vs toughness
 
 `python -m src.math_modeling.pareto_optimization --all --plot docs/figures/pareto.png`
@@ -576,7 +590,7 @@ Deadlines from the project brief [14]: written project **and** 5-8 min video pit
 
 ![Gantt chart](docs/figures/gantt.png)
 
-**Figure 8** - Gantt chart, 04/11 to 03/12/2026.
+**Figure 10** - Gantt chart, 04/11 to 03/12/2026.
 
 | # | Activity | Owner(s) | Start | End | Days |
 |:-:|:--|:--|:-:|:-:|:-:|

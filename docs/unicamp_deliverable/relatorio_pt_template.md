@@ -196,7 +196,7 @@ O **fator de segurança** padrão é *N* = 1,5, o fator entre a carga limite e a
 
 ## 4.4 Gráficos de Ashby com restrições, linhas-guia e setas
 
-As Figuras 6 e 7 reproduzem os gráficos originais de Ashby [11] com as linhas e setas sobrepostas pela equipe. As setas numeradas indicam: (1) a linha de restrição; (2) os materiais descartados; (3) a linha-guia do índice; (4) a régua que desliza ao longo da inclinação; (5) o material selecionado, cuja bolha é atravessada pela linha-guia. A seta verde aponta para o sentido de índice maior. As caixas sombreadas são as faixas do Granta de cada material (a extensão da bolha), com um ponto no centro.
+As Figuras 6 e 7 são a **construção provisória** sobre os gráficos originais de Ashby [11], com as linhas e setas sobrepostas pela equipe, usando as faixas do Granta. Os prints do próprio Granta já feitos (registros, estágios de limite com as listas de resultados e gráficos de barras de uma propriedade) estão nos Apêndices A a C; os diagramas de Ashby de dois eixos feitos no Granta (E × ρ, σ_y × ρ e E × C_v) ainda estão pendentes e entrarão aqui, no lugar destas figuras, quando ficarem prontos. As setas numeradas indicam: (1) a linha de restrição; (2) os materiais descartados; (3) a linha-guia do índice; (4) a régua que desliza ao longo da inclinação; (5) o material selecionado, cuja bolha é atravessada pela linha-guia. A seta verde aponta para o sentido de índice maior. As caixas sombreadas são as faixas do Granta de cada material (a extensão da bolha), com um ponto no centro.
 
 ![Figura 6 – Gráfico E–ρ: restrição E ≥ 3,84 GPa (rigidez do braço) e linha-guia de E/ρ (inclinação 1); CFRP selecionado. Fonte: ASHBY [11], com anotações dos autores](../../docs/figures/ashby_E_rho_annotated.png)
 
@@ -379,3 +379,99 @@ Os índices de mérito foram deduzidos como problemas de minimização com restr
 [16] RAO, S. S. **Mechanical Vibrations**. 6. ed. Harlow: Pearson, 2017.
 
 [17] GERE, J. M.; GOODNO, B. J. **Mechanics of Materials**. 8. ed. Stamford: Cengage Learning, 2013.
+
+\pagebreak
+
+# Apêndice A – Registros do Granta EduPack usados como fonte dos dados
+
+Telas do Granta EduPack 2024 R1 (versão 24.1.1) com os registros lidos. Os valores usados no relatório são as faixas dessas telas.
+
+![Figura A1 – Árvore de materiais (MaterialUniverse) do Granta EduPack. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p00_0.png)
+
+![Figura A2 – Granta EduPack 2024 R1, versão 24.1.1 (Ajuda > Sobre). Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p03_0.png)
+
+![Figura A3 – Registro CFRP, matriz epóxi (isotrópico): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p01_0.png)
+
+![Figura A4 – Registro CFRP, matriz epóxi (isotrópico): propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p02_0.png)
+
+![Figura A5 – Registro Aluminum alloys: descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p04_0.png)
+
+![Figura A6 – Registro Aluminum alloys: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p05_0.png)
+
+![Figura A7 – Registro Magnesium alloys: descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p06_0.png)
+
+![Figura A8 – Registro Magnesium alloys: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p07_0.png)
+
+![Figura A9 – Registro GFRP, matriz epóxi (isotrópico): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p08_0.png)
+
+![Figura A10 – Registro GFRP, matriz epóxi (isotrópico): propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p09_0.png)
+
+![Figura A11 – Registro Polyetheretherketone (PEEK): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p10_0.png)
+
+![Figura A12 – Registro PEEK: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p11_0.png)
+
+![Figura A13 – Registro PEEK: continuação (reciclagem e usos típicos). Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p11_1.png)
+
+![Figura A14 – Lista de termoplásticos da árvore (Polymers > Thermoplastics). Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p12_0.png)
+
+![Figura A15 – Registro Polycarbonate (PC): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p13_0.png)
+
+![Figura A16 – Registro PC: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p14_0.png)
+
+![Figura A17 – Registro PC: continuação (reciclagem e usos típicos). Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p14_1.png)
+
+![Figura A18 – Registro Low carbon steel (referência do custo relativo): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p15_0.png)
+
+![Figura A19 – Registro Low carbon steel: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p16_0.png)
+
+![Figura A20 – Registro Acrylonitrile butadiene styrene (ABS): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p17_0.png)
+
+![Figura A21 – Registro ABS: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p18_0.png)
+
+![Figura A22 – Registro ABS: continuação (reciclagem e usos típicos). Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p18_1.png)
+
+\pagebreak
+
+# Apêndice B – Estágios de limite aplicados no Granta
+
+Os limites são os da Seção 5. O registro de PEEK permanece na lista do estágio de módulo porque a faixa dele se sobrepõe ao limite; o relatório o descarta (Seção 7.2).
+
+![Figura B1 – Painel de limite do Granta, sem restrições. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p21_0.png)
+
+![Figura B2 – Estágio de limite: densidade ≤ 3000 kg/m³, tenacidade à fratura ≥ 2 MPa·m^0,5 e temperatura máxima de serviço ≥ 80 °C. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p22_0.png)
+
+![Figura B3 – Estágio de limite com as três restrições anteriores e módulo de Young ≥ 3,84 GPa. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p24_0.png)
+
+![Figura B4 – Estágio de limite: módulo de Young ≥ 3,84 GPa. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p26_0.png)
+
+![Figura B5 – Lista de resultados com o limite de módulo de Young (37 de 69 registros aprovados). Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p27_0.png)
+
+![Figura B6 – Estágio de limite: limite de escoamento ≥ 7,2 MPa. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p28_0.png)
+
+![Figura B7 – Lista de resultados com o limite de escoamento: registros aprovados (parte 1). Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p29_0.png)
+
+![Figura B8 – Lista de resultados com o limite de escoamento: registros aprovados (parte 2). Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p29_1.png)
+
+\pagebreak
+
+# Apêndice C – Estágio do gráfico e gráficos de barras do Granta
+
+São gráficos de uma propriedade só (sem densidade no eixo X), feitos para conferir as faixas e as restrições; não substituem os diagramas de Ashby de dois eixos, que estão pendentes (Seção 4.4).
+
+![Figura C1 – Diálogo do estágio do gráfico do Granta (aba do eixo Y). Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p19_0.png)
+
+![Figura C2 – Categorias de propriedades disponíveis para o eixo. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p19_1.png)
+
+![Figura C3 – Atributos disponíveis para o eixo: não há propriedades de durabilidade (UV, absorção de água). Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p20_0.png)
+
+![Figura C4 – Gráfico de barras da resistência à fadiga a 10^7 ciclos (uma propriedade). Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p20_1.png)
+
+![Figura C5 – Gráfico de barras da resistência à fadiga com a lista de estágios à esquerda. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p23_0.png)
+
+![Figura C6 – Gráfico de barras da resistência à fadiga com rótulo e seta de um registro. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p25_0.png)
+
+![Figura C7 – Detalhe do gráfico de barras da resistência à fadiga. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p25_1.png)
+
+![Figura C8 – Gráfico de barras do módulo de Young com o limite E ≥ 3,84 GPa. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p26_1.png)
+
+![Figura C9 – Gráfico de barras do limite de escoamento com o limite ≥ 7,2 MPa. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p28_1.png)
