@@ -22,7 +22,7 @@ from __future__ import annotations
 
 import argparse
 
-from src.analysis.export_tables import load_filters, load_materials
+from src.analysis.export_tables import load_filters, load_materials, lower, upper
 from src.math_modeling.load_case_screening import check_material
 from src.math_modeling.merit_indices import compute_all_indices
 
@@ -30,22 +30,29 @@ CRITERIA = ["mechanical_performance", "cost", "manufacturability", "environmenta
 
 
 def screen(materials: list[dict], filters: dict) -> tuple[list[dict], dict[str, list[str]]]:
-    """Apply hard constraints; return (survivors, {id: [violated constraints]})."""
+    """Apply hard constraints; return (survivors, {id: [violated constraints]}).
+
+    A constraint that cuts the Granta range of a material (its lowest value for a minimum, its highest for a maximum)
+    discards it. A property that is not in the dataset (null) is not evaluated; see :func:`not_evaluated`.
+    """
     scale = filters["uv_resistance_scale"]
     survivors, rejected = [], {}
     for m in materials:
         fails = []
         for c in filters["constraints"]:
             prop, kind, limit = c["property"], c["type"], c["value"]
-            val = m[prop]
+            val = m.get(prop)
+            if val is None:
+                continue
             if kind == "min_category":
                 ok = scale.index(val) >= scale.index(limit)
             elif kind == "min":
-                ok = val >= limit
+                ok = lower(m, prop) >= limit
             else:  # "max"
-                ok = val <= limit
+                ok = upper(m, prop) <= limit
             if not ok:
-                fails.append(f"{prop}={val} violates {kind} {limit}")
+                fails.append(f"{prop}={val:g} violates {kind} {limit}" if isinstance(val, (int, float))
+                             else f"{prop}={val} violates {kind} {limit}")
         if "load_cases" in filters:
             fails += check_material(m, filters["load_cases"])
         if fails:
@@ -53,6 +60,12 @@ def screen(materials: list[dict], filters: dict) -> tuple[list[dict], dict[str, 
         else:
             survivors.append(m)
     return survivors, rejected
+
+
+def not_evaluated(materials: list[dict], filters: dict) -> dict[str, list[str]]:
+    """Constraint properties missing from the dataset, per material (the filter could not be applied)."""
+    return {m["id"]: [c["property"] for c in filters["constraints"] if m.get(c["property"]) is None]
+            for m in materials if any(m.get(c["property"]) is None for c in filters["constraints"])}
 
 
 def normalise_weights(weights: dict[str, float]) -> dict[str, float]:
@@ -95,7 +108,7 @@ def format_matrix(scored: list[dict], weights: dict[str, float]) -> str:
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--weights", type=float, nargs=4, metavar=("MECH", "COST", "MANUF", "DURAB"))
-    ap.add_argument("--all", action="store_true", help="use the full pool instead of the 4-material shortlist")
+    ap.add_argument("--all", action="store_true", help="use every complete record instead of the shortlist")
     ap.add_argument("--no-filter", action="store_true", help="skip hard-constraint screening")
     args = ap.parse_args()
 

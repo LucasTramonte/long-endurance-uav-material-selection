@@ -32,9 +32,14 @@ def test_stiffness_constraint_is_consistent_with_deflection_formula():
 
 def test_screening_discards_what_the_constraint_cuts():
     e_c, _ = sel.arm_requirements(**ARM, w_max=0.5e-3)
-    kept, dropped = sel.screen_by_constraint(load_materials(), e_c)
-    assert {m["id"] for m, _ in dropped} == {"PC", "ABS"}
-    assert all(m["youngs_modulus_GPa"] >= e_c.minimum for m in kept)
+    soft = {"id": "soft", "youngs_modulus_GPa": 2.0, "youngs_modulus_GPa_min": 1.5}
+    cut_bubble = {"id": "bubble", "youngs_modulus_GPa": 6.0, "youngs_modulus_GPa_min": 2.0}   # range straddles 3.84 GPa
+    stiff = {"id": "stiff", "youngs_modulus_GPa": 70.0, "youngs_modulus_GPa_min": 69.0}
+    kept, dropped = sel.screen_by_constraint([soft, cut_bubble, stiff], e_c)
+    assert [m["id"] for m in kept] == ["stiff"] and {m["id"] for m, _ in dropped} == {"soft", "bubble"}
+    kept_db, dropped_db = sel.screen_by_constraint(load_materials(), e_c)
+    # their Granta E ranges (3.76-3.95, 2.32-2.44 GPa) dip below 3.84 GPa
+    assert {m["id"] for m, _ in dropped_db} == {"PEEK", "PC", "ABS"}
 
 
 def test_ceramics_are_excluded_in_tension_only():

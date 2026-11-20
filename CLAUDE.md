@@ -29,7 +29,7 @@ Portuguese** (`docs/unicamp_deliverable/`, .docx + .pdf). README, code and commi
 | Backslash inside an f-string expression is valid on 3.12, a SyntaxError on 3.10/3.11 | Build the string first, then interpolate | `tests/test_python_compatibility.py` |
 | A figure showed forces but nothing proved the equations were solved correctly | Add analytic-vs-numeric, convergence and energy-error panels (`verification_figure.py`) with a test per number | `tests/test_verification.py` |
 | Material chosen without the chart procedure, or a safety factor picked to make a material pass | Follow `.claude/skills/ashby-chart-selection` and `.claude/skills/safety-factor-selection`: constraint line, discard cut bubbles, guide line, ceramics never in tension, `s` from cited literature | `tests/test_ashby.py` |
-| Static strength used for a cyclic load, or merit indices that do not describe the drone (flywheel, extra premises) | Follow `.claude/skills/fatigue-assessment`; keep IM1 = E/rho (tube, fixed radius), IM2, IM3 as reviewed by the course monitor; cost and selection text follow `cost-merit-indices` and `selection-method-and-decision-matrix` | `tests/test_rotating_fatigue.py`, `tests/test_symbolic.py` |
+| Static strength used for a cyclic load, or merit indices that do not describe the drone (flywheel, extra premises) | Follow `.claude/skills/fatigue-assessment` (and `rotating-parts-merit-indices` for spinning parts); keep IM1 = E/rho (tube, fixed radius), IM2, IM3 as reviewed by the course monitor; cost and selection text follow `cost-merit-indices` and `selection-method-and-decision-matrix` | `tests/test_rotating_fatigue.py`, `tests/test_symbolic.py` |
 | Claimed numbers or sources that were not checked | Cite only what was read; say what could not be verified | review |
 
 ## Privacy and redistribution
@@ -38,5 +38,7 @@ Everything in `assets/` except its README is git-ignored (slides, brief, drafts 
 annotated Ashby charts in `docs/figures/ashby_*_annotated.png` are published (source credited in the image); the source PDFs in
 `assets/ashby_charts/` stay git-ignored. Material data in `data/materials_db.json` are representative placeholders until replaced by
 Granta/MatWeb exports.
+
+Skills in `.claude/skills/` are never deleted because the current report does not use them: they are the team's reusable method.
 
 ## Do not commit or push unless the user asks.

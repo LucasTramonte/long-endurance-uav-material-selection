@@ -12,7 +12,8 @@ The five steps of the reading (see ``.claude/skills/ashby-chart-selection``):
   1 constraint line, 2 materials discarded, 3 guide line of the merit index, 4 slide the ruler along the slope,
   5 keep the material whose bubble centre the guide line crosses.
 
-Premises (arm, rotor, safety factor, steel reference) come from ``data/granta_filters.json`` -> ``load_cases``.
+Premises (arm, rotor, safety factor) come from ``data/granta_filters.json`` -> ``load_cases``; the materials are the Granta ranges
+of ``data/materials_db.json`` (drawn as boxes, the extent of the bubble, with a dot at its centre).
 
 Usage (repository root):  python -m src.analysis.ashby_charts [--print | --open]   (default: --print if the PDFs exist)
 """
@@ -27,12 +28,12 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.patches import Rectangle
 
 from src.analysis.export_tables import ROOT, load_cases, load_materials
 from src.analysis.figure_utils import declutter
 from src.math_modeling.ashby_selection import GUIDE_SLOPES, excluded_in_tension, guide_line_log
 from src.math_modeling.load_case_screening import derived_limits
-from src.math_modeling.merit_indices import relative_volumetric_cost
 from src.math_modeling.rotating_parts import blade_root_stress
 
 CHART_DIR = ROOT / "assets" / "ashby_charts"
@@ -72,7 +73,7 @@ class Guide:
 @dataclass(frozen=True)
 class ChartSpec:
     key: str
-    x_prop: str                      # "density_kg_m3" or "Cv_R" (relative volumetric cost)
+    x_prop: str                      # key of the material dict plotted on the x axis (density)
     y_prop: str
     xlabel: str
     ylabel: str
@@ -85,7 +86,6 @@ class ChartSpec:
 
 
 RHO = r"Density $\rho$ (kg/m$^3$)"
-CVR = r"Relative cost per unit volume $C_{v,R}$"
 CHARTS = (
     ChartSpec("E_rho", "density_kg_m3", "youngs_modulus_GPa", RHO, "Young's modulus $E$ (GPa)",
               (Guide("E/rho", BLUE, r"$E/\rho$ (tube)"),),
@@ -93,20 +93,18 @@ CHARTS = (
     ChartSpec("sigma_rho", "density_kg_m3", "yield_strength_MPa", RHO, r"Strength $\sigma_f$ (MPa)",
               (Guide("sigma/rho", BLUE, r"$\sigma_f/\rho$"),),
               "mapas_ashby", 0, Calib(412, 2, 286.5, 277, 2, 133.2), (2.8, 3.7), (0.5, 3.3)),
-    ChartSpec("E_cost", "Cv_R", "youngs_modulus_GPa", CVR, "Young's modulus $E$ (GPa)",
-              (Guide("E/rho", BLUE, r"$E/C_{v,R}$ (tube)"),),
-              "diagrama_custo", 0, Calib(550, 0, 212.5, 199, 2, 124.7), (-0.3, 2.0), (-0.3, 2.4)),
-    ChartSpec("sigma_cost", "Cv_R", "yield_strength_MPa", CVR, r"Strength $\sigma_f$ (MPa)",
-              (Guide("sigma/rho", BLUE, r"$\sigma_f/C_{v,R}$"),),
-              "diagrama_custo", 1, Calib(574, 0, 220, 315, 2, 132.8), (-0.3, 2.0), (0.5, 3.3)),
 )
 
 
 def material_xy(m: dict, spec: ChartSpec, case: dict) -> tuple[float, float]:
-    ref = case["reference_steel"]
-    x = (relative_volumetric_cost(m["price_usd_kg"], m["density_kg_m3"], ref["price_usd_kg"], ref["density_kg_m3"])
-         if spec.x_prop == "Cv_R" else m[spec.x_prop])
-    return float(np.log10(x)), float(np.log10(m[spec.y_prop]))
+    """Centre of the bubble (geometric mean of the Granta range) in log10 coordinates."""
+    return float(np.log10(m[spec.x_prop])), float(np.log10(m[spec.y_prop]))
+
+
+def material_box(m: dict, spec: ChartSpec) -> tuple[float, float, float, float]:
+    """Extent of the Granta bubble in log10 coordinates: (x_min, x_max, y_min, y_max)."""
+    return tuple(float(np.log10(m[f"{k}_{b}"])) for k, bs in ((spec.x_prop, ("min", "max")), (spec.y_prop, ("min", "max")))
+                 for b in bs)
 
 
 def constraints_for(spec: ChartSpec, case: dict) -> list[dict]:
@@ -124,10 +122,12 @@ def constraints_for(spec: ChartSpec, case: dict) -> list[dict]:
     return cons
 
 
-def fails_constraint(c: dict, xy: tuple[float, float]) -> bool:
+def fails_constraint(c: dict, m: dict, spec: ChartSpec) -> bool:
+    """True when the constraint line cuts the bubble of ``m`` (its lowest strength or stiffness, highest density)."""
+    x_min, x_max, y_min, y_max = material_box(m, spec)
     if c["kind"] == "h":
-        return xy[1] < np.log10(c["value"])
-    return xy[1] < c["intercept"] + c["slope"] * xy[0]
+        return y_min < np.log10(c["value"])
+    return y_min < c["intercept"] + c["slope"] * x_max
 
 
 def _step(ax, n, target, offset, color, scale):
@@ -152,8 +152,7 @@ def draw_overlay(ax, spec: ChartSpec, case: dict, xlim: tuple, ylim: tuple, scal
     mats = load_materials()
     pts = {m["id"]: material_xy(m, spec, case) for m in mats}
     cons = constraints_for(spec, case)
-    dropped = {m["id"] for m in mats
-               if excluded_in_tension(m) or any(fails_constraint(c, pts[m["id"]]) for c in cons)}
+    dropped = {m["id"] for m in mats if excluded_in_tension(m) or any(fails_constraint(c, m, spec) for c in cons)}
     kept = [m for m in mats if m["id"] not in dropped]
     legend = []
     # step 1: constraint lines and the shaded region they discard
@@ -177,6 +176,10 @@ def draw_overlay(ax, spec: ChartSpec, case: dict, xlim: tuple, ylim: tuple, scal
         anchors[g.index] = best
         if best is not None:
             line(xf, guide_line_log(sl, pts[best["id"]], xf), color=g.color, lw=2.0 * scale, zorder=6)
+    for m in mats:                                                  # Granta bubbles: the min-max box of each material
+        x0, x1, y0, y1 = material_box(m, spec)
+        ax.add_patch(Rectangle((x0, y0), x1 - x0, y1 - y0, fill=True, fc=GREY if m["id"] in dropped else BLUE, alpha=0.12,
+                               ec=GREY if m["id"] in dropped else BLUE, lw=1.2 * scale, zorder=7))
     texts, px, py = [], [], []
     selected = {a["id"] for a in anchors.values() if a is not None}
     for m in mats:
@@ -254,8 +257,8 @@ def build_open(spec: ChartSpec):
     _, _, legend = draw_overlay(ax, spec, case, spec.open_xlim, spec.open_ylim)
     fig.subplots_adjust(bottom=0.34)
     _draw_legend(fig.text, legend, case["safety_factor"], 0.02, 0.012, 0.027, 7)
-    what = "density" if spec.x_prop == "density_kg_m3" else "relative cost"
-    ax.set_title(f"Ashby chart: {spec.ylabel.split(' (')[0]} against {what} (representative data)", fontsize=9.5)
+    what = "density"
+    ax.set_title(f"Ashby chart: {spec.ylabel.split(' (')[0]} against {what} (Granta ranges)", fontsize=9.5)
     return fig
 
 
@@ -298,7 +301,7 @@ def main() -> None:
     for spec in CHARTS:
         if a.only and spec.key not in a.only:
             continue
-        if a.open and spec.x_prop == "density_kg_m3":
+        if a.open:
             OUT_OPEN.mkdir(parents=True, exist_ok=True)
             fig = build_open(spec)
             fig.savefig(OUT_OPEN / f"ashby_{spec.key}_blank.png")

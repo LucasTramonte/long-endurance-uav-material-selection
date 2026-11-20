@@ -26,8 +26,8 @@ The selection is made **on the chart**, with the five steps below, and the repor
 
 ## Premises and the original charts
 
-- Every number (arm, rotor, safety factor, balance grade, fatigue ratio, steel reference) is a **premise** in `data/granta_filters.json` -> `load_cases`. Change it there, never in a chart script. The same premises feed `decision_matrix.screen()` (`load_case_screening.py`), so charts and ranking cannot disagree.
-- `python -m src.analysis.ashby_charts --print` draws the steps on the four ORIGINAL course charts (E-rho, sigma-rho, E-cost, sigma-cost) with numbered arrows: 1 constraint, 2 discarded, 3 guide line, 4 ruler slides along the slope, 5 selected; a green arrow shows the direction of a higher index. The annotated images go to `docs/figures/ashby_*_annotated.png` and are published (team decision, source credited in the image); the source PDFs in `assets/ashby_charts/` stay git-ignored. Embed the annotated images in the README, not blank charts.
+- Loads (arm, rotor, safety factor) are **premises** in `data/granta_filters.json` -> `load_cases`; change them there, never in a chart script. Material properties are NOT premises: they are the Granta ranges of `data/materials_db.json` (Granta is the only data source of the repository). The same data feed `decision_matrix.screen()`, so charts and ranking cannot disagree.
+- `python -m src.analysis.ashby_charts --print` draws the steps on the ORIGINAL course charts (E-rho and sigma-rho) with numbered arrows, and each material as its Granta range (box = extent of the bubble, dot = centre): 1 constraint, 2 discarded, 3 guide line, 4 ruler slides along the slope, 5 selected; a green arrow shows the direction of a higher index. A constraint that cuts the box discards the material. The cost charts need the relative cost (steel record read in Granta) and are made in Granta itself.
 - Printed axes can contain typos (the strength-cost chart labels its last decade 1000 for 100): calibrate on the gridlines and check by overlay.
 
 ## Workflow

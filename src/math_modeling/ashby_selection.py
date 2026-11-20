@@ -83,7 +83,7 @@ def screen_by_constraint(materials: list[dict], constraint: Constraint, tension:
     for m in materials:
         if tension and excluded_in_tension(m):
             discarded.append((m, "brittle: no tensile use"))
-        elif m[constraint.prop] < constraint.minimum:
+        elif m.get(f"{constraint.prop}_min", m[constraint.prop]) < constraint.minimum:    # cuts the bubble
             discarded.append((m, f"below {constraint.label}"))
         else:
             kept.append(m)

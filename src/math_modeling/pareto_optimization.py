@@ -37,7 +37,7 @@ def pareto_mask(objectives: np.ndarray) -> np.ndarray:
 
 def evaluate_candidates(materials: list[dict], EI_target: float | None = None,
                         radius_m: float | None = None, length_m: float | None = None) -> list[dict]:
-    """Compute tube mass [kg], material cost [USD] and KIc for each material.
+    """Compute tube mass [kg], material cost [BRL] and KIc for each material.
 
     Defaults (tube radius, length and rigidity target) come from "reference_tube" in
     data/granta_filters.json.
@@ -54,7 +54,7 @@ def evaluate_candidates(materials: list[dict], EI_target: float | None = None,
         rows.append({
             "id": m["id"],
             "mass_g": mass * 1000.0,
-            "cost_usd": mass * m["price_usd_kg"],
+            "cost_brl": mass * m["price_brl_kg"],
             "KIc": m["fracture_toughness_MPa_m05"],
         })
     return rows
@@ -62,14 +62,14 @@ def evaluate_candidates(materials: list[dict], EI_target: float | None = None,
 
 def pareto_front(rows: list[dict]) -> list[dict]:
     """Return rows annotated with a boolean 'pareto' flag."""
-    obj = np.array([[r["mass_g"], r["cost_usd"], -r["KIc"]] for r in rows])
+    obj = np.array([[r["mass_g"], r["cost_brl"], -r["KIc"]] for r in rows])
     mask = pareto_mask(obj)
     return [{**r, "pareto": bool(k)} for r, k in zip(rows, mask)]
 
 
 def dominated_by(rows: list[dict]) -> dict[str, list[str]]:
     """For every dominated row, the ids of the rows that dominate it (mass, cost minimised; KIc maximised)."""
-    obj = np.array([[r["mass_g"], r["cost_usd"], -r["KIc"]] for r in rows])
+    obj = np.array([[r["mass_g"], r["cost_brl"], -r["KIc"]] for r in rows])
     out: dict[str, list[str]] = {}
     for i, r in enumerate(rows):
         dom = [rows[j]["id"] for j in range(len(rows))
@@ -99,14 +99,14 @@ def build_front_figure(rows: list[dict]):
 
     blue, grey, vermilion = "#0072B2", "#666666", "#D55E00"
     mass = np.array([r["mass_g"] for r in rows])
-    cost = np.array([r["cost_usd"] for r in rows])
+    cost = np.array([r["cost_brl"] for r in rows])
     kic = np.array([r["KIc"] for r in rows])
     optimal = np.array([r["pareto"] for r in rows])
 
     fig, axs = plt.subplots(1, 2, figsize=(12.5, 5.6))
     fig.subplots_adjust(left=0.07, right=0.98, top=0.86, bottom=0.2, wspace=0.22)
     panels = (
-        (axs[0], cost, "Material cost of the tube (USD, log scale)", _front_2d(mass, cost), "lower left"),
+        (axs[0], cost, "Material cost of the tube (BRL, log scale)", _front_2d(mass, cost), "lower left"),
         (axs[1], kic, r"Fracture toughness $K_{Ic}$ (MPa$\cdot$m$^{1/2}$, log scale)", None, "upper left"),
     )
     labelled = []
@@ -168,9 +168,9 @@ def main() -> None:
 
     mats = load_materials(shortlist_only=not args.all)
     rows = pareto_front(evaluate_candidates(mats))
-    print(f"{'Material':<12}{'mass (g)':>10}{'cost (USD)':>12}{'KIc':>8}  Pareto")
+    print(f"{'Material':<12}{'mass (g)':>10}{'cost (BRL)':>12}{'KIc':>8}  Pareto")
     for r in sorted(rows, key=lambda r: r["mass_g"]):
-        print(f"{r['id']:<12}{r['mass_g']:>10.1f}{r['cost_usd']:>12.3f}{r['KIc']:>8.1f}  {'*' if r['pareto'] else ''}")
+        print(f"{r['id']:<12}{r['mass_g']:>10.1f}{r['cost_brl']:>12.3f}{r['KIc']:>8.1f}  {'*' if r['pareto'] else ''}")
     if args.plot:
         plot_front(rows, args.plot if args.plot.is_absolute() else ROOT / args.plot)
         print(f"Saved {args.plot}")

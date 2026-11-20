@@ -6,7 +6,7 @@ Derivations are given in README.md, Section 2. Summary
                              prescribed flexural stiffness (course monitor's formulation)
 * IM2 = sigma_y / rho      - minimum-mass tie/skin, prescribed tensile strength
 * IM3 = E / C_v,R          - minimum-cost tube, prescribed flexural stiffness,
-                             with C_v,R = C_m * rho (volumetric cost, USD/m^3)
+                             with C_v = C_m * rho (volumetric cost, currency/m^3; BRL in the Granta data)
 
 Assumptions: Hookean (linear-elastic) regime, small-deflection (Euler-Bernoulli /
 Kirchhoff) theory, isotropic (or quasi-isotropic) material, fixed length and width
@@ -17,7 +17,7 @@ Unit convention (kept explicit to avoid silent errors)
 * E          : GPa
 * sigma_y    : MPa
 * rho        : kg/m^3  (converted internally to Mg/m^3, the Ashby convention)
-* price      : USD/kg  ->  C_v,R in USD/m^3 (converted to kUSD/m^3 inside IM3)
+* price      : currency/kg (Granta: BRL/kg)  ->  C_v in currency/m^3 (converted to k-currency/m^3 inside IM3)
 """
 
 from __future__ import annotations
@@ -71,10 +71,10 @@ def tensile_strength_index(sigma_y_MPa: ArrayLike, rho_kg_m3: ArrayLike) -> np.n
     return _as_array(sigma_y_MPa) / (_as_array(rho_kg_m3) / 1000.0)
 
 
-def volumetric_cost(price_usd_kg: ArrayLike, rho_kg_m3: ArrayLike) -> np.ndarray:
-    """Volumetric cost C_v,R = C_m * rho  [USD/m^3]."""
-    _check_positive(price_usd_kg=price_usd_kg, rho_kg_m3=rho_kg_m3)
-    return _as_array(price_usd_kg) * _as_array(rho_kg_m3)
+def volumetric_cost(price_per_kg: ArrayLike, rho_kg_m3: ArrayLike) -> np.ndarray:
+    """Volumetric cost C_v = C_m * rho  [currency/m^3]."""
+    _check_positive(price_per_kg=price_per_kg, rho_kg_m3=rho_kg_m3)
+    return _as_array(price_per_kg) * _as_array(rho_kg_m3)
 
 
 def relative_volumetric_cost(price_per_kg: float, rho_kg_m3: float, ref_price_per_kg: float,
@@ -82,20 +82,20 @@ def relative_volumetric_cost(price_per_kg: float, rho_kg_m3: float, ref_price_pe
     """C_v,R = (C_m rho) / (C_m,ref rho_ref): cost per unit volume relative to a reference material.
 
     Comparing relative cost removes the currency and the inflation of the price list. Ashby's charts use a
-    reference material (course notes: steel; confirm the exact reference before mixing with USD/m^3).
+    reference material (course notes: steel; confirm the exact reference before mixing with currency/m^3).
     """
     _check_positive(price=price_per_kg, rho=rho_kg_m3, ref_price=ref_price_per_kg, ref_rho=ref_rho_kg_m3)
     return (price_per_kg * rho_kg_m3) / (ref_price_per_kg * ref_rho_kg_m3)
 
 
-def cost_index(E_GPa: ArrayLike, Cv_usd_m3: ArrayLike) -> np.ndarray:
-    """IM3 = E^(1/3)/C_v,R  [GPa^(1/3) / (kUSD/m^3)].
+def cost_index(E_GPa: ArrayLike, Cv_m3: ArrayLike) -> np.ndarray:
+    """IM3 = E^(1/3)/C_v,R  [GPa^(1/3) / (kcurrency/m^3)].
 
     Minimum-cost panel for prescribed bending stiffness: cost = C_m * m =
     C_v,R * L * w * t with t ~ E^(-1/3), so cost scales as C_v,R / E^(1/3).
     """
-    _check_positive(E_GPa=E_GPa, Cv_usd_m3=Cv_usd_m3)
-    return np.cbrt(_as_array(E_GPa)) / (_as_array(Cv_usd_m3) / 1000.0)
+    _check_positive(E_GPa=E_GPa, Cv_m3=Cv_m3)
+    return np.cbrt(_as_array(E_GPa)) / (_as_array(Cv_m3) / 1000.0)
 
 
 def tube_bending_index(E_GPa: ArrayLike, rho_kg_m3: ArrayLike) -> np.ndarray:
@@ -108,10 +108,10 @@ def tube_bending_index(E_GPa: ArrayLike, rho_kg_m3: ArrayLike) -> np.ndarray:
     return _as_array(E_GPa) / (_as_array(rho_kg_m3) / 1000.0)
 
 
-def tube_cost_index(E_GPa: ArrayLike, Cv_usd_m3: ArrayLike) -> np.ndarray:
-    """IM3 = E/C_v,R  [GPa / (kUSD/m^3)] - cheapest tube for a prescribed flexural stiffness (C = C_m m)."""
-    _check_positive(E_GPa=E_GPa, Cv_usd_m3=Cv_usd_m3)
-    return _as_array(E_GPa) / (_as_array(Cv_usd_m3) / 1000.0)
+def tube_cost_index(E_GPa: ArrayLike, Cv_m3: ArrayLike) -> np.ndarray:
+    """IM3 = E/C_v,R  [GPa / (kcurrency/m^3)] - cheapest tube for a prescribed flexural stiffness (C = C_m m)."""
+    _check_positive(E_GPa=E_GPa, Cv_m3=Cv_m3)
+    return _as_array(E_GPa) / (_as_array(Cv_m3) / 1000.0)
 
 
 def tube_thickness_for_rigidity(E_GPa: float, EI_target_Nm2: float, R_m: float) -> float:
@@ -157,7 +157,7 @@ def rigidity_of_panel(E_GPa: float, thickness_m: float) -> float:
 
 
 def performance_indices(E_GPa: ArrayLike, rho_kg_m3: ArrayLike, sigma_y_MPa: ArrayLike,
-                        price_usd_kg: ArrayLike) -> dict[str, np.ndarray]:
+                        price_per_kg: ArrayLike) -> dict[str, np.ndarray]:
     """Minimisation form of the merit indices: P_k = 1/IM_k (the quantity to *minimise*).
 
     ``P1 = rho/E`` (tube mass), ``P2 = rho/sigma_y`` (tie mass), ``P3 = C_v,R/E`` (tube cost).
@@ -165,7 +165,7 @@ def performance_indices(E_GPa: ArrayLike, rho_kg_m3: ArrayLike, sigma_y_MPa: Arr
     derivation (``symbolic_derivations.py``) shows each P as the material group of a constrained
     minimisation problem  min m  s.t.  stiffness (or strength) >= requirement.
     """
-    cv = volumetric_cost(price_usd_kg, rho_kg_m3)
+    cv = volumetric_cost(price_per_kg, rho_kg_m3)
     return {
         "P1": 1.0 / tube_bending_index(E_GPa, rho_kg_m3),
         "P2": 1.0 / tensile_strength_index(sigma_y_MPa, rho_kg_m3),
@@ -177,11 +177,11 @@ def compute_all_indices(materials: Iterable[dict]) -> list[dict]:
     """Attach IM1 (E/rho), IM2 (sigma_y/rho), IM3 (E/C_v,R) and C_v,R to each material dict (returns copies)."""
     out = []
     for m in materials:
-        cv = float(volumetric_cost(m["price_usd_kg"], m["density_kg_m3"]))
+        cv = float(volumetric_cost(m["price_brl_kg"], m["density_kg_m3"]))
         out.append(
             {
                 **m,
-                "Cv_usd_m3": cv,
+                "Cv_brl_m3": cv,
                 "IM1": float(tube_bending_index(m["youngs_modulus_GPa"], m["density_kg_m3"])),
                 "IM2": float(tensile_strength_index(m["yield_strength_MPa"], m["density_kg_m3"])),
                 "IM3": float(tube_cost_index(m["youngs_modulus_GPa"], cv)),
