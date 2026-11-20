@@ -29,14 +29,3 @@ def test_overlap_checker_detects_a_collision():
     ax.text(0.5, 0.5, "beta")
     assert text_overlaps(fig) == [("alpha", "beta")]
     plt.close(fig)
-
-
-def test_pareto_figure_has_no_overlapping_labels():
-    from src.analysis.export_tables import load_materials
-    from src.math_modeling.pareto_optimization import build_front_figure, evaluate_candidates, pareto_front
-
-    fig = build_front_figure(pareto_front(evaluate_candidates(load_materials(shortlist_only=False))))
-    try:
-        assert text_overlaps(fig) == []
-    finally:
-        plt.close(fig)

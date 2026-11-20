@@ -358,7 +358,7 @@ t^\star=\frac{S^\star L^{3}}{48\pi\,E\,R^{3}}\quad\Longrightarrow\quad m^\star=\
 <li><strong>Anisotropy</strong>: IM1 uses a scalar <span class="arithmatex">\(E\)</span>. For laminates use the effective in-plane modulus from classical laminate theory [9] (<code>composite_anisotropy.py</code>): for 55 % fibre volume fraction, <span class="arithmatex">\([0]_8\)</span> gives <span class="arithmatex">\(E_x\)</span> = 128 GPa but <span class="arithmatex">\(E_y\)</span> = 7.6 GPa; <span class="arithmatex">\([0/{+45}/{-45}/90]_s\)</span> gives a uniform <strong>47 GPa</strong> (database value for CFRP-QI: 48 GPa).</li>
 <li>IM1 holds for a thin wall (<span class="arithmatex">\(t\ll R\)</span>), a fixed radius and a free thickness; with a minimum-gauge limit (e.g. 0.5 mm for handling) <span class="arithmatex">\(t\ge t_{\mathrm{min}}\)</span> is an extra constraint and lighter materials cannot use their full advantage. The thin-wall assumption holds for CFRP, aluminium and magnesium at equal rigidity (walls of 0.7 to 1.6 mm against an 18 mm radius); PEEK, PC and ABS would need walls of 18.7, 30.2 and 30.1 mm, larger than the radius, so they cannot reach that rigidity as a thin tube (Section 3.2).</li>
 <li>Small-deflection theory underestimates deflection for thin shells with large displacements; local buckling, ovalisation, dents and joint design are not captured.</li>
-<li>Single-objective indices ignore interaction effects: use the multi-objective/Pareto treatment and the decision matrix (Section 2.6 and Section 6).</li>
+<li>Single-objective indices ignore interaction effects: use the decision matrix (Section 2.6 and Section 6).</li>
 <li>Material data are typical values; scatter (composites +-10-15 %) is not propagated.</li>
 <li>IM2 with <span class="arithmatex">\(\sigma_y\)</span> for composites uses the quasi-isotropic tensile strength; fatigue and notch sensitivity are not included in the index (Section 5.4).</li>
 </ul>
@@ -373,11 +373,6 @@ t^\star=\frac{S^\star L^{3}}{48\pi\,E\,R^{3}}\quad\Longrightarrow\quad m^\star=\
 k^\star=\arg\min_{k\in\mathcal K}\;\sum_{j=1}^{4} w_j\,\bigl(1-s_{kj}\bigr)\;=\;\arg\max_{k\in\mathcal K}\;\sum_{j=1}^{4} w_j\,s_{kj}
 \]</div>
 <p>with <span class="arithmatex">\(s_{k,\mathrm{mech}}=\tfrac12\big(\tfrac{IM_{1,k}}{\max IM_1}+\tfrac{IM_{2,k}}{\max IM_2}\big)\)</span> and <span class="arithmatex">\(s_{k,\mathrm{cost}}=\tfrac{IM_{3,k}}{\max IM_3}\)</span>.</p>
-<p><strong>Multi-objective (Pareto) view.</strong> Without fixing weights, the non-dominated candidates solve the vector problem (all objectives minimised; <span class="arithmatex">\(K_{Ic}\)</span> is maximised, hence the sign):</p>
-<div class="arithmatex">\[
-\min_{k\in\mathcal K}\;\bigl(m_k,\;C_k,\;-K_{Ic,k}\bigr),\qquad
-\mathcal P=\bigl\{k\in\mathcal K:\ \nexists\, l\in\mathcal K\ \text{with}\ \mathrm f_l\le\mathrm f_k\ \text{and}\ \mathrm f_l\ne\mathrm f_k\bigr\}
-\]</div>
 <hr />
 <h2>Section 3: Ansys Granta Screening and Ashby Mapping</h2>
 <p><strong>Source of the data.</strong> Every material property in this report comes from Ansys Granta EduPack 2024 R1 (version 24.1.1), the only data source of the repository. Granta gives each property as a <em>range</em> (the extent of its bubble on an Ashby chart). The records read so far are <strong>CFRP, epoxy matrix (isotropic)</strong> (epoxy with continuous carbon fibre, quasi-isotropic layup), <strong>Aluminum alloys</strong>, <strong>Magnesium alloys</strong>, <strong>Polyetheretherketone (PEEK)</strong>, <strong>Polycarbonate (PC)</strong> and <strong>Acrylonitrile butadiene styrene (ABS)</strong>; the <strong>Low carbon steel</strong> record was read as the reference of the relative cost, not as a candidate; and <strong>GFRP, epoxy matrix (isotropic)</strong> (epoxy with continuous E-glass fibre, quasi-isotropic layup; Granta marks almost every value of this record as estimated). The alloy records are family-level (all aluminium or magnesium alloys); 7075-T6 stays the reference grade for the process discussion. The PEEK record is the <em>unfilled</em> polymer: the course candidate, PEEK with 30 % carbon fibre, was not found in the tree. UV resistance and 24 h water absorption are not among the attributes of this Granta installation (checked in the axis and limit lists). Prices are in BRL/kg, as shown by this Granta installation, and Granta marks some values as estimated (for example the CFRP price and toughness, the PEEK modulus and price, the fatigue strengths).</p>
@@ -487,7 +482,7 @@ k^\star=\arg\min_{k\in\mathcal K}\;\sum_{j=1}^{4} w_j\,\bigl(1-s_{kj}\bigr)\;=\;
 </table>
 <p>Ranges as read in Granta; <span class="arithmatex">\(C_v\)</span> and the indices use the centre of each range. Relative to the steel record (<span class="arithmatex">\(C_{v,steel}\)</span> = 59,506 BRL/m<sup>3</sup>) the volumetric cost is 5.4 (CFRP), 0.81 (aluminium), 1.07 (magnesium), 8.6 (PEEK), 0.37 (PC), 0.23 (ABS) and 5.8 (GFRP). Units: IM1 in GPa/(Mg/m<sup>3</sup>); IM2 in MPa/(Mg/m<sup>3</sup>); IM3 in GPa/(kBRL/m<sup>3</sup>). Regenerate: <code>python -m src.analysis.export_tables --shortlist</code>.</p>
 <h3>3.2 Tube mass at equal flexural rigidity</h3>
-<p>Reference: flexural rigidity <span class="arithmatex">\(EI\)</span> of a <strong>thin-walled tube with a 1.0 mm wall of the aluminium-alloys record, mean radius 18 mm and length 30 mm</strong> (assumed duct-like shell read from the Ø36 duct feature and the 30 mm side height of the CAD drawing, which the CAD README flags as ambiguous; <code>reference_tube</code> in <code>data/granta_filters.json</code>). Mass ratios are size-independent; absolute values scale with <span class="arithmatex">\(R^{-2}L^{4}\)</span>.</p>
+<p>Reference: flexural rigidity <span class="arithmatex">\(EI\)</span> of a <strong>thin-walled tube with a 1.0 mm wall of the aluminium-alloys record, mean radius 18 mm and length 30 mm</strong> (assumed duct-like shell read from the Ø36 duct feature and the 30 mm side height of the CAD drawing, which the CAD README flags as ambiguous; <code>reference_tube</code> in <code>data/granta_filters.json</code>; regenerate with <code>python -m src.analysis.export_tables --tube</code>). Mass ratios are size-independent; absolute values scale with <span class="arithmatex">\(R^{-2}L^{4}\)</span>.</p>
 <table>
 <thead>
 <tr>
@@ -586,10 +581,6 @@ k^\star=\arg\min_{k\in\mathcal K}\;\sum_{j=1}^{4} w_j\,\bigl(1-s_{kj}\bigr)\;=\;
 <p><img alt="Granta limit stage yield strength ≥ 7.2 MPa" src="docs/figures/granta/p28_0.png" /></p>
 <p><img alt="Granta bar chart of yield strength" src="docs/figures/granta/p28_1.png" /></p>
 <p><strong>Figure 7</strong> - Granta: limit stage <span class="arithmatex">\(\sigma_y\ge7.2\)</span> MPa and the bar chart of yield strength.</p>
-<h3>3.4 Pareto view: mass vs cost vs toughness</h3>
-<p><code>python -m src.math_modeling.pareto_optimization --all --plot docs/figures/pareto.png</code></p>
-<p><img alt="Pareto front" src="docs/figures/pareto.png" /></p>
-<p>Pareto-optimal among the shortlisted materials: <strong>CFRP</strong> (lightest) and <strong>aluminium alloys</strong> (cheapest and toughest). The magnesium alloys and the GFRP are dominated by the aluminium alloys (lighter, cheaper and tougher); PEEK, PC and ABS are dominated as well (their masses are formal values, because the wall would exceed the radius). Mass is that of the reference tube of Section 3.2, cost is in BRL.</p>
 <hr />
 <h2>Section 4: Advanced Environmental Filtering</h2>
 <p>Hard constraints (<code>data/granta_filters.json</code>), applied as Granta <em>limit stages</em> and in <code>decision_matrix.screen()</code>. A constraint that cuts the Granta range of a material discards it (the lowest value is tested for a minimum, the highest for a maximum):</p>
@@ -908,7 +899,7 @@ R=\frac{\sigma_{\mathrm{min}}}{\sigma_{\mathrm{max}}}
 <ol>
 <li><strong>Selected by the matrix: quasi-isotropic CFRP</strong> - the lightest by far (-60 % tube mass on the reference tube), highest IM1 and IM2, and the best score in four of six weight scenarios; pursue it only through a press/compression-moulded route, and weigh the cost (IM3 about 4.7x worse than the aluminium alloys) and the process burden.</li>
 <li><strong>Lower-risk alternative: CNC-machined aluminium alloy (7075-T6 as the reference grade)</strong> - the cheapest (best IM3), mature unibody process at 50,000 units/year, and first whenever the cost weight is high. The two options are a near-tie at the default weights, so the choice depends on how the team weighs mass against cost and process risk.</li>
-<li><strong>Not recommended</strong>: magnesium alloys (never first: neither lighter nor cheaper than the other two), GFRP (dominated by the aluminium alloys in mass, cost and toughness, with almost every Granta value estimated), PEEK and PC (screened out by the arm stiffness and last even without the screen: low stiffness and, for PEEK, a price about 2x that of CFRP per kg) and ABS (fails the toughness, temperature and stiffness limits).</li>
+<li><strong>Not recommended</strong>: magnesium alloys (never first: neither lighter nor cheaper than the other two), GFRP (heavier, costlier and less tough than the aluminium alloys at equal rigidity, with almost every Granta value estimated), PEEK and PC (screened out by the arm stiffness and last even without the screen: low stiffness and, for PEEK, a price about 2x that of CFRP per kg) and ABS (fails the toughness, temperature and stiffness limits).</li>
 </ol>
 <p><strong>Caveats.</strong> The manufacturability and durability scores are subjective; UV resistance and water absorption were not read in Granta; the alloy records are family-level (the 7075-T6 grade is not a separate record) and the PEEK record is the unfilled polymer; the matrix uses a simple normalised weighted sum (no tie-break or uncertainty analysis). Re-run after adding the missing Granta records and properties.</p>
 <h3>6.5 Benchmark against a published case</h3>
@@ -916,7 +907,7 @@ R=\frac{\sigma_{\mathrm{min}}}{\sigma_{\mathrm{max}}}
 <ul>
 <li><strong>Numerical validation:</strong> the thesis' plate index <span class="arithmatex">\(E^{1/3}/\rho\)</span> and beam index <span class="arithmatex">\(E^{1/2}/\rho\)</span> for all 19 materials are reproduced by our code within 0.5 % (<code>bending_panel_index</code> and <code>bending_beam_index</code>, kept as benchmark functions; <code>tests/test_benchmark.py</code>, data in <code>data/benchmark_niero2024.json</code>); e.g. Al 7075-T6: 1.478 (thesis) vs 1.48 (this project). The ranking of this report uses the tube index <span class="arithmatex">\(E/\rho\)</span> instead, because the radius of our shells is fixed.</li>
 <li><strong>Same conclusions in direction:</strong> composites rank first when the index dominates, limited by cost; aluminium alloys are a good alternative in every scenario; steels are excluded by density and titanium by cost/manufacturing.</li>
-<li><strong>Differences:</strong> the thesis uses a unidirectional carbon/epoxy value (<span class="arithmatex">\(E\)</span> = 142 GPa) while we use a quasi-isotropic laminate (48 GPa); we add hard environmental constraints (UV, moisture, <span class="arithmatex">\(K_{Ic}\)</span>), Pareto optimisation, process/vibration engineering and CAD/tolerancing, which the thesis does not cover.</li>
+<li><strong>Differences:</strong> the thesis uses a unidirectional carbon/epoxy value (<span class="arithmatex">\(E\)</span> = 142 GPa) while we use a quasi-isotropic laminate (48 GPa); we add hard environmental constraints (UV, moisture, <span class="arithmatex">\(K_{Ic}\)</span>), process/vibration engineering and CAD/tolerancing, which the thesis does not cover.</li>
 </ul>
 <hr />
 <h1>Project Management</h1>

@@ -91,6 +91,27 @@ def properties_dataframe(materials: list[dict]) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+def tube_table(materials: list[dict]) -> pd.DataFrame:
+    """Wall, mass and material cost of the reference tube at equal flexural rigidity (README Section 3.2).
+
+    The rigidity target is that of a wall of ``reference_thickness_m`` of the reference material; a wall thicker than the
+    radius is a formal value (the thin-walled model does not hold).
+    """
+    from src.math_modeling.merit_indices import tube_mass_for_rigidity, tube_rigidity, tube_thickness_for_rigidity
+
+    ref = load_filters()["reference_tube"]
+    r, length = ref["mean_radius_m"], ref["length_m"]
+    ref_mat = next(m for m in load_materials(include_incomplete=True) if m["id"] == ref["reference_material"])
+    ei = tube_rigidity(ref_mat["youngs_modulus_GPa"], ref["reference_thickness_m"], r)
+    rows = []
+    for m in materials:
+        wall = tube_thickness_for_rigidity(m["youngs_modulus_GPa"], ei, r)
+        mass = tube_mass_for_rigidity(m["youngs_modulus_GPa"], m["density_kg_m3"], ei, r, length)
+        rows.append({"Material": m["id"], "Wall (mm)": round(wall * 1e3, 2) if wall <= r else f"{wall * 1e3:.1f} (> radius)",
+                     "Mass (g)": round(mass * 1e3, 1), "Cost (BRL)": round(mass * m["price_brl_kg"], 2)})
+    return pd.DataFrame(rows)
+
+
 def to_markdown(df: pd.DataFrame) -> str:
     """GitHub-flavoured Markdown pipe table (no external dependency)."""
     cols = list(df.columns)
@@ -104,9 +125,11 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--out", type=Path, help="directory for materials.csv / materials.md")
     ap.add_argument("--shortlist", action="store_true", help="only the shortlisted materials")
+    ap.add_argument("--tube", action="store_true", help="wall, mass and cost of the reference tube instead of the properties")
     args = ap.parse_args()
 
-    df = properties_dataframe(load_materials(shortlist_only=args.shortlist))
+    mats = load_materials(shortlist_only=args.shortlist)
+    df = tube_table(mats) if args.tube else properties_dataframe(mats)
     md = to_markdown(df)
     print(md)
     if args.out:

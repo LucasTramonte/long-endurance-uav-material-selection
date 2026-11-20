@@ -1,4 +1,4 @@
-"""Unit tests for merit indices, laminate model, vibration/fatigue, Pareto and decision matrix.
+"""Unit tests for merit indices, laminate model, vibration/fatigue and decision matrix.
 
 Run from the repository root:  pytest -q
 """
@@ -7,7 +7,6 @@ import math
 import sys
 from pathlib import Path
 
-import numpy as np
 import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -16,7 +15,6 @@ from src.analysis.decision_matrix import CRITERIA, normalise_weights, not_evalua
 from src.analysis.export_tables import load_filters, load_materials, properties_dataframe, to_markdown  # noqa: E402
 from src.math_modeling import composite_anisotropy as ca  # noqa: E402
 from src.math_modeling import merit_indices as mi  # noqa: E402
-from src.math_modeling import pareto_optimization as po  # noqa: E402
 from src.math_modeling import vibration_fatigue as vf  # noqa: E402
 
 
@@ -137,24 +135,6 @@ def test_basquin_and_miner():
         vf.basquin_cycles(100.0, 900.0, 0.1)
 
 
-# ---------------------------------------------------------------- Pareto
-def test_pareto_mask_simple():
-    pts = np.array([[1, 5], [2, 4], [3, 3], [3, 5], [4, 4]])
-    assert po.pareto_mask(pts).tolist() == [True, True, True, False, False]
-
-
-def test_pareto_duplicates_are_both_kept():
-    assert po.pareto_mask(np.array([[1, 1], [1, 1]])).tolist() == [True, True]
-
-
-def test_pareto_on_database_contains_lightest_and_cheapest():
-    rows = po.pareto_front(po.evaluate_candidates(load_materials()))
-    flagged = {r["id"] for r in rows if r["pareto"]}
-    lightest = min(rows, key=lambda r: r["mass_g"])["id"]
-    cheapest = min(rows, key=lambda r: r["cost_brl"])["id"]
-    assert lightest in flagged and cheapest in flagged
-
-
 # ---------------------------------------------------------------- decision matrix / data
 def test_database_integrity():
     mats = load_materials()
@@ -213,14 +193,3 @@ def test_scores_bounded():
 def test_markdown_table_shape():
     md = to_markdown(properties_dataframe(load_materials(shortlist_only=True))).splitlines()
     assert len(md) == 2 + 7
-
-
-def test_dominance_relations_of_the_pareto_analysis():
-    from src.analysis.export_tables import load_materials
-    from src.math_modeling.pareto_optimization import dominated_by, evaluate_candidates, pareto_front
-
-    rows = pareto_front(evaluate_candidates(load_materials(shortlist_only=False)))
-    dom = dominated_by(rows)
-    assert set(dom) == {r["id"] for r in rows if not r["pareto"]}     # exactly the non-Pareto rows are dominated
-    optimal = {r["id"] for r in rows if r["pareto"]}
-    assert all(optimal & set(v) for v in dom.values())          # each dominated row has a Pareto-optimal dominator

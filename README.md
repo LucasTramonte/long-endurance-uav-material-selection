@@ -306,7 +306,7 @@ Implementation units: $`E`$ in GPa, $`\sigma_y`$ in MPa, $`\rho`$ in kg/m<sup>3<
 - **Anisotropy**: IM1 uses a scalar $`E`$. For laminates use the effective in-plane modulus from classical laminate theory [9] (`composite_anisotropy.py`): for 55 % fibre volume fraction, $`[0]_8`$ gives $`E_x`$ = 128 GPa but $`E_y`$ = 7.6 GPa; $`[0/{+45}/{-45}/90]_s`$ gives a uniform **47 GPa** (database value for CFRP-QI: 48 GPa).
 - IM1 holds for a thin wall ($`t\ll R`$), a fixed radius and a free thickness; with a minimum-gauge limit (e.g. 0.5 mm for handling) $`t\ge t_{\mathrm{min}}`$ is an extra constraint and lighter materials cannot use their full advantage. The thin-wall assumption holds for CFRP, aluminium and magnesium at equal rigidity (walls of 0.7 to 1.6 mm against an 18 mm radius); PEEK, PC and ABS would need walls of 18.7, 30.2 and 30.1 mm, larger than the radius, so they cannot reach that rigidity as a thin tube (Section 3.2).
 - Small-deflection theory underestimates deflection for thin shells with large displacements; local buckling, ovalisation, dents and joint design are not captured.
-- Single-objective indices ignore interaction effects: use the multi-objective/Pareto treatment and the decision matrix (Section 2.6 and Section 6).
+- Single-objective indices ignore interaction effects: use the decision matrix (Section 2.6 and Section 6).
 - Material data are typical values; scatter (composites +-10-15 %) is not propagated.
 - IM2 with $`\sigma_y`$ for composites uses the quasi-isotropic tensile strength; fatigue and notch sensitivity are not included in the index (Section 5.4).
 
@@ -327,15 +327,6 @@ k^\star=\arg\min_{k\in\mathcal K}\;\sum_{j=1}^{4} w_j\,\bigl(1-s_{kj}\bigr)\;=\;
 ```
 
 with $`s_{k,\mathrm{mech}}=\tfrac12\big(\tfrac{IM_{1,k}}{\max IM_1}+\tfrac{IM_{2,k}}{\max IM_2}\big)`$ and $`s_{k,\mathrm{cost}}=\tfrac{IM_{3,k}}{\max IM_3}`$.
-
-**Multi-objective (Pareto) view.** Without fixing weights, the non-dominated candidates solve the vector problem (all objectives minimised; $`K_{Ic}`$ is maximised, hence the sign):
-
-```math
-\min_{k\in\mathcal K}\;\bigl(m_k,\;C_k,\;-K_{Ic,k}\bigr),\qquad
-\mathcal P=\bigl\{k\in\mathcal K:\ \nexists\, l\in\mathcal K\ \text{with}\ \mathbf f_l\le\mathbf f_k\ \text{and}\ \mathbf f_l\ne\mathbf f_k\bigr\}
-```
-
-
 
 ---
 
@@ -361,7 +352,7 @@ Ranges as read in Granta; $`C_v`$ and the indices use the centre of each range. 
 
 ### 3.2 Tube mass at equal flexural rigidity
 
-Reference: flexural rigidity $`EI`$ of a **thin-walled tube with a 1.0 mm wall of the aluminium-alloys record, mean radius 18 mm and length 30 mm** (assumed duct-like shell read from the Ø36 duct feature and the 30 mm side height of the CAD drawing, which the CAD README flags as ambiguous; `reference_tube` in `data/granta_filters.json`). Mass ratios are size-independent; absolute values scale with $`R^{-2}L^{4}`$.
+Reference: flexural rigidity $`EI`$ of a **thin-walled tube with a 1.0 mm wall of the aluminium-alloys record, mean radius 18 mm and length 30 mm** (assumed duct-like shell read from the Ø36 duct feature and the 30 mm side height of the CAD drawing, which the CAD README flags as ambiguous; `reference_tube` in `data/granta_filters.json`; regenerate with `python -m src.analysis.export_tables --tube`). Mass ratios are size-independent; absolute values scale with $`R^{-2}L^{4}`$.
 
 | Material | Wall thickness (mm) | Tube mass (g) | Material cost (BRL) |
 |---|---|---|---|
@@ -406,14 +397,6 @@ The selection is made on the charts with five explicit steps. They are also writ
 ![Granta bar chart of yield strength](docs/figures/granta/p28_1.png)
 
 **Figure 7** - Granta: limit stage $`\sigma_y\ge7.2`$ MPa and the bar chart of yield strength.
-
-### 3.4 Pareto view: mass vs cost vs toughness
-
-`python -m src.math_modeling.pareto_optimization --all --plot docs/figures/pareto.png`
-
-![Pareto front](docs/figures/pareto.png)
-
-Pareto-optimal among the shortlisted materials: **CFRP** (lightest) and **aluminium alloys** (cheapest and toughest). The magnesium alloys and the GFRP are dominated by the aluminium alloys (lighter, cheaper and tougher); PEEK, PC and ABS are dominated as well (their masses are formal values, because the wall would exceed the radius). Mass is that of the reference tube of Section 3.2, cost is in BRL.
 
 ---
 
@@ -553,7 +536,7 @@ CFRP ranks first in four of six scenarios and aluminium alloys in the two cost-d
 
 1. **Selected by the matrix: quasi-isotropic CFRP** - the lightest by far (-60 % tube mass on the reference tube), highest IM1 and IM2, and the best score in four of six weight scenarios; pursue it only through a press/compression-moulded route, and weigh the cost (IM3 about 4.7x worse than the aluminium alloys) and the process burden.
 2. **Lower-risk alternative: CNC-machined aluminium alloy (7075-T6 as the reference grade)** - the cheapest (best IM3), mature unibody process at 50,000 units/year, and first whenever the cost weight is high. The two options are a near-tie at the default weights, so the choice depends on how the team weighs mass against cost and process risk.
-3. **Not recommended**: magnesium alloys (never first: neither lighter nor cheaper than the other two), GFRP (dominated by the aluminium alloys in mass, cost and toughness, with almost every Granta value estimated), PEEK and PC (screened out by the arm stiffness and last even without the screen: low stiffness and, for PEEK, a price about 2x that of CFRP per kg) and ABS (fails the toughness, temperature and stiffness limits).
+3. **Not recommended**: magnesium alloys (never first: neither lighter nor cheaper than the other two), GFRP (heavier, costlier and less tough than the aluminium alloys at equal rigidity, with almost every Granta value estimated), PEEK and PC (screened out by the arm stiffness and last even without the screen: low stiffness and, for PEEK, a price about 2x that of CFRP per kg) and ABS (fails the toughness, temperature and stiffness limits).
 
 **Caveats.** The manufacturability and durability scores are subjective; UV resistance and water absorption were not read in Granta; the alloy records are family-level (the 7075-T6 grade is not a separate record) and the PEEK record is the unfilled polymer; the matrix uses a simple normalised weighted sum (no tie-break or uncertainty analysis). Re-run after adding the missing Granta records and properties.
 
@@ -563,7 +546,7 @@ The closest published case is the UNESP thesis of Niero [20] (Ashby + Pahl & Bei
 
 - **Numerical validation:** the thesis' plate index $`E^{1/3}/\rho`$ and beam index $`E^{1/2}/\rho`$ for all 19 materials are reproduced by our code within 0.5 % (`bending_panel_index` and `bending_beam_index`, kept as benchmark functions; `tests/test_benchmark.py`, data in `data/benchmark_niero2024.json`); e.g. Al 7075-T6: 1.478 (thesis) vs 1.48 (this project). The ranking of this report uses the tube index $`E/\rho`$ instead, because the radius of our shells is fixed.
 - **Same conclusions in direction:** composites rank first when the index dominates, limited by cost; aluminium alloys are a good alternative in every scenario; steels are excluded by density and titanium by cost/manufacturing.
-- **Differences:** the thesis uses a unidirectional carbon/epoxy value ($`E`$ = 142 GPa) while we use a quasi-isotropic laminate (48 GPa); we add hard environmental constraints (UV, moisture, $`K_{Ic}`$), Pareto optimisation, process/vibration engineering and CAD/tolerancing, which the thesis does not cover.
+- **Differences:** the thesis uses a unidirectional carbon/epoxy value ($`E`$ = 142 GPa) while we use a quasi-isotropic laminate (48 GPa); we add hard environmental constraints (UV, moisture, $`K_{Ic}`$), process/vibration engineering and CAD/tolerancing, which the thesis does not cover.
 
 ---
 
@@ -651,7 +634,7 @@ The draft report and this repository differ in a few places; decide which is aut
 │       ├── relatorio_pt_template.md  # Portuguese draft (edit this)
 │       └── relatorio_final.docx/.pdf # generated Portuguese deliverable
 ├── src/
-│   ├── math_modeling/                # merit_indices, ashby_selection, rotating_parts (blade stress), load_case_screening, symbolic_derivations + statics_torsors (SymPy), composite_anisotropy, vibration_fatigue, pareto_optimization
+│   ├── math_modeling/                # merit_indices, ashby_selection, rotating_parts (blade stress), load_case_screening, symbolic_derivations + statics_torsors (SymPy), composite_anisotropy, vibration_fatigue
 │   └── analysis/                     # decision_matrix, export_tables, gantt_chart, forces_on_drone, verification_figure, build_tikz_figures, figure_utils (adjustText)
 └── tests/                            # pytest: math, benchmark, symbolic derivations, statics torsors, Ashby procedure, blade stress and fatigue cycles, verification, figure label overlap, README math syntax, Python 3.10 compatibility
 ```
@@ -669,7 +652,6 @@ python -m src.math_modeling.symbolic_derivations       # SymPy derivation of the
 python -m src.math_modeling.merit_indices              # indices table
 python -m src.analysis.decision_matrix                 # weighted matrix (default weights)
 python -m src.analysis.decision_matrix --weights 0.5 0.15 0.15 0.2   # custom weights
-python -m src.math_modeling.pareto_optimization --plot docs/figures/pareto.png
 python -m src.analysis.export_tables --out outputs     # Markdown + CSV tables
 python -m src.analysis.gantt_chart --table             # Gantt PNG + Markdown table
 python -m src.analysis.forces_on_drone                 # 3D free-body figure

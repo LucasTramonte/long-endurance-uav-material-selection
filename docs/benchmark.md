@@ -38,7 +38,6 @@ Not reproduced: the weighted scores of the thesis (its Table 8) - the normalisat
 | Candidate set | 19 materials, 4 classes | 4 shortlisted + 3 screening-pool materials |
 | Composite modelling | Single UD carbon/epoxy value ($E$ = 142 GPa) | Quasi-isotropic laminate ($E$ = 48 GPa, CLT cross-check) |
 | Manufacturing / dynamics | Scored qualitatively | Process engineering (CNC 20,000 RPM, cure cycle), 40,000 RPM isolation |
-| Multi-objective view | No | Pareto front: mass vs cost vs $K_{Ic}$ |
 | Tolerances / CAD | Not covered | ISO 2768-m, CAD drawing |
 | Tools | MatWeb + Excel | Ansys Granta + MatWeb + Python |
 
@@ -58,7 +57,7 @@ Our results agree with the thesis in direction. The main quantitative difference
 - **Scenario analysis** with a fixed set of weights per priority (performance, cost, durability) - adopted in README Section 6.3.
 - **Documentation stage** after the numeric ranking (history of use, datasheets) - listed as a caveat and to-do in README Sections 1.3 and 6.4.
 - **Honest treatment of subjective scores** - same limitation, stated explicitly.
-- Where we go beyond it: hard environmental constraints, laminate anisotropy, Pareto optimisation, process and vibration engineering, tolerancing and CAD.
+- Where we go beyond it: hard environmental constraints, laminate anisotropy, process and vibration engineering, tolerancing and CAD.
 
 ## 5. Structural reference for the written report
 

@@ -3,7 +3,7 @@ message: "If you use this work, please cite it as below."
 title: "Long-Endurance UAV Fuselage: Material Selection and Manufacturing Design"
 abstract: >-
   Ashby-based material selection for the airframe of a ducted quadcopter: merit indices written as
-  constrained minimisation problems, hard-constraint screening, Pareto optimisation, weighted decision
+  constrained minimisation problems, hard-constraint screening, weighted decision
   matrix, process engineering and CAD, with a benchmark against a published UAV material-selection thesis.
 type: software
 authors:
