@@ -27,7 +27,7 @@ OPERATORS = {"min", "max", "sin", "cos", "log", "ln", "exp"}
 
 
 def _run(text: str, upright: bool = False) -> str:
-    props = '<m:rPr><m:sty m:val="p"/></m:rPr>' if upright else ""
+    props = '<m:rPr><m:nor/><m:sty m:val="p"/></m:rPr>' if upright else ""
     return f'<m:r>{props}<m:t xml:space="preserve">{escape(text)}</m:t></m:r>'
 
 
@@ -174,8 +174,42 @@ def latex_to_omml(latex: str) -> str:
     return f"<m:oMath>{body}</m:oMath>"
 
 
-def split_lines(latex: str, budget: int = 78) -> list[str]:
-    r"""Split a long equation at ``\qquad`` into lines of at most ``budget`` LaTeX characters."""
+def _top_level_breaks(line: str) -> list[tuple[int, int, bool]]:
+    r"""Positions (start, end, keep) where a line may be broken: relations (kept) and ``\quad`` (dropped)."""
+    out, depth, i = [], 0, 0
+    while i < len(line):
+        ch = line[i]
+        if ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+        elif depth == 0:
+            if ch == "=" or line.startswith((r"\leq", r"\geq"), i):
+                out.append((i, i, True))
+            elif line.startswith(r"\quad", i) and not line.startswith(r"\qquad", i):
+                out.append((i, i + 5, False))
+        i += 1
+    return [b for b in out if 14 <= b[0] and len(line) - b[1] >= 14]
+
+
+def _break(line: str, budget: int) -> list[str]:
+    if len(line) <= budget:
+        return [line]
+    cands = _top_level_breaks(line)
+    if not cands:
+        return [line]
+    start, end, _keep = min(cands, key=lambda b: abs(b[0] - len(line) / 2))
+    left, right = line[:start].strip().rstrip("\\").strip(), line[end:].strip()
+    if not left or not right:
+        return [line]
+    return _break(left, budget) + _break(right, budget)
+
+
+def split_lines(latex: str, budget: int = 64) -> list[str]:
+    r"""Split an equation into short lines (Google Docs clips wide equations instead of wrapping them).
+
+    The first cut is at ``\qquad``, further cuts are at relations (``=``, ``\leq``) or ``\quad``.
+    """
     parts = [p.strip() for p in re.split(r"\\qquad", latex) if p.strip()]
     merged: list[str] = []
     for part in parts:                           # an implication arrow stays with what follows it
@@ -189,4 +223,4 @@ def split_lines(latex: str, budget: int = 78) -> list[str]:
             lines[-1] += r"\qquad " + part
         else:
             lines.append(part)
-    return lines
+    return [piece for line in lines for piece in _break(line, budget)]
