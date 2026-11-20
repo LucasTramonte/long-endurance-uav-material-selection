@@ -70,7 +70,7 @@
 | ID | Requirement | Type |
 |---|---|---|
 | FR1 | Carry bending loads from motor thrust through the arms/spokes into the body without excessive deflection (payload pointing error) | Stiffness constraint |
-| FR2 | Survive handling and hard landing without cracking | Toughness constraint (K_Ic > 2.0 MPa.m^0.5) |
+| FR2 | Survive handling and hard landing without cracking | Toughness constraint (K_Ic > 2.0 MPa·m<sup>0.5</sup>) |
 | FR3 | 24 h water absorption < 0.2 % [6] (dimensional stability, electronics sealing) | Environmental |
 | FR4 | UV resistance >= "Acceptable" for sun exposure | Environmental |
 | FR5 | Attenuate 666.7 Hz motor vibration towards the IMU/camera | Dynamic |
@@ -100,7 +100,7 @@ The model is a quad-duct airframe: four annular ducts with three-spoke motor mou
 
 **Figure 2** - Technical drawing (first-angle projection layout, [3]) with dimensions; ISO 2768-m governs unspecified tolerances [4], [5]. Enlarged front/top/side views, the full dimension table, tolerance tables and the checklist of missing items are in [`cad/README.md`](cad/README.md).
 
-**Mass budget.** The airframe target is <= 22 g (assumption). A thin-walled tube of the reference geometry (mean radius 18 mm, length 30 mm; Section 3.2) with the wall of an aluminium alloy (1.0 mm) weighs 9.2 g, so a metal airframe must use local thinning and pockets (Section 5.1); the CFRP equivalent (3.7 g) leaves much more margin.
+**Mass budget.** The airframe target is ≤ 22 g (assumption). A thin-walled tube of the reference geometry (mean radius 18 mm, length 30 mm; Section 3.2) with the wall of an aluminium alloy (1.0 mm) weighs 9.2 g, so a metal airframe must use local thinning and pockets (Section 5.1); the CFRP equivalent (3.7 g) leaves much more margin.
 
 **Currently used materials (brief requirement).** Compact ducted drones commonly use injection-moulded thermoplastics (ABS, PC, polyamide-glass fibre) for ducts and bodies, with CFRP plates or metal parts in premium models. *[Source needed: team to add manufacturer datasheets/teardowns - not verified here.]*
 
@@ -131,13 +131,13 @@ The model uses the vector/torsor formalism of classical (French-school) mechanic
 The torsor of all external actions on $`S`$, reduced at $`G`$, is
 
 ```math
-\{\mathcal T_{ext\to S}\}_G=\left\{\begin{aligned}\vec R&=\Big(\textstyle\sum_i T_i-mg\Big)\vec z\\[2pt]\vec M_G&=\textstyle\sum_i \overrightarrow{GM_i}\wedge T_i\vec z+\sum_i \vec Q_i\end{aligned}\right\}=\{\vec 0;\vec 0\}
+\{\mathcal T_{ext\to S}\}_G=\left\{\begin{aligned}\vec R&=\Big(\textstyle\sum_i\,T_i-mg\Big)\vec z\\[2pt]\vec M_G&=\textstyle\sum_i \overrightarrow{GM_i}\wedge T_i\vec z+\sum_i \vec Q_i\end{aligned}\right\}=\{\vec 0;\vec 0\}
 ```
 
 With $`\overrightarrow{GM_i}\wedge T_i\vec z=(y_iT_i,\,-x_iT_i,\,0)`$, projection on $`\vec x,\vec y,\vec z`$ gives the four scalar conditions
 
 ```math
-\sum_i T_i = mg,\qquad \sum_i y_iT_i=0,\qquad \sum_i x_iT_i=0,\qquad \sum_i \varepsilon_i\,\omega_i^{2}=0 .
+\sum_i\,T_i = mg,\qquad \sum_i\,y_iT_i=0,\qquad \sum_i\,x_iT_i=0,\qquad \sum_i\,\varepsilon_i\,\omega_i^{2}=0 .
 ```
 
 By symmetry $`T_i=mg/4`$ and $`\omega_i=\sqrt{mg/(4k_T)}`$. For the assumed take-off mass $`m=150`$ g (Section 1.1), $`T_i=0.368`$ N per rotor. Small thrust differences $`\delta T_i`$ produce the control wrench (mixing) of the airframe:
@@ -179,7 +179,7 @@ The arm is modelled as an Euler-Bernoulli beam of length $`L`$, rectangular sect
 *Normal stress* (Navier) and its maximum, at the root:
 
 ```math
-\sigma_{xx}(x,z)=\frac{N}{S}+\frac{M_{fy}(x)}{I_{Gy}}\,z\qquad\Rightarrow\qquad |\sigma_{xx}|_{max}=\frac{6\,(T-m_mg)\,L}{b\,h^{2}}
+\sigma_{xx}(x,z)=\frac{N}{S}+\frac{M_{fy}(x)}{I_{Gy}}\,z\qquad\Rightarrow\qquad |\sigma_{xx}|_{\mathrm{max}}=\frac{6\,(T-m_mg)\,L}{b\,h^{2}}
 ```
 
 (upper fibre $`z>0`$ in compression, lower fibre in tension, as in Figure 4c). *Deflection* (small displacements):
@@ -188,7 +188,7 @@ The arm is modelled as an Euler-Bernoulli beam of length $`L`$, rectangular sect
 E\,I_{Gy}\,w''(x)=-M_{fy}(x)\quad\Rightarrow\quad w(L)=\frac{(T-m_mg)\,L^{3}}{3\,E\,I_{Gy}}
 ```
 
-The stiffness requirement (maximum allowable $`w(L)`$, payload pointing error) and the strength requirement ($`|\sigma|_{max}\le\sigma_y/s`$, safety factor $`s`$) lead to the merit indices $`E/\rho`$ and $`\sigma_y/\rho`$ of Section 2.
+The stiffness requirement (maximum allowable $`w(L)`$, payload pointing error) and the strength requirement ($`|\sigma|_{\mathrm{max}}\le\sigma_y/s`$, safety factor $`s`$) lead to the merit indices $`E/\rho`$ and $`\sigma_y/\rho`$ of Section 2.
 
 #### 1.4.5 Vibration excitation
 
@@ -281,7 +281,7 @@ Chart guideline: slope 1 on $`\log\sigma_y`$ vs $`\log\rho`$.
 
 ### 2.3 IM3 - volumetric cost for the stiffness-limited tube
 
-With $`C_m`$ the material price per kg and $`C_{v,R}=C_m\,\rho`$ the volumetric cost (BRL/m^3 in the Granta data), the objective becomes the cost $`C=C_m\,m`$ under the same stiffness constraint as 2.1:
+With $`C_m`$ the material price per kg and $`C_{v,R}=C_m\,\rho`$ the volumetric cost (BRL/m<sup>3</sup> in the Granta data), the objective becomes the cost $`C=C_m\,m`$ under the same stiffness constraint as 2.1:
 
 ```math
 \begin{aligned}
@@ -297,14 +297,14 @@ With $`C_m`$ the material price per kg and $`C_{v,R}=C_m\,\rho`$ the volumetric 
 
 ### 2.4 Units and implementation
 
-Implementation units: $`E`$ in GPa, $`\sigma_y`$ in MPa, $`\rho`$ in kg/m^3 (converted to Mg/m^3), $`C_{v}`$ in BRL/m^3 (IM3 reported per kBRL/m^3). The code also returns the minimisation form $`P_k=1/IM_k`$. As a cross-check, the tube mass ratio of two materials at equal flexural rigidity $`EI`$ equals the inverse ratio of IM1.
+Implementation units: $`E`$ in GPa, $`\sigma_y`$ in MPa, $`\rho`$ in kg/m<sup>3</sup> (converted to Mg/m<sup>3</sup>), $`C_{v}`$ in BRL/m<sup>3</sup> (IM3 reported per kBRL/m<sup>3</sup>). The code also returns the minimisation form $`P_k=1/IM_k`$. As a cross-check, the tube mass ratio of two materials at equal flexural rigidity $`EI`$ equals the inverse ratio of IM1.
 
-**Cost and currency.** A price list changes with the country's currency and with inflation, so absolute price values age quickly. The mass cost is $`C_m`$ (currency/kg), the volumetric cost $`C_{v}=C_m\rho`$ (currency/m^3) and the cost of a part $`C=C_m\,m`$. To compare across currencies and dates the charts use the *relative* volumetric cost $`C_{v,R}=C_m\rho/(C_{m}\rho)_{ref}`$ (`relative_volumetric_cost`); the course notes use steel as the reference: the Granta *Low carbon steel* record (price 6.31-9.2 BRL/kg, density 7800-7820 kg/m^3) gives $`C_{v,steel}\approx59\,500`$ BRL/m^3. The ranking uses the absolute $`C_v`$ in BRL/m^3 (the ratios, and the slope of the guide lines, do not depend on the reference); the relative cost is reported next to it (Section 3.1).
+**Cost and currency.** A price list changes with the country's currency and with inflation, so absolute price values age quickly. The mass cost is $`C_m`$ (currency/kg), the volumetric cost $`C_{v}=C_m\rho`$ (currency/m<sup>3</sup>) and the cost of a part $`C=C_m\,m`$. To compare across currencies and dates the charts use the *relative* volumetric cost $`C_{v,R}=C_m\rho/(C_{m}\rho)_{\mathrm{ref}}`$ (`relative_volumetric_cost`); the course notes use steel as the reference: the Granta *Low carbon steel* record (price 6.31-9.2 BRL/kg, density 7800-7820 kg/m<sup>3</sup>) gives $`C_{v,steel}\approx59\,500`$ BRL/m<sup>3</sup>. The ranking uses the absolute $`C_v`$ in BRL/m<sup>3</sup> (the ratios, and the slope of the guide lines, do not depend on the reference); the relative cost is reported next to it (Section 3.1).
 
 ### 2.5 Composites and model limitations
 
 - **Anisotropy**: IM1 uses a scalar $`E`$. For laminates use the effective in-plane modulus from classical laminate theory [9] (`composite_anisotropy.py`): for 55 % fibre volume fraction, $`[0]_8`$ gives $`E_x`$ = 128 GPa but $`E_y`$ = 7.6 GPa; $`[0/{+45}/{-45}/90]_s`$ gives a uniform **47 GPa** (database value for CFRP-QI: 48 GPa).
-- IM1 holds for a thin wall ($`t\ll R`$), a fixed radius and a free thickness; with a minimum-gauge limit (e.g. 0.5 mm for handling) $`t\ge t_{min}`$ is an extra constraint and lighter materials cannot use their full advantage. The thin-wall assumption holds for CFRP, aluminium and magnesium at equal rigidity (walls of 0.7 to 1.6 mm against an 18 mm radius); PEEK, PC and ABS would need walls of 18.7, 30.2 and 30.1 mm, larger than the radius, so they cannot reach that rigidity as a thin tube (Section 3.2).
+- IM1 holds for a thin wall ($`t\ll R`$), a fixed radius and a free thickness; with a minimum-gauge limit (e.g. 0.5 mm for handling) $`t\ge t_{\mathrm{min}}`$ is an extra constraint and lighter materials cannot use their full advantage. The thin-wall assumption holds for CFRP, aluminium and magnesium at equal rigidity (walls of 0.7 to 1.6 mm against an 18 mm radius); PEEK, PC and ABS would need walls of 18.7, 30.2 and 30.1 mm, larger than the radius, so they cannot reach that rigidity as a thin tube (Section 3.2).
 - Small-deflection theory underestimates deflection for thin shells with large displacements; local buckling, ovalisation, dents and joint design are not captured.
 - Single-objective indices ignore interaction effects: use the multi-objective/Pareto treatment and the decision matrix (Section 2.6 and Section 6).
 - Material data are typical values; scatter (composites +-10-15 %) is not propagated.
@@ -347,7 +347,7 @@ with $`s_{k,\mathrm{mech}}=\tfrac12\big(\tfrac{IM_{1,k}}{\max IM_1}+\tfrac{IM_{2
 
 ### 3.1 Granta properties and indices (shortlist)
 
-| Material | rho (kg/m3) | E (GPa) | sigma_y (MPa) | K_Ic (MPa.m^0.5) | Price (BRL/kg) | Cv (BRL/m3) | IM1 | IM2 | IM3 |
+| Material | rho (kg/m3) | E (GPa) | sigma_y (MPa) | K_Ic (MPa·m<sup>0.5</sup>) | Price (BRL/kg) | Cv (BRL/m3) | IM1 | IM2 | IM3 |
 |---|---|---|---|---|---|---|---|---|---|
 | CFRP, epoxy matrix (isotropic) | 1500-1600 | 69-150 | 550-1050 | 6.12-20 | 197-219 | 321,781 | **65.7** | **490.5** | 0.32 |
 | Aluminum alloys | 2640-2810 | 69-75 | 109-439 | 23-38 | 14.8-21 | 48,017 | 26.4 | 80.3 | **1.50** |
@@ -357,7 +357,7 @@ with $`s_{k,\mathrm{mech}}=\tfrac12\big(\tfrac{IM_{1,k}}{\max IM_1}+\tfrac{IM_{2
 | ABS | 1030-1060 | 2.07-2.76 | 34.5-49.6 | 1.46-4.29 | 11.7-14.7 | 13,703 | 2.3 | 39.6 | 0.17 |
 | GFRP, epoxy matrix (isotropic) | 1750-1970 | 21-21.8 | 207-304 | 19.3-31 | 177-195 | 344,950 | 11.5 | 135.1 | 0.062 |
 
-Ranges as read in Granta; $`C_v`$ and the indices use the centre of each range. Relative to the steel record ($`C_{v,steel}`$ = 59,506 BRL/m^3) the volumetric cost is 5.4 (CFRP), 0.81 (aluminium), 1.07 (magnesium), 8.6 (PEEK), 0.37 (PC), 0.23 (ABS) and 5.8 (GFRP). Units: IM1 in GPa/(Mg/m^3); IM2 in MPa/(Mg/m^3); IM3 in GPa/(kBRL/m^3). Regenerate: `python -m src.analysis.export_tables --shortlist`.
+Ranges as read in Granta; $`C_v`$ and the indices use the centre of each range. Relative to the steel record ($`C_{v,steel}`$ = 59,506 BRL/m<sup>3</sup>) the volumetric cost is 5.4 (CFRP), 0.81 (aluminium), 1.07 (magnesium), 8.6 (PEEK), 0.37 (PC), 0.23 (ABS) and 5.8 (GFRP). Units: IM1 in GPa/(Mg/m<sup>3</sup>); IM2 in MPa/(Mg/m<sup>3</sup>); IM3 in GPa/(kBRL/m<sup>3</sup>). Regenerate: `python -m src.analysis.export_tables --shortlist`.
 
 ### 3.2 Tube mass at equal flexural rigidity
 
@@ -377,7 +377,7 @@ Reference: flexural rigidity $`EI`$ of a **thin-walled tube with a 1.0 mm wall o
 
 The selection is made on the charts with five explicit steps. They are also written as a repository skill (`.claude/skills/ashby-chart-selection`) so that every future edit follows them.
 
-1. **Mark the constraint.** The requirement is drawn as a straight line on the chart: a horizontal line for a minimum $`E`$ or $`\sigma`$. Here it comes from the arm model of Section 1.4.4: $`E\ge 4FL^{3}/(b\,h^{3}\,w_{max})`$ for the tip deflection and $`\sigma_y\ge s\,\sigma_{max}=s\,6FL/(b\,h^{2})`$ for strength. The blade root adds a second strength constraint, $`\sigma_y\ge s\rho\omega^{2}R_b^{2}/2`$, which is a *sloped* line of slope 1 on the $`\sigma`$-$`\rho`$ chart (Section 1.4.3).
+1. **Mark the constraint.** The requirement is drawn as a straight line on the chart: a horizontal line for a minimum $`E`$ or $`\sigma`$. Here it comes from the arm model of Section 1.4.4: $`E\ge 4FL^{3}/(b\,h^{3}\,w_{\mathrm{max}})`$ for the tip deflection and $`\sigma_y\ge s\,\sigma_{\mathrm{max}}=s\,6FL/(b\,h^{2})`$ for strength. The blade root adds a second strength constraint, $`\sigma_y\ge s\rho\omega^{2}R_b^{2}/2`$, which is a *sloped* line of slope 1 on the $`\sigma`$-$`\rho`$ chart (Section 1.4.3).
 2. **Discard the materials the constraint cuts.** If the line crosses a material bubble, part of that material cannot meet the requirement, so the material is discarded.
 3. **Select the guide line of the merit index.** $`E/\rho`$ has slope 1 on the $`E`$-$`\rho`$ chart, $`\sigma_y/\rho`$ has slope 1 on the $`\sigma`$-$`\rho`$ chart and $`E/C_{v,R}`$ has slope 1 on the $`E`$-$`C_{v,R}`$ chart (Section 2).
 4. **Slide the ruler along the slope** of the guide line across the chart, keeping the slope fixed.
@@ -391,17 +391,17 @@ The selection is made on the charts with five explicit steps. They are also writ
 
 | Diagram | Constraint line | Guide line (slope 1, through) |
 |---|---|---|
-| $`E`$ against $`\rho`$ | $`E=3.84`$ GPa (cuts PEEK, PC and ABS) | $`E=0.0657\,\rho`$, through the CFRP centre (1549 kg/m^3; 101.7 GPa) |
+| $`E`$ against $`\rho`$ | $`E=3.84`$ GPa (cuts PEEK, PC and ABS) | $`E=0.0657\,\rho`$, through the CFRP centre (1549 kg/m<sup>3</sup>; 101.7 GPa) |
 | $`\sigma_y`$ against $`\rho`$ | 7.2 MPa and the line $`\sigma=0.00758\,\rho`$ (blade root) | $`\sigma=0.4905\,\rho`$, through the CFRP centre (1549; 760 MPa) |
-| $`E`$ against $`C_v`$ (price x density, BRL/m^3) | $`E=3.84`$ GPa | $`E=1.498`$ GPa per 1000 BRL/m^3, through the aluminium centre (48,017; 71.9 GPa) |
+| $`E`$ against $`C_v`$ (price x density, BRL/m<sup>3</sup>) | $`E=3.84`$ GPa | $`E=1.498`$ GPa per 1000 BRL/m<sup>3</sup>, through the aluminium centre (48,017; 71.9 GPa) |
 
-![Granta limit stage E >= 3.84 GPa](docs/figures/granta/p26_0.png)
+![Granta limit stage E ≥ 3.84 GPa](docs/figures/granta/p26_0.png)
 
 ![Granta bar chart of Young's modulus](docs/figures/granta/p26_1.png)
 
 **Figure 6** - Granta (EduPack 2024 R1): limit stage $`E\ge3.84`$ GPa and the bar chart of Young's modulus (one property, the bubbles are the vertical bars). In the result list of this stage the PEEK record stays, because its range (3.76-3.95 GPa) overlaps the limit; this report discards it.
 
-![Granta limit stage yield strength >= 7.2 MPa](docs/figures/granta/p28_0.png)
+![Granta limit stage yield strength ≥ 7.2 MPa](docs/figures/granta/p28_0.png)
 
 ![Granta bar chart of yield strength](docs/figures/granta/p28_1.png)
 
@@ -425,17 +425,17 @@ Hard constraints (`data/granta_filters.json`), applied as Granta *limit stages* 
 |---|---|---|---|---|---|---|---|---|
 | UV resistance | >= Acceptable | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
 | Water absorption, 24 h [6] | < 0.2 % | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
-| Fracture toughness K_Ic | > 2.0 MPa.m^0.5 | 6.12-20 (pass) | 23-38 (pass) | 14-18 (pass) | 2.73-4.3 (pass) | 2.1-2.3 (pass, marginal) | 1.46-4.29 (**cut**) | 19.3-31 (pass) |
+| Fracture toughness K_Ic | > 2.0 MPa·m<sup>0.5</sup> | 6.12-20 (pass) | 23-38 (pass) | 14-18 (pass) | 2.73-4.3 (pass) | 2.1-2.3 (pass, marginal) | 1.46-4.29 (**cut**) | 19.3-31 (pass) |
 | Max service temperature | > 80 C | 140-220 (pass) | 99.9-170 (pass) | 150-234 (pass) | 239-260 (pass) | 101-116 (pass) | 62.9-76.9 (**fail**) | 140-220 (pass) |
-| Density | < 3000 kg/m^3 | 1500-1600 (pass) | 2640-2810 (pass) | 1780-1840 (pass) | 1300-1320 (pass) | 1190-1210 (pass) | 1030-1060 (pass) | 1750-1970 (pass) |
+| Density | < 3000 kg/m<sup>3</sup> | 1500-1600 (pass) | 2640-2810 (pass) | 1780-1840 (pass) | 1300-1320 (pass) | 1190-1210 (pass) | 1030-1060 (pass) | 1750-1970 (pass) |
 
 n/a: not available in this Granta installation (the attribute lists have no durability category).
 
 *Outcome*: CFRP, aluminium, magnesium, GFRP, PEEK and PC pass the filters that could be evaluated (PC only marginally on toughness, 2.1 against a limit of 2.0). **ABS is eliminated**: the lower end of its toughness range (1.46) is below 2.0 and its maximum service temperature (up to 76.9 C) is below 80 C. UV resistance and 24 h water absorption are not available in this Granta installation, so those two filters are **not evaluated** (the dataset holds null and the code reports them). Practical notes:
 
-- **UV**: epoxy matrices degrade under UV - CFRP needs a UV-stable clearcoat or paint (adds mass ~ 10-15 g/m^2 and a process step).
-- **Moisture**: 0.2 % applies to the 24 h test (ASTM D570). Equilibrium moisture uptake of epoxy composites (typically ~0.5-1.5 %, see [9]) is higher and reduces matrix-dominated properties and hot/wet T_g - verify with the saturation value if the course requires it.
-- **Toughness**: the CFRP record starts at 6.12 MPa.m^0.5 (an estimated value in Granta), far below the metals, and PC passes only marginally (2.1 MPa.m^0.5) in this fracture-mechanics measure although it is ductile in practice; wrought aluminium alloys such as 7075-T6 are susceptible to stress-corrosion cracking in the short-transverse direction - anodise and avoid sustained tension across the grain.
+- **UV**: epoxy matrices degrade under UV - CFRP needs a UV-stable clearcoat or paint (adds mass ~ 10-15 g/m<sup>2</sup> and a process step).
+- **Moisture**: 0.2 % applies to the 24 h test (ASTM D570). Equilibrium moisture uptake of epoxy composites (typically ~0.5-1.5 %, see [9]) is higher and reduces matrix-dominated properties and hot/wet $`T_g`$ - verify with the saturation value if the course requires it.
+- **Toughness**: the CFRP record starts at 6.12 MPa·m<sup>0.5</sup> (an estimated value in Granta), far below the metals, and PC passes only marginally (2.1 MPa·m<sup>0.5</sup>) in this fracture-mechanics measure although it is ductile in practice; wrought aluminium alloys such as 7075-T6 are susceptible to stress-corrosion cracking in the short-transverse direction - anodise and avoid sustained tension across the grain.
 - Galvanic: CFRP in contact with aluminium fasteners corrodes the aluminium - insulate with glass ply or sealant.
 
 ---
@@ -485,19 +485,19 @@ The fundamental excitation is f = 40,000/60 = **666.7 Hz** (plus harmonics and b
 T=\sqrt{\frac{1+(2\zeta r)^2}{(1-r^2)^2+(2\zeta r)^2}},\qquad r=\frac{f}{f_n}
 ```
 
-Isolation (T < 1) requires r > sqrt(2). For a target T = 0.1 with zeta = 0.1: **f_n <= 182 Hz** (r = 3.7); for an assumed 10 g motor/ESC assembly this implies a mount stiffness of about 13 kN/m in total (`vibration_fatigue.isolator_stiffness`; SDOF theory per [10]). Note also that 4.8 million cycles accumulate in a 2 h flight, so fatigue of the damper and fixings must be checked with Basquin [11] and Miner [12] (`basquin_cycles`, `miner_damage`).
+Isolation ($`T<1`$) requires $`r>\sqrt{2}`$. For a target $`T=0.1`$ with $`\zeta=0.1`$: **$`f_n\le182`$ Hz** ($`r=3.7`$); for an assumed 10 g motor/ESC assembly this implies a mount stiffness of about 13 kN/m in total (`vibration_fatigue.isolator_stiffness`; SDOF theory per [10]). Note also that 4.8 million cycles accumulate in a 2 h flight, so fatigue of the damper and fixings must be checked with Basquin [11] and Miner [12] (`basquin_cycles`, `miner_damage`).
 
-**Structural resonance check:** an idealised simply supported 100 x 50 x 1.0 mm Al panel has f_11 ~ 1.2 kHz and f_12 ~ 4.1 kHz, i.e. above the 667 Hz excitation, so the compact panels are stiffness-controlled. The risk moves to the **cantilevered spokes and motor pods**, whose first bending modes must be checked by FE and kept outside 667 Hz +-15 % (and outside the isolator mode). CFRP's higher E/rho shifts modes upward and offers higher damping, an advantage not captured in the decision matrix.
+**Structural resonance check:** an idealised simply supported 100 x 50 x 1.0 mm Al panel has $`f_{11}\approx1.2`$ kHz and $`f_{12}\approx4.1`$ kHz, i.e. above the 667 Hz excitation, so the compact panels are stiffness-controlled. The risk moves to the **cantilevered spokes and motor pods**, whose first bending modes must be checked by FE and kept outside 667 Hz +-15 % (and outside the isolator mode). CFRP's higher $`E/\rho`$ shifts modes upward and offers higher damping, an advantage not captured in the decision matrix.
 
 ### 5.4 Fatigue: stress cycle, S-N curve and life at 40,000 RPM
 
 Dynamic loads (the rotating unbalance of Section 1.4.5, vibration of the arms) must be checked for fatigue; static strength alone is not enough. For a constant-amplitude cycle with tension positive and compression negative:
 
 ```math
-\Delta\sigma=\sigma_{max}-\sigma_{min},\qquad
+\Delta\sigma=\sigma_{\mathrm{max}}-\sigma_{\mathrm{min}},\qquad
 \sigma_a=\frac{\Delta\sigma}{2},\qquad
-\sigma_m=\frac{\sigma_{max}+\sigma_{min}}{2},\qquad
-R=\frac{\sigma_{min}}{\sigma_{max}}
+\sigma_m=\frac{\sigma_{\mathrm{max}}+\sigma_{\mathrm{min}}}{2},\qquad
+R=\frac{\sigma_{\mathrm{min}}}{\sigma_{\mathrm{max}}}
 ```
 
 Worked example (course notes): 20 MPa in tension and 10 MPa in compression give $`\Delta\sigma=30`$ MPa, $`\sigma_a=15`$ MPa, $`\sigma_m=5`$ MPa and $`R=-0.5`$ (`stress_cycle`, tested). Fully reversed loading has $`R=-1`$ and $`\sigma_m=0`$.

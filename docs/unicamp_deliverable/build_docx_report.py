@@ -51,19 +51,39 @@ def set_font(run, size: float = 12, bold=None, italic=None, name: str = FONT) ->
         run.italic = italic
 
 
+SCRIPT = re.compile(r"([_^])\{([^}]*)\}")
+
+
+def emit(par, text: str, size: float, bold=None, italic=None, name: str = FONT) -> None:
+    """Add ``text`` to ``par``; ``x_{abc}`` becomes a subscript and ``x^{abc}`` a superscript."""
+    pos = 0
+    for m in SCRIPT.finditer(text):
+        if m.start() > pos:
+            set_font(par.add_run(text[pos:m.start()]), size, bold=bold, italic=italic, name=name)
+        run = par.add_run(m.group(2))
+        set_font(run, size, bold=bold, italic=False if italic else italic, name=name)
+        if m.group(1) == "_":
+            run.font.subscript = True
+        else:
+            run.font.superscript = True
+        pos = m.end()
+    if pos < len(text):
+        set_font(par.add_run(text[pos:]), size, bold=bold, italic=italic, name=name)
+
+
 def add_runs(par, text: str, size: float = 12) -> None:
-    """Add text to a paragraph, honouring **bold**, *italic* and `code` spans."""
+    """Add text to a paragraph, honouring **bold**, *italic* and `code` spans and sub/superscripts."""
     for chunk in INLINE.split(text):
         if not chunk:
             continue
         if chunk.startswith("**") and chunk.endswith("**"):
-            set_font(par.add_run(chunk[2:-2]), size, bold=True)
+            emit(par, chunk[2:-2], size, bold=True)
         elif chunk.startswith("`") and chunk.endswith("`"):
             set_font(par.add_run(chunk[1:-1]), size - 1, name="Courier New")
         elif chunk.startswith("*") and chunk.endswith("*") and len(chunk) > 2:
-            set_font(par.add_run(chunk[1:-1]), size, italic=True)
+            emit(par, chunk[1:-1], size, italic=True)
         else:
-            set_font(par.add_run(chunk), size)
+            emit(par, chunk, size)
 
 
 def fmt(par, align=WD_ALIGN_PARAGRAPH.JUSTIFY, spacing=1.5, indent_first=True, left=0.0,
