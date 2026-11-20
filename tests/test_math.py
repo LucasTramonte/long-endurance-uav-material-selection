@@ -158,10 +158,9 @@ def test_pareto_on_database_contains_lightest_and_cheapest():
 # ---------------------------------------------------------------- decision matrix / data
 def test_database_integrity():
     mats = load_materials()
-    ids = {"CFRP_QI", "AL_ALLOYS", "MG_ALLOYS", "PEEK", "PC", "ABS"}
-    assert {m["id"] for m in mats} == ids                          # GFRP lacks mechanical data in the export
+    ids = {"CFRP_QI", "AL_ALLOYS", "MG_ALLOYS", "PEEK", "PC", "ABS", "GFRP_EPOXY"}
+    assert {m["id"] for m in mats} == ids
     assert {m["id"] for m in mats if m["shortlist"]} == ids
-    assert "GFRP_EPOXY" in {m["id"] for m in load_materials(include_incomplete=True)}
     for m in mats:
         assert m["density_kg_m3"] > 0 and m["youngs_modulus_GPa"] > 0
         for key in m["granta"]:                                      # representative value = centre of the range
@@ -171,7 +170,7 @@ def test_database_integrity():
 
 def test_screening_uses_the_whole_granta_range():
     survivors, rejected = screen(load_materials(), load_filters())
-    assert {m["id"] for m in survivors} == {"CFRP_QI", "AL_ALLOYS", "MG_ALLOYS"}
+    assert {m["id"] for m in survivors} == {"CFRP_QI", "AL_ALLOYS", "MG_ALLOYS", "GFRP_EPOXY"}
     # the arm stiffness cuts the E ranges of PEEK (3.76-3.95), PC (2.32-2.44) and ABS (2.07-2.76 GPa)
     assert set(rejected) == {"PEEK", "PC", "ABS"}
     assert all("arm stiffness" in why for key in ("PEEK", "PC") for why in rejected[key])
@@ -213,7 +212,7 @@ def test_scores_bounded():
 
 def test_markdown_table_shape():
     md = to_markdown(properties_dataframe(load_materials(shortlist_only=True))).splitlines()
-    assert len(md) == 2 + 6
+    assert len(md) == 2 + 7
 
 
 def test_dominance_relations_of_the_pareto_analysis():

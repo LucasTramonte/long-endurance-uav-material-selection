@@ -48,11 +48,11 @@ a { color: #1f5fa8; text-decoration: none; }
 </tr>
 <tr>
 <td>Weighted decision matrix (default weights)</td>
-<td><strong>1. CFRP (0.643)</strong>, 2. aluminium alloys (0.629), 3. magnesium alloys (0.411); PEEK, PC and ABS are screened out (and would rank 4th to 6th anyway)</td>
+<td><strong>1. CFRP (0.643)</strong>, 2. aluminium alloys (0.629), 3. magnesium alloys (0.411), 4. GFRP (0.329); PEEK, PC and ABS are screened out</td>
 </tr>
 <tr>
 <td>Sensitivity</td>
-<td>the first two are a near-tie: aluminium alloys overtake CFRP once the mechanical weight falls below about 0.33 (cost-driven scenarios)</td>
+<td>the first two are a near-tie: aluminium alloys overtake CFRP once the mechanical weight falls below about 0.34 (cost-driven scenarios)</td>
 </tr>
 <tr>
 <td>Motor vibration (40,000 RPM = 666.7 Hz)</td>
@@ -380,7 +380,7 @@ k^\star=\arg\min_{k\in\mathcal K}\;\sum_{j=1}^{4} w_j\,\bigl(1-s_{kj}\bigr)\;=\;
 \]</div>
 <hr />
 <h2>Section 3: Ansys Granta Screening and Ashby Mapping</h2>
-<p><strong>Source of the data.</strong> Every material property in this report comes from Ansys Granta EduPack 2024 R1 (version 24.1.1), the only data source of the repository. Granta gives each property as a <em>range</em> (the extent of its bubble on an Ashby chart). The records read so far are <strong>CFRP, epoxy matrix (isotropic)</strong> (epoxy with continuous carbon fibre, quasi-isotropic layup), <strong>Aluminum alloys</strong>, <strong>Magnesium alloys</strong>, <strong>Polyetheretherketone (PEEK)</strong>, <strong>Polycarbonate (PC)</strong> and <strong>Acrylonitrile butadiene styrene (ABS)</strong>; the <strong>Low carbon steel</strong> record was read as the reference of the relative cost, not as a candidate; the GFRP record was read only for density and price, so it is not ranked. The alloy records are family-level (all aluminium or magnesium alloys); 7075-T6 stays the reference grade for the process discussion. The PEEK record is the <em>unfilled</em> polymer: the course candidate, PEEK with 30 % carbon fibre, was not found in the tree. UV resistance and 24 h water absorption are not among the attributes of this Granta installation (checked in the axis and limit lists). Prices are in BRL/kg, as shown by this Granta installation, and Granta marks some values as estimated (for example the CFRP price and toughness, the PEEK modulus and price, the fatigue strengths).</p>
+<p><strong>Source of the data.</strong> Every material property in this report comes from Ansys Granta EduPack 2024 R1 (version 24.1.1), the only data source of the repository. Granta gives each property as a <em>range</em> (the extent of its bubble on an Ashby chart). The records read so far are <strong>CFRP, epoxy matrix (isotropic)</strong> (epoxy with continuous carbon fibre, quasi-isotropic layup), <strong>Aluminum alloys</strong>, <strong>Magnesium alloys</strong>, <strong>Polyetheretherketone (PEEK)</strong>, <strong>Polycarbonate (PC)</strong> and <strong>Acrylonitrile butadiene styrene (ABS)</strong>; the <strong>Low carbon steel</strong> record was read as the reference of the relative cost, not as a candidate; and <strong>GFRP, epoxy matrix (isotropic)</strong> (epoxy with continuous E-glass fibre, quasi-isotropic layup; Granta marks almost every value of this record as estimated). The alloy records are family-level (all aluminium or magnesium alloys); 7075-T6 stays the reference grade for the process discussion. The PEEK record is the <em>unfilled</em> polymer: the course candidate, PEEK with 30 % carbon fibre, was not found in the tree. UV resistance and 24 h water absorption are not among the attributes of this Granta installation (checked in the axis and limit lists). Prices are in BRL/kg, as shown by this Granta installation, and Granta marks some values as estimated (for example the CFRP price and toughness, the PEEK modulus and price, the fatigue strengths).</p>
 <p><em>Reading the ranges.</em> The representative value is the <strong>centre of the bubble</strong> (geometric mean of the range); it is used for the indices and for the ranking. A constraint that <strong>cuts the bubble</strong> discards the material, so the screening uses the lowest value of each range for a minimum requirement and the highest for a maximum.</p>
 <h3>3.1 Granta properties and indices (shortlist)</h3>
 <table>
@@ -471,9 +471,21 @@ k^\star=\arg\min_{k\in\mathcal K}\;\sum_{j=1}^{4} w_j\,\bigl(1-s_{kj}\bigr)\;=\;
 <td>39.6</td>
 <td>0.17</td>
 </tr>
+<tr>
+<td>GFRP, epoxy matrix (isotropic)</td>
+<td>1750-1970</td>
+<td>21-21.8</td>
+<td>207-304</td>
+<td>19.3-31</td>
+<td>177-195</td>
+<td>344,950</td>
+<td>11.5</td>
+<td>135.1</td>
+<td>0.062</td>
+</tr>
 </tbody>
 </table>
-<p>Ranges as read in Granta; <span class="arithmatex">\(C_v\)</span> and the indices use the centre of each range. Relative to the steel record (<span class="arithmatex">\(C_{v,steel}\)</span> = 59,506 BRL/m^3) the volumetric cost is 5.4 (CFRP), 0.81 (aluminium), 1.07 (magnesium), 8.6 (PEEK), 0.37 (PC) and 0.23 (ABS). Units: IM1 in GPa/(Mg/m^3); IM2 in MPa/(Mg/m^3); IM3 in GPa/(kBRL/m^3). Regenerate: <code>python -m src.analysis.export_tables --shortlist</code>.</p>
+<p>Ranges as read in Granta; <span class="arithmatex">\(C_v\)</span> and the indices use the centre of each range. Relative to the steel record (<span class="arithmatex">\(C_{v,steel}\)</span> = 59,506 BRL/m^3) the volumetric cost is 5.4 (CFRP), 0.81 (aluminium), 1.07 (magnesium), 8.6 (PEEK), 0.37 (PC), 0.23 (ABS) and 5.8 (GFRP). Units: IM1 in GPa/(Mg/m^3); IM2 in MPa/(Mg/m^3); IM3 in GPa/(kBRL/m^3). Regenerate: <code>python -m src.analysis.export_tables --shortlist</code>.</p>
 <h3>3.2 Tube mass at equal flexural rigidity</h3>
 <p>Reference: flexural rigidity <span class="arithmatex">\(EI\)</span> of a <strong>thin-walled tube with a 1.0 mm wall of the aluminium-alloys record, mean radius 18 mm and length 30 mm</strong> (assumed duct-like shell read from the Ø36 duct feature and the 30 mm side height of the CAD drawing, which the CAD README flags as ambiguous; <code>reference_tube</code> in <code>data/granta_filters.json</code>). Mass ratios are size-independent; absolute values scale with <span class="arithmatex">\(R^{-2}L^{4}\)</span>.</p>
 <table>
@@ -522,6 +534,12 @@ k^\star=\arg\min_{k\in\mathcal K}\;\sum_{j=1}^{4} w_j\,\bigl(1-s_{kj}\bigr)\;=\;
 <td>106.7</td>
 <td>1.40</td>
 </tr>
+<tr>
+<td>GFRP, epoxy matrix (isotropic)</td>
+<td>3.36</td>
+<td>21.2</td>
+<td>3.94</td>
+</tr>
 </tbody>
 </table>
 <h3>3.3 Reading the Ashby charts: constraint line and guide line</h3>
@@ -543,7 +561,7 @@ k^\star=\arg\min_{k\in\mathcal K}\;\sum_{j=1}^{4} w_j\,\bigl(1-s_{kj}\bigr)\;=\;
 <h3>3.4 Pareto view: mass vs cost vs toughness</h3>
 <p><code>python -m src.math_modeling.pareto_optimization --all --plot docs/figures/pareto.png</code></p>
 <p><img alt="Pareto front" src="docs/figures/pareto.png" /></p>
-<p>Pareto-optimal among the shortlisted materials: <strong>CFRP</strong> (lightest) and <strong>aluminium alloys</strong> (cheapest and toughest). The magnesium alloys are dominated by the aluminium alloys (lighter, cheaper and tougher); PEEK, PC and ABS are dominated by the three materials that pass the screen (their masses are formal values, because the wall would exceed the radius). Mass is that of the reference tube of Section 3.2, cost is in BRL.</p>
+<p>Pareto-optimal among the shortlisted materials: <strong>CFRP</strong> (lightest) and <strong>aluminium alloys</strong> (cheapest and toughest). The magnesium alloys and the GFRP are dominated by the aluminium alloys (lighter, cheaper and tougher); PEEK, PC and ABS are dominated as well (their masses are formal values, because the wall would exceed the radius). Mass is that of the reference tube of Section 3.2, cost is in BRL.</p>
 <hr />
 <h2>Section 4: Advanced Environmental Filtering</h2>
 <p>Hard constraints (<code>data/granta_filters.json</code>), applied as Granta <em>limit stages</em> and in <code>decision_matrix.screen()</code>. A constraint that cuts the Granta range of a material discards it (the lowest value is tested for a minimum, the highest for a maximum):</p>
@@ -558,28 +576,31 @@ k^\star=\arg\min_{k\in\mathcal K}\;\sum_{j=1}^{4} w_j\,\bigl(1-s_{kj}\bigr)\;=\;
 <th>PEEK</th>
 <th>PC</th>
 <th>ABS</th>
+<th>GFRP</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>UV resistance</td>
 <td>&gt;= Acceptable</td>
-<td>not available</td>
-<td>not available</td>
-<td>not available</td>
-<td>not available</td>
-<td>not available</td>
-<td>not available</td>
+<td>n/a</td>
+<td>n/a</td>
+<td>n/a</td>
+<td>n/a</td>
+<td>n/a</td>
+<td>n/a</td>
+<td>n/a</td>
 </tr>
 <tr>
 <td>Water absorption, 24 h [6]</td>
 <td>&lt; 0.2 %</td>
-<td>not available</td>
-<td>not available</td>
-<td>not available</td>
-<td>not available</td>
-<td>not available</td>
-<td>not available</td>
+<td>n/a</td>
+<td>n/a</td>
+<td>n/a</td>
+<td>n/a</td>
+<td>n/a</td>
+<td>n/a</td>
+<td>n/a</td>
 </tr>
 <tr>
 <td>Fracture toughness K_Ic</td>
@@ -590,6 +611,7 @@ k^\star=\arg\min_{k\in\mathcal K}\;\sum_{j=1}^{4} w_j\,\bigl(1-s_{kj}\bigr)\;=\;
 <td>2.73-4.3 (pass)</td>
 <td>2.1-2.3 (pass, marginal)</td>
 <td>1.46-4.29 (<strong>cut</strong>)</td>
+<td>19.3-31 (pass)</td>
 </tr>
 <tr>
 <td>Max service temperature</td>
@@ -600,6 +622,7 @@ k^\star=\arg\min_{k\in\mathcal K}\;\sum_{j=1}^{4} w_j\,\bigl(1-s_{kj}\bigr)\;=\;
 <td>239-260 (pass)</td>
 <td>101-116 (pass)</td>
 <td>62.9-76.9 (<strong>fail</strong>)</td>
+<td>140-220 (pass)</td>
 </tr>
 <tr>
 <td>Density</td>
@@ -610,10 +633,12 @@ k^\star=\arg\min_{k\in\mathcal K}\;\sum_{j=1}^{4} w_j\,\bigl(1-s_{kj}\bigr)\;=\;
 <td>1300-1320 (pass)</td>
 <td>1190-1210 (pass)</td>
 <td>1030-1060 (pass)</td>
+<td>1750-1970 (pass)</td>
 </tr>
 </tbody>
 </table>
-<p><em>Outcome</em>: CFRP, aluminium, magnesium, PEEK and PC pass the filters that could be evaluated (PC only marginally on toughness, 2.1 against a limit of 2.0). <strong>ABS is eliminated</strong>: the lower end of its toughness range (1.46) is below 2.0 and its maximum service temperature (up to 76.9 C) is below 80 C. UV resistance and 24 h water absorption are not available in this Granta installation, so those two filters are <strong>not evaluated</strong> (the dataset holds null and the code reports them). Practical notes:</p>
+<p>n/a: not available in this Granta installation (the attribute lists have no durability category).</p>
+<p><em>Outcome</em>: CFRP, aluminium, magnesium, GFRP, PEEK and PC pass the filters that could be evaluated (PC only marginally on toughness, 2.1 against a limit of 2.0). <strong>ABS is eliminated</strong>: the lower end of its toughness range (1.46) is below 2.0 and its maximum service temperature (up to 76.9 C) is below 80 C. UV resistance and 24 h water absorption are not available in this Granta installation, so those two filters are <strong>not evaluated</strong> (the dataset holds null and the code reports them). Practical notes:</p>
 <ul>
 <li><strong>UV</strong>: epoxy matrices degrade under UV - CFRP needs a UV-stable clearcoat or paint (adds mass ~ 10-15 g/m^2 and a process step).</li>
 <li><strong>Moisture</strong>: 0.2 % applies to the 24 h test (ASTM D570). Equilibrium moisture uptake of epoxy composites (typically ~0.5-1.5 %, see [9]) is higher and reduces matrix-dominated properties and hot/wet T_g - verify with the saturation value if the course requires it.</li>
@@ -769,7 +794,16 @@ R=\frac{\sigma_{min}}{\sigma_{max}}
 <td>0.411</td>
 </tr>
 <tr>
-<td>(4)</td>
+<td>4</td>
+<td>GFRP, epoxy matrix (isotropic)</td>
+<td>0.225</td>
+<td>0.041</td>
+<td>0.600</td>
+<td>0.600</td>
+<td>0.329</td>
+</tr>
+<tr>
+<td>(-)</td>
 <td>PEEK (screened out)</td>
 <td>0.100</td>
 <td>0.005</td>
@@ -778,7 +812,7 @@ R=\frac{\sigma_{min}}{\sigma_{max}}
 <td>0.396</td>
 </tr>
 <tr>
-<td>(5)</td>
+<td>(-)</td>
 <td>Polycarbonate (screened out)</td>
 <td>0.068</td>
 <td>0.072</td>
@@ -787,7 +821,7 @@ R=\frac{\sigma_{min}}{\sigma_{max}}
 <td>0.362</td>
 </tr>
 <tr>
-<td>(6)</td>
+<td>(-)</td>
 <td>ABS (screened out)</td>
 <td>0.058</td>
 <td>0.116</td>
@@ -797,7 +831,7 @@ R=\frac{\sigma_{min}}{\sigma_{max}}
 </tr>
 </tbody>
 </table>
-<p>The first two are a near-tie (difference 0.014). PEEK, PC and ABS are removed by the screens: the arm stiffness <span class="arithmatex">\(E\ge3.84\)</span> GPa cuts their ranges (PEEK 3.76-3.95 GPa, PC 2.32-2.44 GPa, ABS 2.07-2.76 GPa) and ABS also fails the toughness and temperature filters; the PEEK cut is marginal and would disappear for an allowable tip deflection of about 0.51 mm or more instead of the assumed 0.5 mm. Even without the screens they would rank 4th, 5th and 6th (rows in brackets, scored among all six records). The manufacturability and durability scores are team judgements (assigned for CFRP, 7075-T6, AZ31B, PEEK with 30 % carbon fibre, PC and ABS) and are not Granta data. The GFRP record is not ranked (mechanical properties not read).</p>
+<p>The first two are a near-tie (difference 0.014). PEEK, PC and ABS are removed by the screens: the arm stiffness <span class="arithmatex">\(E\ge3.84\)</span> GPa cuts their ranges (PEEK 3.76-3.95 GPa, PC 2.32-2.44 GPa, ABS 2.07-2.76 GPa) and ABS also fails the toughness and temperature filters; the PEEK cut is marginal and would disappear for an allowable tip deflection of about 0.51 mm or more instead of the assumed 0.5 mm. Without the screens PEEK (0.396) and PC (0.362) would still rank only 4th and 5th (rows marked (-), scored among all seven records), and ABS last. In Granta's own Limit stage with <span class="arithmatex">\(E\ge3.84\)</span> GPa the PEEK record <strong>stays</strong> (its range overlaps the limit) while PC and ABS are removed: Granta keeps a record when any part of its range passes, whereas this report discards a record whose range the constraint cuts; the difference does not change the ranking. The manufacturability and durability scores are team judgements (assigned for CFRP, 7075-T6, AZ31B, GFRP, PEEK with 30 % carbon fibre, PC and ABS) and are not Granta data.</p>
 <h3>6.3 Sensitivity to weights</h3>
 <p>Scenario analysis in the style of the benchmark thesis [20] (one dominant priority per scenario), plus the default and two intermediate weightings:</p>
 <table>
@@ -812,41 +846,41 @@ R=\frac{\sigma_{min}}{\sigma_{max}}
 <tr>
 <td>Default</td>
 <td>0.35 / 0.25 / 0.20 / 0.20</td>
-<td><strong>CFRP</strong>, aluminium alloys, magnesium alloys</td>
+<td><strong>CFRP</strong>, aluminium alloys, magnesium alloys, GFRP</td>
 </tr>
 <tr>
 <td>Cost-driven</td>
 <td>0.25 / 0.35 / 0.20 / 0.20</td>
-<td><strong>Aluminium alloys</strong>, CFRP, magnesium alloys</td>
+<td><strong>Aluminium alloys</strong>, CFRP, magnesium alloys, GFRP</td>
 </tr>
 <tr>
 <td>Performance-driven</td>
 <td>0.50 / 0.15 / 0.15 / 0.20</td>
-<td><strong>CFRP</strong>, aluminium alloys, magnesium alloys</td>
+<td><strong>CFRP</strong>, aluminium alloys, magnesium alloys, GFRP</td>
 </tr>
 <tr>
 <td>Performance priority (0.7)</td>
 <td>0.70 / 0.10 / 0.10 / 0.10</td>
-<td><strong>CFRP</strong>, aluminium alloys, magnesium alloys</td>
+<td><strong>CFRP</strong>, aluminium alloys, magnesium alloys, GFRP</td>
 </tr>
 <tr>
 <td>Cost priority (0.7)</td>
 <td>0.10 / 0.70 / 0.10 / 0.10</td>
-<td><strong>Aluminium alloys</strong>, magnesium alloys, CFRP</td>
+<td><strong>Aluminium alloys</strong>, magnesium alloys, CFRP, GFRP</td>
 </tr>
 <tr>
 <td>Durability priority (0.7)</td>
 <td>0.10 / 0.10 / 0.10 / 0.70</td>
-<td><strong>CFRP</strong>, aluminium alloys, magnesium alloys</td>
+<td><strong>CFRP</strong>, aluminium alloys, GFRP, magnesium alloys</td>
 </tr>
 </tbody>
 </table>
-<p>CFRP ranks first in four of six scenarios and aluminium alloys in the two cost-driven ones; the magnesium alloys are never first. Scaling the other weights in proportion, aluminium alloys overtake CFRP when the mechanical weight falls below about 0.33.</p>
+<p>CFRP ranks first in four of six scenarios and aluminium alloys in the two cost-driven ones; the magnesium alloys and the GFRP are never first. Scaling the other weights in proportion, aluminium alloys overtake CFRP when the mechanical weight falls below about 0.34.</p>
 <h3>6.4 Recommendation</h3>
 <ol>
 <li><strong>Selected by the matrix: quasi-isotropic CFRP</strong> - the lightest by far (-60 % tube mass on the reference tube), highest IM1 and IM2, and the best score in four of six weight scenarios; pursue it only through a press/compression-moulded route, and weigh the cost (IM3 about 4.7x worse than the aluminium alloys) and the process burden.</li>
 <li><strong>Lower-risk alternative: CNC-machined aluminium alloy (7075-T6 as the reference grade)</strong> - the cheapest (best IM3), mature unibody process at 50,000 units/year, and first whenever the cost weight is high. The two options are a near-tie at the default weights, so the choice depends on how the team weighs mass against cost and process risk.</li>
-<li><strong>Not recommended</strong>: magnesium alloys (never first: neither lighter nor cheaper than the other two, and the lowest durability score among the three), PEEK and PC (screened out by the arm stiffness and last even without the screen: low stiffness and, for PEEK, a price about 2x that of CFRP per kg) and ABS (fails the toughness, temperature and stiffness limits).</li>
+<li><strong>Not recommended</strong>: magnesium alloys (never first: neither lighter nor cheaper than the other two), GFRP (dominated by the aluminium alloys in mass, cost and toughness, with almost every Granta value estimated), PEEK and PC (screened out by the arm stiffness and last even without the screen: low stiffness and, for PEEK, a price about 2x that of CFRP per kg) and ABS (fails the toughness, temperature and stiffness limits).</li>
 </ol>
 <p><strong>Caveats.</strong> The manufacturability and durability scores are subjective; UV resistance and water absorption were not read in Granta; the alloy records are family-level (the 7075-T6 grade is not a separate record) and the PEEK record is the unfilled polymer; the matrix uses a simple normalised weighted sum (no tie-break or uncertainty analysis). Re-run after adding the missing Granta records and properties.</p>
 <h3>6.5 Benchmark against a published case</h3>
@@ -975,7 +1009,7 @@ R=\frac{\sigma_{min}}{\sigma_{max}}
 <tr>
 <td>Candidate materials</td>
 <td>Al 7075-T6, Al-Li 2099-T83, CFRP epoxy (autoclave), CFRP-PEEK (thermoplastic)</td>
-<td>Granta records read: CFRP epoxy (isotropic), aluminium alloys, magnesium alloys, PEEK (unfilled), PC, ABS (GFRP partial); PEEK with carbon fibre and Al-Li 2099 are not in the dataset</td>
+<td>Granta records read: CFRP epoxy (isotropic), aluminium alloys, magnesium alloys, GFRP epoxy (isotropic), PEEK (unfilled), PC, ABS; PEEK with carbon fibre and Al-Li 2099 are not in the dataset</td>
 </tr>
 <tr>
 <td>Criteria / weights</td>
@@ -995,7 +1029,7 @@ R=\frac{\sigma_{min}}{\sigma_{max}}
 <tr>
 <td>Missing Granta data</td>
 <td>-</td>
-<td>UV resistance and 24 h water absorption (not among the attributes of this installation), the GFRP mechanical properties and the grade-level records (7075-T6, AZ31B, PEEK with carbon fibre)</td>
+<td>UV resistance and 24 h water absorption (not among the attributes of this installation) and the grade-level records (7075-T6, AZ31B, PEEK with carbon fibre)</td>
 </tr>
 <tr>
 <td>Year / dates</td>

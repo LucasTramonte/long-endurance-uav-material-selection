@@ -2,7 +2,7 @@
   "metadata": {
     "description": "Candidate material property dataset for the long-endurance UAV fuselage selection study.",
     "source": "Ansys Granta EduPack 2024 R1 (version 24.1.1), records read by the team in November 2026. Granta is the only source of material data in this repository.",
-    "records": "CFRP, epoxy matrix (isotropic); Aluminum alloys; Magnesium alloys; Polyetheretherketone (PEEK); Polycarbonate (PC); Acrylonitrile butadiene styrene (ABS); GFRP, epoxy matrix (isotropic) (only density and price were read). Low carbon steel is in granta_filters.json as the reference of the relative cost, not as a candidate.",
+    "records": "CFRP, epoxy matrix (isotropic); Aluminum alloys; Magnesium alloys; Polyetheretherketone (PEEK); Polycarbonate (PC); Acrylonitrile butadiene styrene (ABS); GFRP, epoxy matrix (isotropic). Low carbon steel is in granta_filters.json as the reference of the relative cost, not as a candidate.",
     "format": "'granta' holds the [minimum, maximum] range of each property as shown by Granta (the extent of its bubble). The loader derives the representative value (geometric mean = centre of the bubble in log space) as the plain key, and '<key>_min' / '<key>_max' for conservative screening.",
     "estimated": "Granta marks estimated values with an asterisk; they are listed in 'estimated' of each record.",
     "units": {
@@ -394,8 +394,8 @@
       "id": "GFRP_EPOXY",
       "name": "GFRP, epoxy matrix (isotropic)",
       "family": "Composite",
-      "shortlist": false,
-      "complete": false,
+      "shortlist": true,
+      "complete": true,
       "granta": {
         "density_kg_m3": [
           1750,
@@ -404,10 +404,50 @@
         "price_brl_kg": [
           177,
           195
+        ],
+        "youngs_modulus_GPa": [
+          21,
+          21.8
+        ],
+        "yield_strength_MPa": [
+          207,
+          304
+        ],
+        "tensile_strength_MPa": [
+          207,
+          304
+        ],
+        "fatigue_strength_1e7_MPa": [
+          41.3,
+          91.1
+        ],
+        "fracture_toughness_MPa_m05": [
+          19.3,
+          31
+        ],
+        "max_service_temp_C": [
+          140,
+          220
+        ],
+        "thermal_conductivity_W_mK": [
+          0.42,
+          0.51
+        ],
+        "cte_microstrain_K": [
+          8.64,
+          33
         ]
       },
       "estimated": [
-        "price_brl_kg"
+        "price_brl_kg",
+        "youngs_modulus_GPa",
+        "yield_strength_MPa",
+        "tensile_strength_MPa",
+        "fatigue_strength_1e7_MPa",
+        "fracture_toughness_MPa_m05",
+        "max_service_temp_C",
+        "thermal_conductivity_W_mK",
+        "cte_microstrain_K"
       ],
       "uv_resistance": null,
       "water_absorption_24h_pct": null,
@@ -415,7 +455,7 @@
         "manufacturability": 3,
         "environmental_durability": 3
       },
-      "notes": "Only density and price were read from Granta; the mechanical properties are missing, so it is not ranked."
+      "notes": "Epoxy + continuous E-glass fibre (0, +-45, 90), quasi-isotropic layup. Granta marks almost every value of this record as estimated. Scores were assigned by the team."
     }
   ]
 }

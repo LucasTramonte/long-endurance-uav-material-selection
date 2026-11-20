@@ -158,7 +158,7 @@ Os índices usam um *E* escalar; para laminados de CFRP usa-se o módulo efetivo
 
 ## 4.1 Propriedades e índices dos candidatos
 
-**Fonte dos dados.** Todas as propriedades vêm do Ansys Granta EduPack 2024 R1 (versão 24.1.1), a única fonte de dados de materiais deste trabalho. O Granta apresenta cada propriedade como uma *faixa* (a extensão da bolha no gráfico de Ashby). Os registros lidos até agora são **CFRP, matriz epóxi (isotrópico)** (epóxi com fibra de carbono contínua em laminado quase-isotrópico), **Aluminum alloys**, **Magnesium alloys**, **Polyetheretherketone (PEEK)**, **Polycarbonate (PC)** e **Acrylonitrile butadiene styrene (ABS)**; o registro **Low carbon steel** foi lido como referência do custo relativo, e não como candidato; o registro de GFRP foi lido apenas para densidade e preço e, por isso, não é classificado. Os registros das ligas são de família (todas as ligas de alumínio ou de magnésio); a liga 7075-T6 permanece como grau de referência na discussão de processo. O registro de PEEK é o polímero *sem carga*: o candidato da disciplina, PEEK com 30% de fibra de carbono, não foi encontrado na árvore. A resistência a UV e a absorção de água não estão entre os atributos desta instalação do Granta (verificado nas listas de eixos e de limites). Os preços estão em R$/kg, como esta instalação do Granta mostra, e o Granta marca alguns valores como estimados (por exemplo preço e tenacidade do CFRP, módulo e preço do PEEK, resistências à fadiga).
+**Fonte dos dados.** Todas as propriedades vêm do Ansys Granta EduPack 2024 R1 (versão 24.1.1), a única fonte de dados de materiais deste trabalho. O Granta apresenta cada propriedade como uma *faixa* (a extensão da bolha no gráfico de Ashby). Os registros lidos até agora são **CFRP, matriz epóxi (isotrópico)** (epóxi com fibra de carbono contínua em laminado quase-isotrópico), **Aluminum alloys**, **Magnesium alloys**, **Polyetheretherketone (PEEK)**, **Polycarbonate (PC)** e **Acrylonitrile butadiene styrene (ABS)**; o registro **Low carbon steel** foi lido como referência do custo relativo, e não como candidato e **GFRP, matriz epóxi (isotrópico)** (epóxi com fibra de vidro E contínua em laminado quase-isotrópico; o Granta marca quase todos os valores desse registro como estimados). Os registros das ligas são de família (todas as ligas de alumínio ou de magnésio); a liga 7075-T6 permanece como grau de referência na discussão de processo. O registro de PEEK é o polímero *sem carga*: o candidato da disciplina, PEEK com 30% de fibra de carbono, não foi encontrado na árvore. A resistência a UV e a absorção de água não estão entre os atributos desta instalação do Granta (verificado nas listas de eixos e de limites). Os preços estão em R$/kg, como esta instalação do Granta mostra, e o Granta marca alguns valores como estimados (por exemplo preço e tenacidade do CFRP, módulo e preço do PEEK, resistências à fadiga).
 
 O valor representativo é o **centro da bolha** (média geométrica da faixa), usado nos índices e no ranking. Uma restrição que **corta a bolha** descarta o material; por isso a triagem usa o menor valor da faixa para um requisito mínimo e o maior para um máximo.
 
@@ -170,10 +170,11 @@ O valor representativo é o **centro da bolha** (média geométrica da faixa), u
 | PEEK (sem carga) | 1300–1320 | 3,76–3,95 | 90–110 | 2,73–4,3 | 368–410 | 2,9 | 76,0 | 0,008 |
 | Policarbonato | 1190–1210 | 2,32–2,44 | 59,1–65,2 | 2,1–2,3 | 17,6–19,1 | 2,0 | 51,7 | 0,11 |
 | ABS | 1030–1060 | 2,07–2,76 | 34,5–49,6 | 1,46–4,29 | 11,7–14,7 | 2,3 | 39,6 | 0,17 |
+| GFRP, matriz epóxi (isotrópico) | 1750–1970 | 21–21,8 | 207–304 | 19,3–31 | 177–195 | 11,5 | 135,1 | 0,062 |
 
-Unidades: IM1 em GPa/(Mg/m³); IM2 em MPa/(Mg/m³); IM3 em GPa/(kR$/m³). Os índices usam o centro de cada faixa. Em relação ao registro do aço (*C*v = 59.506 R$/m³), o custo volumétrico é 5,4 (CFRP), 0,81 (alumínio), 1,07 (magnésio), 8,6 (PEEK), 0,37 (PC) e 0,23 (ABS).
+Unidades: IM1 em GPa/(Mg/m³); IM2 em MPa/(Mg/m³); IM3 em GPa/(kR$/m³). Os índices usam o centro de cada faixa. Em relação ao registro do aço (*C*v = 59.506 R$/m³), o custo volumétrico é 5,4 (CFRP), 0,81 (alumínio), 1,07 (magnésio), 8,6 (PEEK), 0,37 (PC), 0,23 (ABS) e 5,8 (GFRP).
 
-Massa de um tubo de referência (raio médio de 18 mm, comprimento de 30 mm, premissas lidas do detalhe Ø36 do desenho) com a mesma rigidez à flexão de um tubo de parede de 1,0 mm do registro de ligas de alumínio: CFRP, parede de 0,71 mm e 3,7 g; ligas de alumínio, 9,2 g; ligas de magnésio, parede de 1,64 mm e 10,0 g; PEEK, PC e ABS exigiriam paredes de 18,7 mm, 30,2 mm e 30,1 mm, maiores que o raio (valores formais de 83,0 g, 123,1 g e 106,7 g), isto é, não alcançam essa rigidez como tubo de parede fina.
+Massa de um tubo de referência (raio médio de 18 mm, comprimento de 30 mm, premissas lidas do detalhe Ø36 do desenho) com a mesma rigidez à flexão de um tubo de parede de 1,0 mm do registro de ligas de alumínio: CFRP, parede de 0,71 mm e 3,7 g; ligas de alumínio, 9,2 g; ligas de magnésio, parede de 1,64 mm e 10,0 g; GFRP, parede de 3,36 mm e 21,2 g; PEEK, PC e ABS exigiriam paredes de 18,7 mm, 30,2 mm e 30,1 mm, maiores que o raio (valores formais de 83,0 g, 123,1 g e 106,7 g), isto é, não alcançam essa rigidez como tubo de parede fina.
 
 ## 4.2 Leitura dos gráficos de Ashby: linha de restrição e linha-guia
 
@@ -213,15 +214,17 @@ Na Figura 7, nenhuma faixa é cortada pelas restrições de resistência (a meno
 
 Aplicaram-se as restrições: resistência a UV mínima "aceitável", absorção de água em 24 h inferior a 0,2% e tenacidade à fratura *K*Ic superior a 2,0 MPa·m^0,5, além da temperatura de serviço superior a 80 °C e da densidade máxima de 3000 kg/m³. Uma restrição que corta a faixa do Granta descarta o material (testa-se o menor valor para um mínimo e o maior para um máximo).
 
-| Restrição | Limite | CFRP | Aluminum alloys | Magnesium alloys | PEEK | PC | ABS |
-|---|---|---|---|---|---|---|---|
-| Resistência a UV | ≥ Aceitável | não disponível | não disponível | não disponível | não disponível | não disponível | não disponível |
-| Absorção de água, 24 h | < 0,2% | não disponível | não disponível | não disponível | não disponível | não disponível | não disponível |
-| Tenacidade K_Ic | > 2,0 MPa·m^0,5 | 6,12–20 (passa) | 23–38 (passa) | 14–18 (passa) | 2,73–4,3 (passa) | 2,1–2,3 (passa, marginal) | 1,46–4,29 (cortada) |
-| Temperatura máxima | > 80 °C | 140–220 (passa) | 99,9–170 (passa) | 150–234 (passa) | 239–260 (passa) | 101–116 (passa) | 62,9–76,9 (reprova) |
-| Densidade | < 3000 kg/m³ | 1500–1600 (passa) | 2640–2810 (passa) | 1780–1840 (passa) | 1300–1320 (passa) | 1190–1210 (passa) | 1030–1060 (passa) |
+| Restrição | Limite | CFRP | Aluminum alloys | Magnesium alloys | PEEK | PC | ABS | GFRP |
+|---|---|---|---|---|---|---|---|---|
+| Resistência a UV | ≥ Aceitável | n/d | n/d | n/d | n/d | n/d | n/d | n/d |
+| Absorção de água, 24 h | < 0,2% | n/d | n/d | n/d | n/d | n/d | n/d | n/d |
+| Tenacidade K_Ic | > 2,0 MPa·m^0,5 | 6,12–20 (passa) | 23–38 (passa) | 14–18 (passa) | 2,73–4,3 (passa) | 2,1–2,3 (passa, marginal) | 1,46–4,29 (cortada) | 19,3–31 (passa) |
+| Temperatura máxima | > 80 °C | 140–220 (passa) | 99,9–170 (passa) | 150–234 (passa) | 239–260 (passa) | 101–116 (passa) | 62,9–76,9 (reprova) | 140–220 (passa) |
+| Densidade | < 3000 kg/m³ | 1500–1600 (passa) | 2640–2810 (passa) | 1780–1840 (passa) | 1300–1320 (passa) | 1190–1210 (passa) | 1030–1060 (passa) | 1750–1970 (passa) |
 
-CFRP, alumínio, magnésio, PEEK e PC passam nos filtros que puderam ser avaliados (o PC só marginalmente na tenacidade, 2,1 contra um limite de 2,0). O **ABS é eliminado**: o limite inferior de sua tenacidade (1,46) está abaixo de 2,0 e sua temperatura máxima de serviço (até 76,9 °C) está abaixo de 80 °C. A resistência a UV e a absorção de água não estão disponíveis nesta instalação do Granta, e esses dois filtros **não foram avaliados**. O CFRP exige verniz ou tinta estável a UV; o registro de CFRP começa em 6,12 MPa·m^0,5 (valor estimado no Granta), muito abaixo dos metais; ligas de alumínio forjadas, como a 7075-T6, são suscetíveis à corrosão sob tensão, e o CFRP em contato com fixadores de alumínio causa corrosão galvânica do alumínio e deve ser isolado com camada de vidro ou selante.
+n/d: não disponível nesta instalação do Granta (as listas de atributos não têm categoria de durabilidade).
+
+CFRP, alumínio, magnésio, GFRP, PEEK e PC passam nos filtros que puderam ser avaliados (o PC só marginalmente na tenacidade, 2,1 contra um limite de 2,0). O **ABS é eliminado**: o limite inferior de sua tenacidade (1,46) está abaixo de 2,0 e sua temperatura máxima de serviço (até 76,9 °C) está abaixo de 80 °C. A resistência a UV e a absorção de água não estão disponíveis nesta instalação do Granta, e esses dois filtros **não foram avaliados**. O CFRP exige verniz ou tinta estável a UV; o registro de CFRP começa em 6,12 MPa·m^0,5 (valor estimado no Granta), muito abaixo dos metais; ligas de alumínio forjadas, como a 7075-T6, são suscetíveis à corrosão sob tensão, e o CFRP em contato com fixadores de alumínio causa corrosão galvânica do alumínio e deve ser isolado com camada de vidro ou selante.
 
 ## 5.2 Filtros de carga
 
@@ -235,6 +238,7 @@ Os filtros de carga usam as premissas da Seção 4.3 e removem o material que fa
 | PEEK (sem carga) | 3,76 GPa: reprova (< 3,84) | 90 MPa: passa | Reprovado |
 | Policarbonato | 2,32 GPa: reprova | 59,1 MPa: passa | Reprovado |
 | ABS | 2,07 GPa: reprova | 34,5 MPa: passa | Reprovado |
+| GFRP, matriz epóxi (isotrópico) | 21 GPa: passa | 207 MPa: passa | Aprovado |
 
 O corte do PEEK é marginal: a faixa de 3,76 a 3,95 GPa contém o limite de 3,84 GPa, e ele passaria com uma flecha admissível de cerca de 0,51 mm em vez dos 0,5 mm assumidos. O corte por rigidez vale para a geometria de braço assumida; com um braço mais fino, o critério ficaria mais restritivo, e com um mais espesso, mais permissivo ao custo de massa.
 
@@ -297,28 +301,29 @@ Os pesos-padrão, editáveis, são 0,35 (mecânico), 0,25 (custo), 0,20 (manufat
 | 1 | CFRP, matriz epóxi (isotrópico) | 1,000 | 0,211 | 0,400 | 0,800 | 0,643 |
 | 2 | Aluminum alloys | 0,283 | 1,000 | 0,800 | 0,600 | 0,629 |
 | 3 | Magnesium alloys | 0,271 | 0,462 | 0,600 | 0,400 | 0,411 |
-| (4) | PEEK (descartado) | 0,100 | 0,005 | 0,800 | 1,000 | 0,396 |
-| (5) | Policarbonato (descartado) | 0,068 | 0,072 | 1,000 | 0,600 | 0,362 |
-| (6) | ABS (descartado) | 0,058 | 0,116 | 1,000 | 0,200 | 0,289 |
+| 4 | GFRP, matriz epóxi (isotrópico) | 0,225 | 0,041 | 0,600 | 0,600 | 0,329 |
+| (-) | PEEK (descartado) | 0,100 | 0,005 | 0,800 | 1,000 | 0,396 |
+| (-) | Policarbonato (descartado) | 0,068 | 0,072 | 1,000 | 0,600 | 0,362 |
+| (-) | ABS (descartado) | 0,058 | 0,116 | 1,000 | 0,200 | 0,289 |
 
-Os dois primeiros formam um empate técnico (diferença de 0,014). O PEEK, o PC e o ABS são removidos pelos filtros (a rigidez do braço corta suas faixas, e o ABS também reprova na tenacidade e na temperatura); mesmo sem os filtros ficariam em 4º, 5º e 6º lugar (linhas entre parênteses, pontuadas entre os seis registros). As notas de manufaturabilidade e durabilidade são julgamentos da equipe (atribuídos para o CFRP, a liga 7075-T6, a AZ31B, o PEEK com 30% de fibra de carbono, o PC e o ABS) e não são dados do Granta. O registro de GFRP não é classificado (propriedades mecânicas não lidas). A análise de sensibilidade aos pesos é a seguinte:
+Os dois primeiros formam um empate técnico (diferença de 0,014). O PEEK, o PC e o ABS são removidos pelos filtros (a rigidez do braço corta suas faixas, e o ABS também reprova na tenacidade e na temperatura); sem os filtros, o PEEK (0,396) e o PC (0,362) ainda ficariam apenas em 4º e 5º lugar (linhas marcadas com (-), pontuadas entre os sete registros), e o ABS em último. No estágio de limite do próprio Granta com *E* ≥ 3,84 GPa, o registro de PEEK **permanece** (a faixa dele se sobrepõe ao limite), enquanto o PC e o ABS são removidos: o Granta mantém o registro quando qualquer parte da faixa passa, ao passo que este relatório descarta o registro cuja faixa é cortada pela restrição; a diferença não altera o ranking. As notas de manufaturabilidade e durabilidade são julgamentos da equipe (atribuídos para o CFRP, a liga 7075-T6, a AZ31B, o GFRP, o PEEK com 30% de fibra de carbono, o PC e o ABS) e não são dados do Granta. A análise de sensibilidade aos pesos é a seguinte:
 
 | Cenário | Pesos (mec / custo / manuf / durab) | Ordem |
 |---|---|---|
-| Padrão | 0,35 / 0,25 / 0,20 / 0,20 | CFRP, ligas de alumínio, ligas de magnésio |
-| Custo | 0,25 / 0,35 / 0,20 / 0,20 | Ligas de alumínio, CFRP, ligas de magnésio |
-| Desempenho | 0,50 / 0,15 / 0,15 / 0,20 | CFRP, ligas de alumínio, ligas de magnésio |
-| Prioridade ao desempenho (0,7) | 0,70 / 0,10 / 0,10 / 0,10 | CFRP, ligas de alumínio, ligas de magnésio |
-| Prioridade ao custo (0,7) | 0,10 / 0,70 / 0,10 / 0,10 | Ligas de alumínio, ligas de magnésio, CFRP |
-| Prioridade à durabilidade (0,7) | 0,10 / 0,10 / 0,10 / 0,70 | CFRP, ligas de alumínio, ligas de magnésio |
+| Padrão | 0,35 / 0,25 / 0,20 / 0,20 | CFRP, ligas de alumínio, ligas de magnésio, GFRP |
+| Custo | 0,25 / 0,35 / 0,20 / 0,20 | Ligas de alumínio, CFRP, ligas de magnésio, GFRP |
+| Desempenho | 0,50 / 0,15 / 0,15 / 0,20 | CFRP, ligas de alumínio, ligas de magnésio, GFRP |
+| Prioridade ao desempenho (0,7) | 0,70 / 0,10 / 0,10 / 0,10 | CFRP, ligas de alumínio, ligas de magnésio, GFRP |
+| Prioridade ao custo (0,7) | 0,10 / 0,70 / 0,10 / 0,10 | Ligas de alumínio, ligas de magnésio, CFRP, GFRP |
+| Prioridade à durabilidade (0,7) | 0,10 / 0,10 / 0,10 / 0,70 | CFRP, ligas de alumínio, GFRP, ligas de magnésio |
 
-O CFRP fica em primeiro em quatro dos seis cenários e as ligas de alumínio nos dois cenários de custo; as ligas de magnésio nunca ficam em primeiro. Reescalando os demais pesos em proporção, as ligas de alumínio superam o CFRP quando o peso mecânico cai abaixo de cerca de 0,33. Sem fixar pesos, o conjunto não dominado de massa, custo e tenacidade (vetor mínimo de massa, custo e −*K*Ic) é formado pelo CFRP (mais leve) e pelas ligas de alumínio (mais baratas e mais tenazes); as ligas de magnésio são dominadas pelas de alumínio (Figura 8). A massa é a do tubo de referência da Seção 4.1, e o custo está em R$.
+O CFRP fica em primeiro em quatro dos seis cenários e as ligas de alumínio nos dois cenários de custo; as ligas de magnésio e o GFRP nunca ficam em primeiro. Reescalando os demais pesos em proporção, as ligas de alumínio superam o CFRP quando o peso mecânico cai abaixo de cerca de 0,34. Sem fixar pesos, o conjunto não dominado de massa, custo e tenacidade (vetor mínimo de massa, custo e −*K*Ic) é formado pelo CFRP (mais leve) e pelas ligas de alumínio (mais baratas e mais tenazes); as ligas de magnésio e o GFRP são dominados pelas de alumínio (Figura 8). A massa é a do tubo de referência da Seção 4.1, e o custo está em R$.
 
 ![Figura 8 – Frentes de Pareto: massa contra custo e massa contra tenacidade. Fonte: elaborado pelos autores](../../docs/figures/pareto.png)
 
 ## 7.3 Recomendação
 
-Com os dados do Granta, a matriz seleciona o **CFRP quase-isotrópico** por uma margem pequena (0,643 contra 0,629 das ligas de alumínio nos pesos-padrão): é de longe o mais leve (-60% de massa no tubo de referência), tem os maiores IM1 e IM2 e a melhor nota em quatro dos seis cenários de peso. Deve ser produzido por rota de prensagem ou cura fora de autoclave, ponderando o índice de custo cerca de 4,7 vezes pior e a carga de processo. A alternativa de menor risco é a **liga de alumínio usinada por CNC** (7075-T6 como grau de referência): a mais barata, processo maduro de fuselagem monobloco a 50.000 un./ano e primeira colocada sempre que o peso do custo é alto. Como os dois estão em empate técnico nos pesos-padrão, a escolha depende de como a equipe pondera massa contra custo e risco de processo. Não são recomendados as ligas de magnésio (nunca em primeiro: nem mais leves nem mais baratas que as outras duas), o PEEK e o PC (descartados pela rigidez do braço e últimos mesmo sem o filtro: baixa rigidez e, no caso do PEEK, preço por kg cerca de duas vezes o do CFRP) e o ABS (reprova a tenacidade, a temperatura e a rigidez).
+Com os dados do Granta, a matriz seleciona o **CFRP quase-isotrópico** por uma margem pequena (0,643 contra 0,629 das ligas de alumínio nos pesos-padrão): é de longe o mais leve (-60% de massa no tubo de referência), tem os maiores IM1 e IM2 e a melhor nota em quatro dos seis cenários de peso. Deve ser produzido por rota de prensagem ou cura fora de autoclave, ponderando o índice de custo cerca de 4,7 vezes pior e a carga de processo. A alternativa de menor risco é a **liga de alumínio usinada por CNC** (7075-T6 como grau de referência): a mais barata, processo maduro de fuselagem monobloco a 50.000 un./ano e primeira colocada sempre que o peso do custo é alto. Como os dois estão em empate técnico nos pesos-padrão, a escolha depende de como a equipe pondera massa contra custo e risco de processo. Não são recomendados as ligas de magnésio (nunca em primeiro: nem mais leves nem mais baratas que as outras duas), o GFRP (dominado pelas ligas de alumínio em massa, custo e tenacidade, com quase todos os valores do Granta estimados), o PEEK e o PC (descartados pela rigidez do braço e últimos mesmo sem o filtro: baixa rigidez e, no caso do PEEK, preço por kg cerca de duas vezes o do CFRP) e o ABS (reprova a tenacidade, a temperatura e a rigidez).
 
 **Ressalvas.** As notas de manufaturabilidade e durabilidade são subjetivas; a resistência a UV e a absorção de água não foram lidas no Granta; os registros das ligas são de família (o grau 7075-T6 não é um registro separado) e o registro de PEEK é o polímero sem carga; todas as cargas e o fator de segurança são premissas; e a matriz usa uma soma ponderada normalizada simples, sem desempate nem análise de incerteza. O resultado deve ser refeito após a inclusão dos registros e propriedades que faltam.
 
