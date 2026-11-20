@@ -48,13 +48,6 @@
     "manufacturability": 0.2,
     "environmental_durability": 0.2
   },
-  "reference_panel": {
-    "description": "Reference panel used to translate merit indices into mass: flexural rigidity of a 1.0 mm Al 7075-T6 flat panel (assumed size of the central body/duct skin of the ~112 mm CAD model).",
-    "length_m": 0.1,
-    "width_m": 0.05,
-    "reference_material": "AL_7075_T6",
-    "reference_thickness_m": 0.001
-  },
   "load_cases": {
     "description": "Load-case premises used to derive hard constraints. Nothing here is measured: every value is an assumption of the team (see README Sections 1.4, 3.3 and 5.4) to be replaced by CAD, test or Granta data.",
     "safety_factor": 1.5,
@@ -68,20 +61,19 @@
     },
     "rotor": {
       "rpm": 40000,
-      "blade_length_m": 0.024,
-      "rotating_mass_kg": 0.01,
-      "balance_grade_G_mm_s": 6.3,
-      "balance_grade_note": "ISO 21940-11 grade; sources found disagree between G2.5 and G6.3 for small electric motors, the standard text was not read",
-      "dynamic_amplification": 1.0
-    },
-    "fatigue": {
-      "fatigue_to_tensile_ratio": 0.1,
-      "note": "Premise: no reliable per-material fatigue strength was found in official sources. Replace with the Granta 'fatigue strength at 10^7 cycles' of each material."
+      "blade_length_m": 0.024
     },
     "reference_steel": {
       "price_usd_kg": 0.7,
       "density_kg_m3": 7850,
       "note": "Premise for relative cost per unit volume (course notes: steel reference). The 0.7 USD/kg price is not from an official source."
     }
+  },
+  "reference_tube": {
+    "description": "Reference thin-walled tube used to turn IM1 into a mass: a duct-like shell of fixed mean radius and length, flexural rigidity of a 1.0 mm Al 7075-T6 wall. Dimensions are premises read from the Ø36 duct feature and the 30 mm side height of the CAD drawing (the CAD README flags the Ø36 assignment as ambiguous).",
+    "mean_radius_m": 0.018,
+    "length_m": 0.03,
+    "reference_material": "AL_7075_T6",
+    "reference_thickness_m": 0.001
   }
 }

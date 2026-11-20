@@ -24,9 +24,9 @@ Este relatório apresenta a seleção de materiais e o projeto de manufatura da 
 **Objetivos específicos.**
 
 - Definir requisitos funcionais, restrições e objetivos do componente e modelar as ações mecânicas sobre a estrutura.
-- Deduzir os índices de mérito de flexão de painel e de viga, de resistência à tração, de custo e de peças giratórias, como problemas de minimização com restrições.
+- Deduzir os índices de mérito de rigidez à flexão de casca tubular (IM1 = E/ρ), de resistência à tração (IM2) e de custo (IM3), como problemas de minimização com restrições.
 - Ler as restrições e as linhas-guia sobre os gráficos de Ashby e triar os candidatos (CFRP, PEEK com 30% de fibra de carbono, policarbonato e liga Al 7075-T6).
-- Aplicar filtros ambientais e filtros de carga (rigidez, resistência e fadiga) com premissas explícitas.
+- Aplicar filtros ambientais e filtros de carga (rigidez, resistência e cerâmicas em tração) com premissas explícitas.
 - Definir o processo de manufatura e o isolamento de vibração dos motores.
 - Recomendar o material final por meio de uma matriz de decisão ponderada.
 
@@ -58,7 +58,7 @@ O modelo é um quadricóptero com quatro dutos (envelope de 112 × 112 × 40 mm)
 
 ## 2.3 Ações mecânicas sobre a estrutura (modelo formal)
 
-O modelo usa o formalismo vetorial e de torsores da mecânica clássica [18]: isola-se o sistema, define-se um referencial, escrevem-se os torsores de ações, aplica-se o princípio fundamental da estática (PFS) ou da dinâmica (PFD) e, no braço, corta-se a viga para obter o torsor de coesão. O referencial *R*G tem origem no centro de massa G e eixo *z* para cima. Os rotores 1 a 4 ficam em (±*a*, ±*a*), com *a* = 30 mm. A Figura 3 mostra o diagrama de corpo livre sobre o desenho do drone, e a Figura 4 mostra os caminhos de carga na pá, no cubo e no braço.
+O modelo usa o formalismo vetorial e de torsores da mecânica clássica [17]: isola-se o sistema, define-se um referencial, escrevem-se os torsores de ações, aplica-se o princípio fundamental da estática (PFS) ou da dinâmica (PFD) e, no braço, corta-se a viga para obter o torsor de coesão. O referencial *R*G tem origem no centro de massa G e eixo *z* para cima. Os rotores 1 a 4 ficam em (±*a*, ±*a*), com *a* = 30 mm. A Figura 3 mostra o diagrama de corpo livre sobre o desenho do drone, e a Figura 4 mostra os caminhos de carga na pá, no cubo e no braço.
 
 ![Figura 3 – Diagrama de corpo livre em voo pairado: empuxo de cada rotor, torque de reação aerodinâmico, peso, força centrífuga e força de desbalanceamento. Fonte: elaborado pelos autores](../../docs/figures/forces_on_drone.png)
 
@@ -70,7 +70,7 @@ $$
 T_i = k_T\,\omega_i^{2},\qquad Q_i = -\varepsilon_i\,k_Q\,\omega_i^{2},\qquad k_T = C_T\,\rho_a\,\pi R^{4}
 $$
 
-em que *ρ*a é a densidade do ar, *R* o raio do rotor, *C*T e *C*Q os coeficientes de empuxo e de torque [14] e *ε*i = ±1 o sentido de giro. Em voo pairado, o torsor de todas as ações externas reduzido em G é nulo:
+em que *ρ*a é a densidade do ar, *R* o raio do rotor, *C*T e *C*Q os coeficientes de empuxo e de torque [13] e *ε*i = ±1 o sentido de giro. Em voo pairado, o torsor de todas as ações externas reduzido em G é nulo:
 
 $$
 \sum_i T_i = m g,\qquad \sum_i y_i T_i = 0,\qquad \sum_i x_i T_i = 0,\qquad \sum_i \varepsilon_i\,\omega_i^{2} = 0
@@ -114,23 +114,23 @@ $$
 
 em que *f* é o objetivo (massa *m* ou custo *C*) e *g*j são as restrições (rigidez, resistência). Eliminando *x* com a restrição ativa, obtém-se a equação de desempenho *f*ót = Φ·Γ·*P*(**p**), em que *P* é o grupo de propriedades a minimizar. O índice de mérito clássico é o inverso, *IM* = 1/*P*; minimizar *P* e maximizar *IM* selecionam o mesmo material.
 
-**Hipóteses.** Regime elástico linear (lei de Hooke); teoria de pequenas deflexões (Euler-Bernoulli e Kirchhoff); material isotrópico ou quase-isotrópico; comprimento *L* e largura *w* fixos, com a espessura como única variável geométrica.
+**Hipóteses.** Regime elástico linear (lei de Hooke); teoria de pequenas deflexões (Euler-Bernoulli e Kirchhoff); material isotrópico ou quase-isotrópico; comprimento *L* e raio médio *R* fixos, com a espessura de parede como única variável geométrica.
 
-## 3.2 IM1: painel leve e rígido em flexão
+## 3.2 IM1: casca tubular leve e rígida em flexão
 
-Minimiza-se a massa de um painel cuja rigidez à flexão deve atingir *S*alvo (*C*₁ depende só dos apoios e do carregamento):
-
-$$
-\min_{t>0}\ m(t)=\rho\,L\,w\,t\quad \mathrm{sujeito\ a}\quad S(t)=\frac{C_1\,E\,w\,t^{3}}{12\,L^{3}}\ \geq\ S^{*}
-$$
-
-Como *m* e *S* crescem com *t*, a restrição está ativa no ótimo, e a massa mínima resulta:
+A fuselagem e os dutos são cascas tubulares de parede fina cujo raio médio *R* é fixado pela embalagem (o rotor e a bateria o determinam); a espessura de parede *t* é a variável livre. Com raio fixo e espessura livre, o índice é *E*/*ρ*, formulação confirmada na revisão da monitora da disciplina. Para um tubo de comprimento *L*, com *I* ≈ π*R*³*t* e rigidez à flexão *S* = 48*EI*/*L*³ (apoiado, carga central), que deve atingir *S*req:
 
 $$
-m^{*}=\left(\frac{12\,S^{*}}{C_1\,w}\right)^{1/3}L^{2}\,w\ \cdot\ \frac{\rho}{E^{1/3}}\qquad\Rightarrow\qquad IM_1=\max\ \frac{E^{1/3}}{\rho}
+\min_{t>0}\ m(t)=2\pi R\,t\,L\,\rho\quad \mathrm{sujeito\ a}\quad S(t)=\frac{48\,E\,\pi R^{3}\,t}{L^{3}}\ \geq\ S_{req}
 $$
 
-A linha-guia no gráfico de Ashby tem inclinação 3 em escala logarítmica.
+Como *m* e *S* crescem com *t*, a restrição está ativa no ótimo, *t*\* = *L*³*S*req/(48π*E R*³), e a massa mínima resulta:
+
+$$
+m^{*}=\frac{S_{req}\,L^{4}}{24\,R^{2}}\ \cdot\ \frac{\rho}{E}\qquad\Rightarrow\qquad IM_1=\max\ \frac{E}{\rho}
+$$
+
+A linha-guia no gráfico de Ashby tem inclinação 1 em escala logarítmica. A espessura entra em *I* linearmente quando o raio é fixo, e por isso o expoente é 1; para um painel plano de largura fixa e espessura livre (*I* ∝ *t*³) seria *E*^(1/3)/*ρ*, o índice de placa da tese usada como comparação. Uma versão anterior do rascunho do grupo usou esse expoente para o tubo, e a revisão o corrigiu.
 
 ## 3.3 IM2: resistência à tração com massa mínima
 
@@ -142,33 +142,17 @@ $$
 
 A linha-guia tem inclinação 1.
 
-## 3.4 Braços como vigas e custo
+## 3.4 Custo
 
-Os braços dos motores são vigas, e não painéis. Para uma viga de seção quadrada livre e rigidez prescrita *S*, a massa mínima é *m* = (12*S*/*C*₁)^(1/2) *L*^(5/2) *ρ*/*E*^(1/2), e o índice, com linha-guia de inclinação 2, é:
-
-$$
-IM_{viga}=\max\ \frac{E^{1/2}}{\rho}
-$$
-
-O custo volumétrico é *C*v = *C*m *ρ* (moeda/m³) e o custo da peça é *C* = *C*m *m*. Como o preço muda com a moeda de cada país e com a inflação, os gráficos de custo usam o custo volumétrico *relativo* *C*v,R = *C*m *ρ*/(*C*m *ρ*)ref, com o aço como referência, segundo as notas de aula; essa referência deve ser confirmada em Ashby [11] antes de substituir os valores em US$/m³. Para o painel, o custo mínimo leva a:
+O custo volumétrico é *C*v = *C*m *ρ* (moeda/m³) e o custo da peça é *C* = *C*m *m*. Como o preço muda com a moeda de cada país e com a inflação, os gráficos de custo usam o custo volumétrico *relativo* *C*v,R = *C*m *ρ*/(*C*m *ρ*)ref, com o aço como referência, segundo as notas de aula; essa referência deve ser confirmada em Ashby [11] antes de substituir os valores em US$/m³. Para o tubo, o custo mínimo leva a *C*mín = (*S*req*L*⁴/24*R*²) · *C*v,R/*E*, e o índice é:
 
 $$
-IM_3=\max\ \frac{E^{1/3}}{C_{v,R}},\qquad\qquad IM_{viga,custo}=\max\ \frac{E^{1/2}}{C_m\,\rho}
+IM_3=\max\ \frac{E}{C_{v,R}}
 $$
 
-## 3.5 Peças giratórias
+## 3.5 Limitações
 
-Uma peça que gira (pá, cubo, carcaça do motor) é limitada pela tensão centrífuga, como o volante estudado em aula. Para um disco maciço de raio *R*, espessura *t* e coeficiente de Poisson *ν* ≈ 1/3 (assumido constante), em regime elástico:
-
-$$
-U=\frac{1}{4}\,\rho\,\pi R^{4}\,t\,\omega^{2},\qquad \sigma_{max}=\frac{3+\nu}{8}\,\rho\,\omega^{2}R^{2}
-$$
-
-Maximizar a energia por unidade de massa no limite de resistência, com *σ*max = *σ*y/*s*, resulta em *U*/*m* = 2/(3+*ν*) · (*σ*y/*s*)/*ρ*. O melhor volante leve maximiza *σ*y/*ρ* (o mesmo IM2); para a energia por volume com *ω* fixa, *U*/*V* = *ρR*²*ω*²/4 favorece o material mais denso, o oposto de um projeto leve. Para *U* com *R* e *t* fixos, o índice é *σ*y. Como a força centrífuga gera tração, **cerâmicas são excluídas**, mesmo quando a resistência impressa no gráfico é alta. A dedução é verificada simbolicamente no repositório do projeto.
-
-## 3.6 Limitações
-
-Os índices usam um *E* escalar; para laminados de CFRP usa-se o módulo efetivo no plano da teoria clássica de laminados (para 55% de fibras, o laminado quase-isotrópico [0/+45/−45/90]s tem módulo uniforme de 47 GPa; o valor do banco de dados é 48 GPa). O IM1 só é exato quando a espessura é livre; com espessura mínima de manuseio, o ganho dos materiais leves diminui. Não estão contidos nos índices a concentração de tensões, a flambagem local, o dano por impacto, a dispersão das propriedades (± 10–15% em compósitos) e os efeitos higrotérmicos.
+Os índices usam um *E* escalar; para laminados de CFRP usa-se o módulo efetivo no plano da teoria clássica de laminados (para 55% de fibras, o laminado quase-isotrópico [0/+45/−45/90]s tem módulo uniforme de 47 GPa; o valor do banco de dados é 48 GPa). O IM1 vale para parede fina (*t* ≪ *R*), raio fixo e espessura livre; com espessura mínima de manuseio, o ganho dos materiais leves diminui, e a hipótese de parede fina é fraca para os materiais macios (no tubo de referência, a parede equivalente é de 5,5 mm para o PEEK-CF30 e supera o raio para o PC). Não estão contidos nos índices a concentração de tensões, a flambagem local, a ovalização, o dano por impacto, a dispersão das propriedades (± 10–15% em compósitos) e os efeitos higrotérmicos.
 
 # 4 Triagem no Ansys Granta e Mapas de Ashby
 
@@ -178,10 +162,14 @@ A lista curta tem CFRP quase-isotrópico (matriz epóxi), PEEK com 30% de fibra 
 
 | Material | ρ (kg/m³) | E (GPa) | σ_y (MPa) | K_Ic (MPa·m^0,5) | IM1 | IM2 | IM3 |
 |---|---|---|---|---|---|---|---|
-| CFRP quase-isotrópico | 1550 | 48 | 600 | 30 | 2,34 | 387 | 0,04 |
-| PEEK 30% CF | 1410 | 13 | 200 | 6 | 1,67 | 142 | 0,02 |
-| Policarbonato | 1200 | 2,3 | 62 | 2,1 | 1,10 | 52 | 0,31 |
-| Al 7075-T6 | 2810 | 71,7 | 503 | 29 | 1,48 | 179 | 0,33 |
+| CFRP quase-isotrópico | 1550 | 48 | 600 | 30 | 31,0 | 387 | 0,52 |
+| PEEK 30% CF | 1410 | 13 | 200 | 6 | 9,2 | 142 | 0,10 |
+| Policarbonato | 1200 | 2,3 | 62 | 2,1 | 1,9 | 52 | 0,55 |
+| Al 7075-T6 | 2810 | 71,7 | 503 | 29 | 25,5 | 179 | 5,67 |
+
+Unidades: IM1 em GPa/(Mg/m³); IM2 em MPa/(Mg/m³); IM3 em GPa/(kUS$/m³).
+
+Massa de um tubo de referência (raio médio de 18 mm, comprimento de 30 mm, premissas lidas do detalhe Ø36 do desenho) com a mesma rigidez à flexão de um tubo de Al 7075-T6 de parede de 1,0 mm: CFRP, parede de 1,49 mm e 7,9 g; Al 7075-T6, 9,5 g; PEEK-CF30, parede de 5,5 mm e 26,4 g; PC, parede de 31 mm (maior que o raio, inviável).
 
 ## 4.2 Leitura dos gráficos de Ashby: linha de restrição e linha-guia
 
@@ -189,7 +177,7 @@ A seleção é feita sobre os próprios gráficos, em cinco passos explícitos.
 
 1. **Marcar a restrição.** O requisito é desenhado como uma reta: horizontal para um *E* ou *σ* mínimo. A restrição de rigidez do braço é *E* ≥ 4*FL*³/(*bh*³*w*máx); a de resistência é *σ*y ≥ *s*·6*FL*/(*bh*²). A raiz da pá acrescenta uma restrição inclinada, *σ*y ≥ *s ρω*²*R*b²/2, que é uma reta de inclinação 1 no gráfico *σ*–*ρ*.
 2. **Descartar os materiais que a restrição corta.** Se a reta cruza a bolha de um material, parte dele não atende ao requisito, e o material é descartado.
-3. **Selecionar a linha-guia do índice de mérito:** inclinação 3 para *E*^(1/3)/*ρ*, 2 para *E*^(1/2)/*ρ* e 1 para *σ*/*ρ*.
+3. **Selecionar a linha-guia do índice de mérito:** inclinação 1 para *E*/*ρ*, para *σ*/*ρ* e para *E*/*C*v,R.
 4. **Deslizar a régua** ao longo da inclinação da linha-guia pelo diagrama, mantendo a inclinação.
 5. **Considerar o material selecionado apenas quando a linha-guia passa pelo centro da sua bolha.** Os materiais acima e à esquerda da reta têm índice maior; os distantes dela são classificados, não selecionados.
 
@@ -197,7 +185,7 @@ Duas regras valem sempre: (i) **cerâmicas não resistem a aplicações de traç
 
 ## 4.3 Premissas e fator de segurança
 
-Nada foi medido. Todos os valores abaixo são premissas da equipe, reunidas em `data/granta_filters.json`: braço com *F* = 0,30 N, *L* = 30 mm, seção *b*×*h* = 5×1,5 mm e flecha admissível de 0,5 mm; rotor a 40.000 rpm, comprimento de pá *R*b = 24 mm e massa rotativa de 10 g. O desbalanceamento vem da classe de balanceamento da ISO 21940-11 [13], *G* = *e*per·*ω*, de modo que *F*u = *m G ω*: com a classe G 6,3, *F*u = 0,26 N e a amplitude de tensão na raiz do braço é *σ*a = 4,2 MPa (as fontes consultadas divergem entre G 2,5 e G 6,3 para motores elétricos pequenos, e o texto da norma não foi lido; G 6,3 é premissa).
+Nada foi medido. Todos os valores abaixo são premissas da equipe, reunidas em `data/granta_filters.json`: braço com *F* = 0,30 N, *L* = 30 mm, seção *b*×*h* = 5×1,5 mm e flecha admissível de 0,5 mm; rotor a 40.000 rpm e comprimento de pá *R*b = 24 mm. O custo relativo usa o aço como referência (premissa: 0,7 US$/kg e 7850 kg/m³, com preço sem fonte oficial).
 
 O **fator de segurança** padrão é *N* = 1,5, o fator entre a carga limite e a carga última da regra 14 CFR 25.303 [12]. Essa regra é escrita para aviões de transporte, não para um UAV de 150 g, e foi lida em cópias secundárias; existem valores de manuais de 2,5 a 4 para cargas dinâmicas incertas (slides de curso e artigo técnico, não a tabela do livro-texto). O fator é, portanto, uma premissa a confirmar no Shigley ou na norma adotada pelo curso, e os gráficos podem ser refeitos com qualquer valor.
 
@@ -205,19 +193,19 @@ O **fator de segurança** padrão é *N* = 1,5, o fator entre a carga limite e a
 
 As Figuras 6 a 9 reproduzem os gráficos originais de Ashby [11] com as linhas e setas sobrepostas pela equipe. As setas numeradas indicam: (1) a linha de restrição; (2) os materiais descartados; (3) a linha-guia do índice; (4) a régua que desliza ao longo da inclinação; (5) o material selecionado, cuja bolha é atravessada pela linha-guia. A seta verde aponta para o sentido de índice maior. Os pontos são os valores representativos do banco de dados da equipe, desenhados sobre as bolhas impressas.
 
-![Figura 6 – Gráfico E–ρ: restrição E ≥ 3,84 GPa (rigidez do braço), linhas-guia de inclinação 3 (painel) e 2 (braço); PC e ABS descartados; CFRP selecionado. Fonte: ASHBY [11], com anotações dos autores](../../docs/figures/ashby_E_rho_annotated.png)
+![Figura 6 – Gráfico E–ρ: restrição E ≥ 3,84 GPa (rigidez do braço) e linha-guia de E/ρ (inclinação 1); PC e ABS descartados; CFRP selecionado. Fonte: ASHBY [11], com anotações dos autores](../../docs/figures/ashby_E_rho_annotated.png)
 
-Na Figura 6, a restrição de rigidez descarta o PC e o ABS. As linhas-guia dos índices de painel e de braço passam pelo CFRP, o material selecionado; Al 7075-T6, Mg AZ31B, GFRP e PEEK-CF30 ficam abaixo delas.
+Na Figura 6, a restrição de rigidez descarta o PC e o ABS. A linha-guia do índice *E*/*ρ* passa pelo CFRP, o material selecionado; Al 7075-T6, Mg AZ31B, GFRP e PEEK-CF30 ficam abaixo dela.
 
 ![Figura 7 – Gráfico σ–ρ: restrições de resistência do braço (7,2 MPa) e da raiz da pá (reta de inclinação 1) e linha-guia de inclinação 1. Fonte: ASHBY [11], com anotações dos autores](../../docs/figures/ashby_sigma_rho_annotated.png)
 
 Na Figura 7, nenhum candidato é cortado pelas restrições de resistência: a resistência não decide a escolha, e a linha-guia de inclinação 1 classifica os sobreviventes, novamente com o CFRP em primeiro. Os limites que decidem são a rigidez e a fadiga.
 
-![Figura 8 – Gráfico E–Cv,R (custo relativo): linhas-guia dos índices de custo do painel e do braço. Fonte: ASHBY [11], com anotações dos autores](../../docs/figures/ashby_E_cost_annotated.png)
+![Figura 8 – Gráfico E–Cv,R (custo relativo): linha-guia de E/Cv,R. Fonte: ASHBY [11], com anotações dos autores](../../docs/figures/ashby_E_cost_annotated.png)
 
 ![Figura 9 – Gráfico σ–Cv,R (custo relativo): linha-guia de σ/Cv,R. Fonte: ASHBY [11], com anotações dos autores](../../docs/figures/ashby_sigma_cost_annotated.png)
 
-Nos gráficos de custo (Figuras 8 e 9), as linhas-guia de custo de painel e de braço passam pelo Mg AZ31B, material do conjunto de triagem que não está na lista curta, e a de resistência por custo passa pela liga Al 7075-T6, nunca pelo CFRP: é o lado do custo da troca discutida na Seção 7. Os pontos usam o aço como referência do custo relativo (premissa: 0,7 US$/kg e 7850 kg/m³, com preço sem fonte oficial). O eixo horizontal impresso na Figura 9 rotula a última década como 1000 onde as linhas de grade indicam 100; a calibração seguiu as linhas de grade.
+Nos gráficos de custo (Figuras 8 e 9), as linhas-guia de *E*/*C*v,R e de *σ*/*C*v,R passam pela liga Al 7075-T6, nunca pelo CFRP: é o lado do custo da troca discutida na Seção 7. Os pontos usam o aço como referência do custo relativo (premissa: 0,7 US$/kg e 7850 kg/m³, com preço sem fonte oficial). O eixo horizontal impresso na Figura 9 rotula a última década como 1000 onde as linhas de grade indicam 100; a calibração seguiu as linhas de grade.
 
 # 5 Filtros Ambientais e de Carga
 
@@ -236,14 +224,14 @@ Os quatro materiais da lista curta passam; o ABS é eliminado. O CFRP exige vern
 
 ## 5.2 Filtros de carga
 
-Os filtros de carga usam as premissas da Seção 4.3 e removem o material que falha em qualquer verificação: (a) cerâmicas e vidros em tração; (b) rigidez do braço, *E* ≥ 3,84 GPa; (c) resistência do braço, *σ*y ≥ *s*·*σ*máx; (d) resistência da raiz da pá, *σ*y ≥ *s ρω*²*R*b²/2; e (e) fadiga do braço, pela reta de Goodman com a razão fadiga/tração necessária *φ*req = *σ*a/(*σ*u/*s* − *σ*m), comparada com a razão premissada de 0,1 (não foi encontrada resistência à fadiga por material em fontes oficiais; o valor deve ser substituído pela resistência à fadiga do Granta a 10⁷–10⁹ ciclos).
+Os filtros de carga usam as premissas da Seção 4.3 e removem o material que falha em qualquer verificação: (a) cerâmicas e vidros em tração; (b) rigidez do braço, *E* ≥ 3,84 GPa; (c) resistência do braço, *σ*y ≥ *s*·*σ*máx; e (d) resistência da raiz da pá, *σ*y ≥ *s ρω*²*R*b²/2.
 
-| Material | Rigidez do braço | Fadiga (φ requerido) | Resultado |
-|---|---|---|---|
-| CFRP quase-isotrópico | 48 GPa: passa | 0,011: passa | Aprovado |
-| PEEK 30% CF | 13 GPa: passa | 0,033: passa | Aprovado |
-| Policarbonato | 2,3 GPa: reprova | 0,116: reprova | Reprovado |
-| Al 7075-T6 | 71,7 GPa: passa | 0,013: passa | Aprovado |
+| Material | Rigidez do braço | Resultado |
+|---|---|---|
+| CFRP quase-isotrópico | 48 GPa: passa | Aprovado |
+| PEEK 30% CF | 13 GPa: passa | Aprovado |
+| Policarbonato | 2,3 GPa: reprova | Reprovado |
+| Al 7075-T6 | 71,7 GPa: passa | Aprovado |
 
 O corte do policarbonato vale para a geometria de braço assumida: com um braço mais espesso, o PC passaria ao custo de massa, que é justamente o que os índices classificam.
 
@@ -261,7 +249,7 @@ Descrever o ciclo de cura (patamar de temperatura, pressão e vácuo), a taxa de
 
 ## 6.3 Isolamento de vibração dos motores
 
-Os motores *brushless* a 40.000 rpm excitam a estrutura em 666,7 Hz (mais harmônicos e a frequência de passagem de pá). Amortecedores elastoméricos entre os suportes dos motores e a carcaça são modelados como um isolador de um grau de liberdade (Kelvin-Voigt) [17], cuja transmissibilidade é:
+Os motores *brushless* a 40.000 rpm excitam a estrutura em 666,7 Hz (mais harmônicos e a frequência de passagem de pá). Amortecedores elastoméricos entre os suportes dos motores e a carcaça são modelados como um isolador de um grau de liberdade (Kelvin-Voigt) [16], cuja transmissibilidade é:
 
 $$
 T=\sqrt{\frac{1+(2\zeta r)^{2}}{(1-r^{2})^{2}+(2\zeta r)^{2}}},\qquad r=\frac{f}{f_n}
@@ -279,11 +267,11 @@ $$
 
 Exemplo de aula: 20 MPa de tração e 10 MPa de compressão dão Δ*σ* = 30 MPa, *σ*a = 15 MPa, *σ*m = 5 MPa e *R* = −0,5. O carregamento totalmente reversível tem *R* = −1 e *σ*m = 0.
 
-A curva S–N relaciona a amplitude de tensão *σ*a (escala logarítmica) ao número de ciclos *N* (escala logarítmica). Ligas ferrosas costumam apresentar um limite de resistência à fadiga, abaixo do qual não há falha; ligas de alumínio, polímeros e compósitos, em geral, apresentam curva que continua caindo, de modo que se usa a vida *N* para uma amplitude dada (afirmação de conhecimento geral, não conferida em fonte neste trabalho). O ensaio retira peso a cada falha e usa um novo corpo de prova usinado e normalizado, razão pela qual *σ*a cai com *N*. Usam-se a lei de Basquin, *σ*a = *σ*f′(2*N*)^b [15], e a soma de Miner, *D* = Σ*n*i/*N*i [16].
+A curva S–N relaciona a amplitude de tensão *σ*a (escala logarítmica) ao número de ciclos *N* (escala logarítmica). Ligas ferrosas costumam apresentar um limite de resistência à fadiga, abaixo do qual não há falha; ligas de alumínio, polímeros e compósitos, em geral, apresentam curva que continua caindo, de modo que se usa a vida *N* para uma amplitude dada (afirmação de conhecimento geral, não conferida em fonte neste trabalho). O ensaio retira peso a cada falha e usa um novo corpo de prova usinado e normalizado, razão pela qual *σ*a cai com *N*. Usam-se a lei de Basquin, *σ*a = *σ*f′(2*N*)^b [14], e a soma de Miner, *D* = Σ*n*i/*N*i [15].
 
 **Vida à frequência de excitação.** A 666,7 Hz, 10⁷ ciclos são atingidos em 4,2 h e 10⁹ ciclos em cerca de 417 h; um voo de 2 h acumula 4,8 milhões de ciclos. Um drone de longa autonomia entra, portanto, no regime de alto ciclo em poucos voos, e braços e suportes devem ser projetados para vida, e não só para resistência estática.
 
-**Ciclo no braço (premissas).** Com as premissas da Seção 4.3, o empuxo estático dá *σ*m = 4,8 MPa e o desbalanceamento da classe G 6,3 (*F*u = 0,26 N, tratado de forma quase estática, sem amplificação dinâmica) dá *σ*a = 4,2 MPa; logo *σ*máx = 9,0 MPa, *σ*mín = 0,6 MPa e *R* = 0,06. A razão fadiga/tração necessária é 0,011 (CFRP), 0,013 (Al 7075-T6), 0,022 (GFRP), 0,033 (PEEK-CF30 e Mg AZ31B) e 0,116 (PC). Com a razão premissada de 0,1, só o PC reprova; trata-se de uma triagem, a refazer com a resistência à fadiga do Granta.
+**Por que a frequência do motor é a frequência dos ciclos de tensão.** A força de desbalanceamento é um vetor de módulo constante que gira com o rotor, *F*u(*t*) = *m*u *e* *ω*² (cos *ωt* **x** + sen *ωt* **y**). Cada componente sobre o braço e a fuselagem percorre, portanto, um ciclo de carga completo por rotação, e um motor a *n* = 40.000 rpm impõe a frequência de ciclos *f* = *n*/60 = 666,7 Hz a toda peça que suporta essa força. O mesmo vale para as variações de empuxo e de força centrífuga das pás, uma vez por rotação; a frequência de passagem de pá e os harmônicos acrescentam frequências mais altas com menor amplitude. A amplitude de tensão depende do desbalanceamento e da resposta dinâmica do suporte e não é conhecida neste trabalho: o número de ciclos é justificado, e a amplitude é um item em aberto.
 
 **Fractografia e engenharia de superfície.** Em uma peça fraturada, as *marcas de praia* (estrias do crescimento lento da trinca, um avanço por ciclo em escala microscópica) indicam fadiga, e uma região de fratura rápida marca a ruptura final. A ausência de marcas de praia não exclui falha catastrófica, conforme o material. A vida em fadiga melhora com engenharia de superfície: revestimentos, jateamento e arredondamento de ângulos agudos onde as trincas se iniciam.
 
@@ -291,7 +279,7 @@ A curva S–N relaciona a amplitude de tensão *σ*a (escala logarítmica) ao n�
 
 ## 7.1 Método
 
-Usa-se o método das propriedades ponderadas [1]: primeiro os candidatos passam pelos filtros ambientais e pelos filtros de carga (Seção 5); depois recebem notas de 0 a 1, com um índice por tipo de peça. O *desempenho mecânico* é a média de IM1 (painéis: corpo e pele do duto), do índice de viga *E*^(1/2)/*ρ* (braços) e de IM2 (tirantes e pás), cada um normalizado pelo melhor valor. O *custo* é a média de IM3 e do índice de custo de viga, normalizados. A *manufaturabilidade* e a *durabilidade ambiental* são notas da equipe (1 a 5, divididas por 5). Com *s*kj ∈ [0,1] e pesos *w*j ≥ 0 de soma 1, maximizar a nota ponderada equivale a minimizar a falta ponderada:
+Usa-se o método das propriedades ponderadas [1]: primeiro os candidatos passam pelos filtros ambientais e pelos filtros de carga (Seção 5); depois recebem notas de 0 a 1, com um índice por tipo de peça. O *desempenho mecânico* é a média de IM1 (*E*/*ρ*, tubo) e de IM2 (*σ*y/*ρ*), cada um normalizado pelo melhor valor. O *custo* é IM3 (*E*/*C*v,R) dividido pelo melhor valor. A *manufaturabilidade* e a *durabilidade ambiental* são notas da equipe (1 a 5, divididas por 5). Com *s*kj ∈ [0,1] e pesos *w*j ≥ 0 de soma 1, maximizar a nota ponderada equivale a minimizar a falta ponderada:
 
 $$
 k^{*}=\mathrm{arg\,min}_{k}\ \sum_{j=1}^{4} w_j\,(1-s_{kj})=\mathrm{arg\,max}_{k}\ \sum_{j=1}^{4} w_j\,s_{kj}
@@ -303,11 +291,11 @@ Os pesos-padrão, editáveis, são 0,35 (mecânico), 0,25 (custo), 0,20 (manufat
 
 | Posição | Material | Desempenho mecânico (0,35) | Custo (0,25) | Manufaturabilidade (0,20) | Durabilidade (0,20) | Total |
 |---|---|---|---|---|---|---|
-| 1 | Al 7075-T6 | 0,589 | 1,000 | 0,800 | 0,600 | 0,736 |
-| 2 | CFRP quase-isotrópico | 1,000 | 0,115 | 0,400 | 0,800 | 0,619 |
-| 3 | PEEK 30% CF | 0,550 | 0,049 | 0,800 | 1,000 | 0,565 |
+| 1 | Al 7075-T6 | 0,643 | 1,000 | 0,800 | 0,600 | 0,755 |
+| 2 | CFRP quase-isotrópico | 1,000 | 0,091 | 0,400 | 0,800 | 0,613 |
+| 3 | PEEK 30% CF | 0,332 | 0,018 | 0,800 | 1,000 | 0,481 |
 
-O policarbonato (nota 0,665 na versão anterior da matriz) deixou o ranking porque reprova a rigidez do braço e a fadiga premissada. A análise de sensibilidade aos pesos é a seguinte:
+O policarbonato não chega ao ranking porque reprova a rigidez do braço assumido (com a mesma rigidez à flexão, a parede do tubo de referência superaria o raio). A análise de sensibilidade aos pesos é a seguinte:
 
 | Cenário | Pesos (mec / custo / manuf / durab) | Ordem |
 |---|---|---|
@@ -318,15 +306,15 @@ O policarbonato (nota 0,665 na versão anterior da matriz) deixou o ranking porq
 | Prioridade ao custo (0,7) | 0,10 / 0,70 / 0,10 / 0,10 | Al 7075-T6, CFRP, PEEK-CF30 |
 | Prioridade à durabilidade (0,7) | 0,10 / 0,10 / 0,10 / 0,70 | PEEK-CF30, CFRP, Al 7075-T6 |
 
-A liga Al 7075-T6 fica em primeiro ou segundo lugar nos seis cenários e nunca em último. Sem fixar pesos, o conjunto não dominado de massa, custo e tenacidade (vetor mínimo de massa, custo e −*K*Ic) é formado pelo CFRP (mais leve e mais tenaz) e pelo Al 7075-T6 (barato e tenaz), conforme a Figura 10.
+A liga Al 7075-T6 fica em primeiro ou segundo lugar nos seis cenários e nunca em último. Sem fixar pesos, o conjunto não dominado de massa, custo e tenacidade (vetor mínimo de massa, custo e −*K*Ic) é formado pelo CFRP (mais leve e mais tenaz) e pelo Al 7075-T6 (barato e tenaz), conforme a Figura 10; a massa é a do tubo de referência da Seção 4.1.
 
 ![Figura 10 – Frentes de Pareto: massa contra custo e massa contra tenacidade. Fonte: elaborado pelos autores](../../docs/figures/pareto.png)
 
 ## 7.3 Recomendação
 
-Recomenda-se a fuselagem monobloco em **liga Al 7075-T6 usinada por CNC**: é a vencedora na matriz padrão, tem processo alinhado à prática de drones comerciais monobloco, excelente comportamento a UV e umidade e nenhum gargalo de autoclave. Deve receber anodização e controle de corrosão sob tensão. Como alternativa leve, o CFRP quase-isotrópico (-37% de massa no painel de referência de 100 × 50 mm, módulo de vibração mais alto, *K*Ic = 30 MPa·m^0,5), apenas por rota de prensagem ou cura fora de autoclave, ponderando o índice de custo cerca de oito vezes pior e a carga de processo. Não são recomendados o policarbonato (reprovado na rigidez do braço assumido; o painel teria 4,7 mm e 255 g para a mesma rigidez) e o PEEK-CF30 (dominado pelo CFRP em massa, custo e tenacidade).
+Recomenda-se a fuselagem monobloco em **liga Al 7075-T6 usinada por CNC**: é a vencedora na matriz padrão, tem processo alinhado à prática de drones comerciais monobloco, excelente comportamento a UV e umidade e nenhum gargalo de autoclave. Deve receber anodização e controle de corrosão sob tensão. Como alternativa leve, o CFRP quase-isotrópico (-18% de massa no tubo de referência, módulo de vibração mais alto, *K*Ic = 30 MPa·m^0,5), apenas por rota de prensagem ou cura fora de autoclave, ponderando o índice de custo cerca de onze vezes pior e a carga de processo. Não são recomendados o policarbonato (reprovado na rigidez do braço assumido) e o PEEK-CF30 (dominado pelo CFRP em massa e tenacidade, e pelo Al 7075-T6 nos três objetivos).
 
-**Ressalvas.** As notas de manufaturabilidade e durabilidade são subjetivas; os dados de propriedades são representativos; todas as cargas, o fator de segurança, a classe de balanceamento, a razão de fadiga e a referência de custo são premissas; e a matriz usa uma soma ponderada normalizada simples, sem desempate nem análise de incerteza. O resultado deve ser refeito após a substituição dos dados pela exportação do Granta.
+**Ressalvas.** As notas de manufaturabilidade e durabilidade são subjetivas; os dados de propriedades são representativos; todas as cargas, o fator de segurança e a referência de custo são premissas; e a matriz usa uma soma ponderada normalizada simples, sem desempate nem análise de incerteza. O resultado deve ser refeito após a substituição dos dados pela exportação do Granta.
 
 # 8 Gestão do Projeto
 
@@ -343,7 +331,7 @@ Dentro dos pacotes: Lucas Tramonte traduziu os requisitos e deduziu formalmente 
 
 # 9 Conclusões
 
-Os índices de mérito foram deduzidos como problemas de minimização com restrições, aplicados sobre os gráficos de Ashby com restrições, linhas-guia e fator de segurança explícitos, e combinados com filtros de carga, de fadiga e ambientais. Em todos os cenários de peso, o Al 7075-T6 fica entre as duas primeiras posições; o CFRP vence quando o desempenho mecânico pesa 0,5 ou mais. As principais limitações são que as propriedades são representativas, que o modelo de cargas cobre só o voo pairado e que o fator de segurança, a classe de balanceamento e a razão de fadiga são premissas. Os próximos passos são substituir os dados pela exportação do Granta (inclusive a resistência à fadiga e o custo relativo), confirmar o fator de segurança na literatura do curso e modelar as cargas aerodinâmicas de voo à frente e de rajada.
+Os índices de mérito foram deduzidos como problemas de minimização com restrições, aplicados sobre os gráficos de Ashby com restrições, linhas-guia e fator de segurança explícitos, e combinados com filtros de carga, de fadiga e ambientais. Em todos os cenários de peso, o Al 7075-T6 fica entre as duas primeiras posições; o CFRP vence quando o desempenho mecânico pesa 0,5 ou mais. As principais limitações são que as propriedades são representativas, que o modelo de cargas cobre só o voo pairado e que o fator de segurança e a referência de custo são premissas. Os próximos passos são substituir os dados pela exportação do Granta (inclusive a resistência à fadiga e o custo relativo), confirmar o fator de segurança na literatura do curso, determinar a amplitude de tensão dos ciclos de fadiga e modelar as cargas aerodinâmicas de voo à frente e de rajada.
 
 # Referências
 
@@ -371,14 +359,12 @@ Os índices de mérito foram deduzidos como problemas de minimização com restr
 
 [12] UNITED STATES. **14 CFR 25.303 – Factor of safety**. Disponível em: https://www.law.cornell.edu/cfr/text/14/25.303. Acesso em: 17 nov. 2026 (lido em cópias secundárias; confirmar o texto vigente).
 
-[13] INTERNATIONAL ORGANIZATION FOR STANDARDIZATION. **ISO 21940-11**: Mechanical vibration – Rotor balancing – Part 11: Procedures and tolerances for rotors with rigid behaviour. Geneva: ISO (texto da norma não consultado; classes de balanceamento citadas a partir de fontes secundárias).
+[13] LEISHMAN, J. G. **Principles of Helicopter Aerodynamics**. 2. ed. Cambridge: Cambridge University Press, 2006.
 
-[14] LEISHMAN, J. G. **Principles of Helicopter Aerodynamics**. 2. ed. Cambridge: Cambridge University Press, 2006.
+[14] BASQUIN, O. H. The exponential law of endurance tests. **Proceedings of the ASTM**, v. 10, p. 625-630, 1910.
 
-[15] BASQUIN, O. H. The exponential law of endurance tests. **Proceedings of the ASTM**, v. 10, p. 625-630, 1910.
+[15] MINER, M. A. Cumulative damage in fatigue. **Journal of Applied Mechanics**, v. 12, n. 3, p. A159-A164, 1945.
 
-[16] MINER, M. A. Cumulative damage in fatigue. **Journal of Applied Mechanics**, v. 12, n. 3, p. A159-A164, 1945.
+[16] RAO, S. S. **Mechanical Vibrations**. 6. ed. Harlow: Pearson, 2017.
 
-[17] RAO, S. S. **Mechanical Vibrations**. 6. ed. Harlow: Pearson, 2017.
-
-[18] GERE, J. M.; GOODNO, B. J. **Mechanics of Materials**. 8. ed. Stamford: Cengage Learning, 2013.
+[17] GERE, J. M.; GOODNO, B. J. **Mechanics of Materials**. 8. ed. Stamford: Cengage Learning, 2013.

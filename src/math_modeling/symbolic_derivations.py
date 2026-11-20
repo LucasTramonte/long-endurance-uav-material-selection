@@ -24,7 +24,7 @@ from dataclasses import dataclass
 import sympy as sp
 
 E, rho, sigma_y, Cm = sp.symbols("E rho sigma_y C_m", positive=True)           # material properties
-L, w, S, F, C1 = sp.symbols("L w S F C_1", positive=True)                      # fixed by the design
+L, w, S, F, C1, R = sp.symbols("L w S F C_1 R", positive=True)                # fixed by the design
 t, A, a = sp.symbols("t A a", positive=True)                                   # free variables
 
 
@@ -60,18 +60,28 @@ def _material_group(expr: sp.Expr, material_symbols: tuple[sp.Symbol, ...]) -> s
     return sp.simplify(dep)
 
 
+def tube_stiffness() -> Problem:
+    """IM1: light thin-walled tube of FIXED radius R and prescribed flexural stiffness S, free wall thickness t."""
+    stiffness = 48 * E * sp.pi * R**3 * t / L**3                       # S = 48 E I / L^3, I = pi R^3 t
+    mass = 2 * sp.pi * R * t * L * rho
+    t_sol = sp.solve(sp.Eq(stiffness, S), t)[0]
+    m_opt = sp.simplify(mass.subs(t, t_sol))
+    return Problem("IM1", "Stiffness-limited thin-walled tube", t, mass, sp.Eq(S, stiffness), t_sol, m_opt,
+                   _material_group(m_opt, (E, rho)))
+
+
 def panel_stiffness() -> Problem:
-    """IM1: light panel of prescribed bending stiffness S, free thickness t."""
+    """Benchmark panel index E^(1/3)/rho (flat panel, free thickness); not used in the ranking."""
     stiffness = C1 * E * w * t**3 / (12 * L**3)
     mass = rho * L * w * t
     t_sol = sp.solve(sp.Eq(stiffness, S), t)[0]
     m_opt = sp.simplify(mass.subs(t, t_sol))
-    return Problem("IM1", "Stiffness-limited panel", t, mass, sp.Eq(S, stiffness), t_sol, m_opt,
+    return Problem("IM_panel", "Stiffness-limited flat panel (benchmark)", t, mass, sp.Eq(S, stiffness), t_sol, m_opt,
                    _material_group(m_opt, (E, rho)))
 
 
 def beam_stiffness() -> Problem:
-    """Benchmark beam index E^(1/2)/rho: square section of free side a, prescribed stiffness S."""
+    """Benchmark beam index E^(1/2)/rho (square section, free side a); not used in the ranking."""
     stiffness = C1 * E * a**4 / (12 * L**3)
     mass = rho * a**2 * L
     a_sol = sp.solve(sp.Eq(stiffness, S), a)[0]
@@ -89,18 +99,18 @@ def tie_strength() -> Problem:
                    _material_group(m_opt, (sigma_y, rho)))
 
 
-def panel_cost() -> Problem:
-    """IM3: cheapest stiffness-limited panel (cost = C_m * mass), C_{v,R} = C_m * rho."""
-    stiffness = C1 * E * w * t**3 / (12 * L**3)
-    cost = Cm * rho * L * w * t
+def tube_cost() -> Problem:
+    """IM3: cheapest stiffness-limited tube (cost = C_m * mass), C_{v,R} = C_m * rho."""
+    stiffness = 48 * E * sp.pi * R**3 * t / L**3
+    cost = Cm * rho * 2 * sp.pi * R * t * L
     t_sol = sp.solve(sp.Eq(stiffness, S), t)[0]
     c_opt = sp.simplify(cost.subs(t, t_sol))
-    return Problem("IM3", "Cost-limited panel", t, cost, sp.Eq(S, stiffness), t_sol, c_opt,
+    return Problem("IM3", "Cost-limited thin-walled tube", t, cost, sp.Eq(S, stiffness), t_sol, c_opt,
                    _material_group(c_opt, (E, rho, Cm)), "C")
 
 
 def all_problems() -> dict[str, Problem]:
-    return {p.key: p for p in (panel_stiffness(), beam_stiffness(), tie_strength(), panel_cost())}
+    return {p.key: p for p in (tube_stiffness(), panel_stiffness(), beam_stiffness(), tie_strength(), tube_cost())}
 
 
 if __name__ == "__main__":

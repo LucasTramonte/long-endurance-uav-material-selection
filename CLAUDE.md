@@ -29,7 +29,7 @@ Portuguese** (`docs/unicamp_deliverable/`, .docx + .pdf). README, code and commi
 | Backslash inside an f-string expression is valid on 3.12, a SyntaxError on 3.10/3.11 | Build the string first, then interpolate | `tests/test_python_compatibility.py` |
 | A figure showed forces but nothing proved the equations were solved correctly | Add analytic-vs-numeric, convergence and energy-error panels (`verification_figure.py`) with a test per number | `tests/test_verification.py` |
 | Material chosen without the chart procedure, or a safety factor picked to make a material pass | Follow `.claude/skills/ashby-chart-selection` and `.claude/skills/safety-factor-selection`: constraint line, discard cut bubbles, guide line, ceramics never in tension, `s` from cited literature | `tests/test_ashby.py` |
-| Static strength used for a cyclic load, or a spinning part sized without the centrifugal check | Follow `.claude/skills/fatigue-assessment` and `rotating-parts-merit-indices`; cost and selection text follow `cost-merit-indices` and `selection-method-and-decision-matrix` | `tests/test_rotating_fatigue.py` |
+| Static strength used for a cyclic load, or merit indices that do not describe the drone (flywheel, extra premises) | Follow `.claude/skills/fatigue-assessment`; keep IM1 = E/rho (tube, fixed radius), IM2, IM3 as reviewed by the course monitor; cost and selection text follow `cost-merit-indices` and `selection-method-and-decision-matrix` | `tests/test_rotating_fatigue.py`, `tests/test_symbolic.py` |
 | Claimed numbers or sources that were not checked | Cite only what was read; say what could not be verified | review |
 
 ## Privacy and redistribution

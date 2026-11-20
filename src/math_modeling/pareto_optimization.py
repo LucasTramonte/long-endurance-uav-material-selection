@@ -1,7 +1,7 @@
 """Multi-objective optimisation: mass vs. cost vs. fracture toughness.
 
-Objectives (for a panel of prescribed bending rigidity, see merit_indices.py):
-  1. minimise panel mass          m    = rho * L * w * t,  t = (12 D / E)^(1/3)
+Objectives (for a thin-walled tube of prescribed flexural rigidity, see merit_indices.py):
+  1. minimise tube mass           m    = 2 pi R t L rho,   t = E I / (E pi R^3)
   2. minimise material cost       cost = C_m * m
   3. maximise fracture toughness  KIc  (converted to -KIc so that all objectives are minimised)
 
@@ -20,7 +20,7 @@ from pathlib import Path
 import numpy as np
 
 from src.analysis.export_tables import ROOT, load_filters, load_materials
-from src.math_modeling.merit_indices import panel_mass_for_rigidity, rigidity_of_panel
+from src.math_modeling.merit_indices import tube_mass_for_rigidity, tube_rigidity
 
 
 def pareto_mask(objectives: np.ndarray) -> np.ndarray:
@@ -35,23 +35,22 @@ def pareto_mask(objectives: np.ndarray) -> np.ndarray:
     return mask
 
 
-def evaluate_candidates(materials: list[dict], D_target: float | None = None,
-                        length_m: float | None = None, width_m: float | None = None) -> list[dict]:
-    """Compute panel mass [kg], material cost [USD] and KIc for each material.
+def evaluate_candidates(materials: list[dict], EI_target: float | None = None,
+                        radius_m: float | None = None, length_m: float | None = None) -> list[dict]:
+    """Compute tube mass [kg], material cost [USD] and KIc for each material.
 
-    Defaults (panel size and rigidity target) come from "reference_panel" in
+    Defaults (tube radius, length and rigidity target) come from "reference_tube" in
     data/granta_filters.json.
     """
-    ref = load_filters()["reference_panel"]
+    ref = load_filters()["reference_tube"]
+    radius_m = ref["mean_radius_m"] if radius_m is None else radius_m
     length_m = ref["length_m"] if length_m is None else length_m
-    width_m = ref["width_m"] if width_m is None else width_m
-    if D_target is None:
+    if EI_target is None:
         ref_mat = next(m for m in load_materials() if m["id"] == ref["reference_material"])
-        D_target = rigidity_of_panel(ref_mat["youngs_modulus_GPa"], ref["reference_thickness_m"])
+        EI_target = tube_rigidity(ref_mat["youngs_modulus_GPa"], ref["reference_thickness_m"], radius_m)
     rows = []
     for m in materials:
-        mass = panel_mass_for_rigidity(m["youngs_modulus_GPa"], m["density_kg_m3"], D_target,
-                                       length_m, width_m)
+        mass = tube_mass_for_rigidity(m["youngs_modulus_GPa"], m["density_kg_m3"], EI_target, radius_m, length_m)
         rows.append({
             "id": m["id"],
             "mass_g": mass * 1000.0,
@@ -107,7 +106,7 @@ def build_front_figure(rows: list[dict]):
     fig, axs = plt.subplots(1, 2, figsize=(12.5, 5.6))
     fig.subplots_adjust(left=0.07, right=0.98, top=0.86, bottom=0.2, wspace=0.22)
     panels = (
-        (axs[0], cost, "Material cost of the panel (USD, log scale)", _front_2d(mass, cost), "lower left"),
+        (axs[0], cost, "Material cost of the tube (USD, log scale)", _front_2d(mass, cost), "lower left"),
         (axs[1], kic, r"Fracture toughness $K_{Ic}$ (MPa$\cdot$m$^{1/2}$, log scale)", None, "upper left"),
     )
     labelled = []
@@ -125,12 +124,12 @@ def build_front_figure(rows: list[dict]):
         ax.yaxis.set_minor_formatter(NullFormatter())
         ax.set_yticks([t for t in (0.03, 0.05, 0.1, 0.2, 0.5, 1, 2, 3, 5, 10, 20, 30, 50)
                        if 0.8 * y.min() <= t <= 1.25 * y.max()])
-        ax.set_xlabel("Panel mass at equal bending rigidity (g)")
+        ax.set_xlabel("Tube mass at equal flexural rigidity (g)")
         ax.set_ylabel(ylabel)
         ax.grid(True, which="major", alpha=0.25)
         ax.margins(x=0.12, y=0.18)
-        ideal = (0.05, 0.08) if corner == "lower left" else (0.05, 0.66)
-        away = (0.17, 0.30) if corner == "lower left" else (0.17, 0.50)
+        ideal = (0.46, 0.40) if corner == "lower left" else (0.42, 0.72)
+        away = (0.62, 0.62) if corner == "lower left" else (0.56, 0.54)
         ax.annotate("better", xy=ideal, xytext=away, xycoords="axes fraction", textcoords="axes fraction",
                     fontsize=9, color=vermilion, ha="center",
                     arrowprops=dict(arrowstyle="-|>", color=vermilion, lw=1.4))

@@ -28,9 +28,9 @@ Mirror of `data/granta_filters.json`. Enter each as a Limit stage in Granta.
 
 | Chart | Axes (log-log) | Guideline | Selection line | Screenshot |
 |---|---|---|---|---|
-| A | Young's modulus E vs Density | slope 3 (E^(1/3)/rho = C) | Maximise IM1 | `docs/figures/granta_E_rho.png` |
+| A | Young's modulus E vs Density | slope 1 (E/rho = C) | Maximise IM1 | `docs/figures/granta_E_rho.png` |
 | B | Yield (tensile) strength vs Density | slope 1 (sigma_y/rho = C) | Maximise IM2 | `docs/figures/granta_sy_rho.png` |
-| C | E vs volumetric cost (price x density) | slope 3 | Maximise IM3 | `docs/figures/granta_E_cost.png` |
+| C | E vs volumetric cost (price x density) | slope 1 (E/Cv,R = C) | Maximise IM3 | `docs/figures/granta_E_cost.png` |
 | D | Fracture toughness vs Young's modulus | none | Toughness check | |
 
 Procedure: add the chart stage, set axes, add *Selection Line* with the stated slope, drag it until only the shortlist remains above the line, and note the intercept value C used. Blank charts (local, git-ignored): `assets/ashby_charts/mapas_ashby.pdf`, `assets/ashby_charts/diagrama_custo.pdf` (Ashby [1]; see README References).

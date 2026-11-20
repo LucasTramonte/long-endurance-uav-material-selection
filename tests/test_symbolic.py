@@ -14,14 +14,15 @@ PROBLEMS = sd.all_problems()
 
 def _fixed(expr):
     """Substitute design constants (not material symbols) with 1."""
-    return expr.subs({sd.L: 1, sd.w: 1, sd.S: 1, sd.F: 1, sd.C1: 1})
+    return expr.subs({sd.L: 1, sd.w: 1, sd.S: 1, sd.F: 1, sd.C1: 1, sd.R: 1})
 
 
 @pytest.mark.parametrize("key,expected", [
-    ("IM1", sd.rho / sd.E ** sp.Rational(1, 3)),
+    ("IM1", sd.rho / sd.E),
+    ("IM_panel", sd.rho / sd.E ** sp.Rational(1, 3)),
     ("IM_beam", sd.rho / sp.sqrt(sd.E)),
     ("IM2", sd.rho / sd.sigma_y),
-    ("IM3", sd.Cm * sd.rho / sd.E ** sp.Rational(1, 3)),
+    ("IM3", sd.Cm * sd.rho / sd.E),
 ])
 def test_performance_index_is_the_material_group(key, expected):
     assert sp.simplify(PROBLEMS[key].performance_index - expected) == 0
@@ -48,4 +49,4 @@ def test_minimising_p_selects_the_same_material_as_maximising_im():
     E = np.array([48.0, 70.0, 3.2, 2.4])
     rho = np.array([1550.0, 2810.0, 1300.0, 1200.0])
     perf = mi.performance_indices(E, rho, np.array([500.0, 503.0, 100.0, 60.0]), np.array([30.0, 4.0, 90.0, 5.0]))
-    assert int(np.argmin(perf["P1"])) == int(np.argmax(mi.bending_panel_index(E, rho)))
+    assert int(np.argmin(perf["P1"])) == int(np.argmax(mi.tube_bending_index(E, rho)))

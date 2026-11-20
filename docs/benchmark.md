@@ -32,7 +32,7 @@ Not reproduced: the weighted scores of the thesis (its Table 8) - the normalisat
 | Aspect | Niero (2024) | This project |
 |---|---|---|
 | Component | Flying-wing spars and ribs | Ducted-quadcopter airframe (body, ducts, arms) |
-| Indices | $E^{1/2}/\rho$ (beam), $E^{1/3}/\rho$ (plate) | $E^{1/3}/\rho$ (plate), $\sigma_y/\rho$ (tie), $E^{1/3}/C_{v,R}$ (cost) |
+| Indices | $E^{1/2}/\rho$ (beam), $E^{1/3}/\rho$ (plate) | $E/\rho$ (tube, fixed radius), $\sigma_y/\rho$ (tie), $E/C_{v,R}$ (cost); the plate index $E^{1/3}/\rho$ is kept for the benchmark |
 | Extra criteria | Cost, corrosion, manufacturing (scores 0-5) | Mechanical, cost (IM3), manufacturability, durability (weights editable) |
 | Hard filters | $E_{min}$, $\rho_{max}$ | UV, 24 h water absorption, $K_{Ic}$, temperature, density |
 | Candidate set | 19 materials, 4 classes | 4 shortlisted + 3 screening-pool materials |
