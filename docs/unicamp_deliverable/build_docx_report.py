@@ -33,6 +33,7 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_BREAK
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.shared import Cm, Pt
+from PIL import Image
 
 HERE = Path(__file__).resolve().parent
 plt.rcParams["mathtext.fontset"] = "stix"
@@ -190,22 +191,47 @@ def add_table(doc: Document, rows: list[list[str]]) -> None:
     doc.add_paragraph()
 
 
+def image_width_cm(path: Path, src: str) -> float:
+    """Text width is 16 cm: Ashby charts and wide screenshots use it all, tall panels are narrower."""
+    with Image.open(path) as im:
+        w, h = im.size
+    if "ashby" in src or w > 1000:
+        return 16.0
+    return 9.0 if h > 400 else 13.0
+
+
 def add_image(doc: Document, alt: str, src: str, base: Path) -> None:
     path = (base / src).resolve()
     p = doc.add_paragraph()
     fmt(p, WD_ALIGN_PARAGRAPH.CENTER, 1.0, False, before=6)
     if path.exists():
-        from PIL import Image
-
-        with Image.open(path) as im:
-            wide = im.width > 1000
-        # text width is 16 cm: Ashby charts and wide Granta screenshots use it all
-        p.add_run().add_picture(str(path), width=Cm(16 if "ashby" in src or wide else 13))
+        p.add_run().add_picture(str(path), width=Cm(image_width_cm(path, src)))
     else:
         set_font(p.add_run(f"[Figura não encontrada: {src}]"), 10, italic=True)
     cap = doc.add_paragraph()
     fmt(cap, WD_ALIGN_PARAGRAPH.CENTER, 1.0, False, after=10)
     add_runs(cap, alt, size=10)
+
+
+def add_image_row(doc: Document, items: list[tuple[str, str]], base: Path) -> None:
+    """Several figures side by side (one table row, no borders), each with its caption below."""
+    n = len(items)
+    table = doc.add_table(rows=1, cols=n)
+    table.alignment = WD_TABLE_ALIGNMENT.CENTER
+    col_cm = 16.0 / n
+    for cell, (alt, src) in zip(table.rows[0].cells, items, strict=True):
+        cell.width = Cm(col_cm)
+        path = (base / src).resolve()
+        p = cell.paragraphs[0]
+        fmt(p, WD_ALIGN_PARAGRAPH.CENTER, 1.0, False, before=4)
+        if path.exists():
+            p.add_run().add_picture(str(path), width=Cm(col_cm - 0.4))
+        else:
+            set_font(p.add_run(f"[Figura não encontrada: {src}]"), 10, italic=True)
+        cap = cell.add_paragraph()
+        fmt(cap, WD_ALIGN_PARAGRAPH.CENTER, 1.0, False, after=6)
+        add_runs(cap, alt, size=9)
+    doc.add_paragraph()
 
 
 def render_equation(latex: str, path: Path) -> None:
@@ -286,6 +312,9 @@ def build(md_text: str, out_path: Path, base: Path) -> None:
             rows = [[c.strip() for c in r.strip("|").split("|")] for r in block
                     if not re.match(r"^\|[\s:\-|]+\|$", r)]
             add_table(doc, rows)
+        elif s.startswith("![") and len(re.findall(r"!\[(.*?)\]\((.*?)\)", s)) > 1:        # figures side by side
+            add_image_row(doc, [(m_[0], m_[1]) for m_ in re.findall(r"!\[(.*?)\]\((.*?)\)", s)], base)
+            i += 1
         elif (m := re.match(r"^!\[(.*?)\]\((.*?)\)", s)):
             add_image(doc, m.group(1), m.group(2), base)
             i += 1

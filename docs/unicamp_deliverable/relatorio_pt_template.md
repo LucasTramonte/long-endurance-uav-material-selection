@@ -384,41 +384,25 @@ Os índices de mérito foram deduzidos como problemas de minimização com restr
 
 Telas do Granta EduPack 2024 R1 (versão 24.1.1) com os registros lidos. Os valores usados no relatório são as faixas dessas telas.
 
-![Figura A1 – Registro CFRP, matriz epóxi (isotrópico): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p01_0.png)
+![Figura A1 – Registro CFRP, matriz epóxi (isotrópico): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p01_0.png) ![Figura A2 – Registro CFRP, matriz epóxi (isotrópico): propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p02_0.png)
 
-![Figura A2 – Registro CFRP, matriz epóxi (isotrópico): propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p02_0.png)
+![Figura A3 – Registro Aluminum alloys: descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p04_0.png) ![Figura A4 – Registro Aluminum alloys: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p05_0.png)
 
-![Figura A3 – Registro Aluminum alloys: descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p04_0.png)
+![Figura A5 – Registro Magnesium alloys: descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p06_0.png) ![Figura A6 – Registro Magnesium alloys: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p07_0.png)
 
-![Figura A4 – Registro Aluminum alloys: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p05_0.png)
+![Figura A7 – Registro GFRP, matriz epóxi (isotrópico): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p08_0.png) ![Figura A8 – Registro GFRP, matriz epóxi (isotrópico): propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p09_0.png)
 
-![Figura A5 – Registro Magnesium alloys: descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p06_0.png)
-
-![Figura A6 – Registro Magnesium alloys: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p07_0.png)
-
-![Figura A7 – Registro GFRP, matriz epóxi (isotrópico): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p08_0.png)
-
-![Figura A8 – Registro GFRP, matriz epóxi (isotrópico): propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p09_0.png)
-
-![Figura A9 – Registro Polyetheretherketone (PEEK): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p10_0.png)
-
-![Figura A10 – Registro PEEK: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p11_0.png)
+![Figura A9 – Registro Polyetheretherketone (PEEK): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p10_0.png) ![Figura A10 – Registro PEEK: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p11_0.png)
 
 ![Figura A11 – Registro PEEK: continuação (reciclagem e usos típicos). Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p11_1.png)
 
-![Figura A12 – Registro Polycarbonate (PC): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p13_0.png)
-
-![Figura A13 – Registro PC: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p14_0.png)
+![Figura A12 – Registro Polycarbonate (PC): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p13_0.png) ![Figura A13 – Registro PC: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p14_0.png)
 
 ![Figura A14 – Registro PC: continuação (reciclagem e usos típicos). Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p14_1.png)
 
-![Figura A15 – Registro Low carbon steel (referência do custo relativo): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p15_0.png)
+![Figura A15 – Registro Low carbon steel (referência do custo relativo): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p15_0.png) ![Figura A16 – Registro Low carbon steel: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p16_0.png)
 
-![Figura A16 – Registro Low carbon steel: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p16_0.png)
-
-![Figura A17 – Registro Acrylonitrile butadiene styrene (ABS): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p17_0.png)
-
-![Figura A18 – Registro ABS: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p18_0.png)
+![Figura A17 – Registro Acrylonitrile butadiene styrene (ABS): descrição. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p17_0.png) ![Figura A18 – Registro ABS: propriedades. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p18_0.png)
 
 ![Figura A19 – Registro ABS: continuação (reciclagem e usos típicos). Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p18_1.png)
 
@@ -436,13 +420,9 @@ Os limites são os da Seção 5. A tabela resume o efeito de cada estágio; as l
 
 O registro de PEEK permanece no Granta porque a faixa dele (3,76–3,95 GPa) se sobrepõe ao limite de módulo; o relatório o descarta (Seção 7.2).
 
-![Figura B1 – Painel de limite do Granta, sem restrições. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p21_0.png)
+![Figura B1 – Painel de limite do Granta, sem restrições. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p21_0.png) ![Figura B2 – Estágio de limite: densidade ≤ 3000 kg/m³, tenacidade à fratura ≥ 2 MPa·m^{0,5} e temperatura máxima de serviço ≥ 80 °C. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p22_0.png)
 
-![Figura B2 – Estágio de limite: densidade ≤ 3000 kg/m³, tenacidade à fratura ≥ 2 MPa·m^{0,5} e temperatura máxima de serviço ≥ 80 °C. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p22_0.png)
-
-![Figura B3 – Estágio de limite com as três restrições anteriores e módulo de Young ≥ 3,84 GPa. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p24_0.png)
-
-![Figura B4 – Estágio de limite: módulo de Young ≥ 3,84 GPa. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p26_0.png)
+![Figura B3 – Estágio de limite com as três restrições anteriores e módulo de Young ≥ 3,84 GPa. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p24_0.png) ![Figura B4 – Estágio de limite: módulo de Young ≥ 3,84 GPa. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p26_0.png)
 
 ![Figura B5 – Estágio de limite: limite de escoamento ≥ 7,2 MPa. Fonte: Ansys Granta EduPack, captura de tela da equipe](../figures/granta/p28_0.png)
 
