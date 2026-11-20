@@ -20,23 +20,23 @@ from __future__ import annotations
 
 import argparse
 import re
-import tempfile
+import sys
 from pathlib import Path
 
-import matplotlib
-
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 from docx import Document
 from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_BREAK
-from docx.oxml import OxmlElement
+from docx.oxml import OxmlElement, parse_xml
 from docx.oxml.ns import qn
 from docx.shared import Cm, Pt
 from PIL import Image
 
 HERE = Path(__file__).resolve().parent
-plt.rcParams["mathtext.fontset"] = "stix"
+sys.path.insert(0, str(HERE))
+
+from latex_to_omml import M_NS, latex_to_omml, split_lines  # noqa: E402
+
+W_NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
 FONT = "Times New Roman"
 INLINE = re.compile(r"(\*\*.+?\*\*|\*.+?\*|`.+?`)")
 
@@ -234,27 +234,21 @@ def add_image_row(doc: Document, items: list[tuple[str, str]], base: Path) -> No
     doc.add_paragraph()
 
 
-def render_equation(latex: str, path: Path) -> None:
-    """Render one display equation (matplotlib mathtext subset) to a transparent PNG."""
-    fig = plt.figure(figsize=(0.1, 0.1))
-    fig.text(0, 0, f"${latex}$", fontsize=13)
-    fig.savefig(path, dpi=300, bbox_inches="tight", pad_inches=0.03, transparent=True)
-    plt.close(fig)
+def add_equation(doc: Document, latex: str, number: int) -> None:
+    r"""Native Word equation (OMML) centred, number in parentheses at the right margin (ABNT NBR 14724).
 
-
-def add_equation(doc: Document, latex: str, number: int, tmp: Path) -> None:
-    """Equation centred, number in parentheses at the right margin (ABNT NBR 14724)."""
-    png = tmp / f"eq{number}.png"
-    render_equation(latex, png)
+    Long equations are split at ``\qquad`` into several centred lines so they never overflow the text width.
+    """
     table = doc.add_table(rows=1, cols=3)
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
-    widths = (Cm(1.0), Cm(13.0), Cm(2.0))
+    widths = (Cm(0.5), Cm(14.0), Cm(1.5))
     for cell, w in zip(table.rows[0].cells, widths, strict=True):
         cell.width = w
-    mid = table.cell(0, 1).paragraphs[0]
-    fmt(mid, WD_ALIGN_PARAGRAPH.CENTER, 1.0, False, before=4, after=4)
-    width_cm = min(13.0, matplotlib.image.imread(str(png)).shape[1] / 300 * 2.54)
-    mid.add_run().add_picture(str(png), width=Cm(width_cm))
+    mid = table.cell(0, 1)
+    for k, line in enumerate(split_lines(latex)):
+        par = mid.paragraphs[0] if k == 0 else mid.add_paragraph()
+        fmt(par, WD_ALIGN_PARAGRAPH.CENTER, 1.0, False, before=4, after=4)
+        par._p.append(parse_xml(f'<m:oMathPara xmlns:m="{M_NS}" xmlns:w="{W_NS}">{latex_to_omml(line)}</m:oMathPara>'))
     num = table.cell(0, 2).paragraphs[0]
     fmt(num, WD_ALIGN_PARAGRAPH.RIGHT, 1.0, False, before=10)
     set_font(num.add_run(f"({number})"), 12)
@@ -271,7 +265,6 @@ def build(md_text: str, out_path: Path, base: Path) -> None:
     header.alignment = WD_ALIGN_PARAGRAPH.RIGHT
     add_page_number_field(header)
 
-    tmp = Path(tempfile.mkdtemp(prefix="eq_"))
     eq_count = 0
     i = 0
     while i < len(lines):
@@ -287,7 +280,7 @@ def build(md_text: str, out_path: Path, base: Path) -> None:
                 i += 1
             i += 1
             eq_count += 1
-            add_equation(doc, " ".join(block), eq_count, tmp)
+            add_equation(doc, " ".join(block), eq_count)
         elif s == r"\pagebreak":
             doc.add_paragraph().add_run().add_break(WD_BREAK.PAGE)
             i += 1

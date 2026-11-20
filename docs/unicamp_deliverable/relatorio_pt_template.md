@@ -145,7 +145,7 @@ $$
 \min_{t>0}\ m(t)=2\pi R\,t\,L\,\rho\quad \mathrm{sujeito\ a}\quad S(t)=\frac{48\,E\,\pi R^{3}\,t}{L^{3}}\ \geq\ S_{\mathrm{req}}
 $$
 
-Como *m* e *S* crescem com *t*, a restrição está ativa no ótimo, *t*\* = *L*³*S*_{req}/(48π*E R*³), e a massa mínima resulta:
+Como *m* e *S* crescem com *t*, a restrição está ativa no ótimo, *t*_{ót} = *L*³*S*_{req}/(48π*E R*³), e a massa mínima resulta:
 
 $$
 m^{*}=\frac{S_{\mathrm{req}}\,L^{4}}{24\,R^{2}}\ \cdot\ \frac{\rho}{E}\qquad\Rightarrow\qquad IM_1=\max\ \frac{E}{\rho}
