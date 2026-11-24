@@ -14,4 +14,4 @@ docx2pdf>=0.1.8          # PDF export of the Portuguese .docx (needs Microsoft W
 markdown>=3.5; python_version < "3.11"      # English report PDF (3.11.3 needs Python 3.11+)
 markdown>=3.11.3; python_version >= "3.11"
 pymdown-extensions>=10.0; python_full_version < "3.11.5"      # 13.1 needs Python 3.11.5+
-pymdown-extensions>=13.1; python_full_version >= "3.11.5"
+pymdown-extensions>=13.1.2; python_full_version >= "3.11.5"
